@@ -105,6 +105,7 @@
             color: #ff9999;
         }
 
+
         /* ================================
            MAIN CONTENT
         ================================= */
@@ -114,6 +115,7 @@
             min-height: 100vh;
             padding: 30px;
         }
+
 
         /* ================================
            TOP BAR
@@ -148,6 +150,7 @@
         .user-box strong {
             color: #d4af37;
         }
+
 
         /* ================================
            STAT CARDS
@@ -199,6 +202,7 @@
             color: #ff6666;
         }
 
+
         /* ================================
            QUICK ACTIONS
         ================================= */
@@ -249,6 +253,7 @@
             line-height: 1.5;
         }
 
+
         /* ================================
            INFO PANEL
         ================================= */
@@ -288,6 +293,7 @@
             color: #d4af37;
             font-size: 20px;
         }
+
 
         /* ================================
            RESPONSIVE
@@ -350,6 +356,7 @@
 
 <body>
 
+
     <!-- ==========================================
          SIDEBAR
     =========================================== -->
@@ -366,6 +373,7 @@
 
 
         <nav class="nav">
+
 
             <!-- HOME -->
 
@@ -393,6 +401,24 @@
             </a>
 
 
+            <!-- SCAN PRODUCT -->
+
+            <!-- IMPORTANT:
+                 barcode_product DOES NOT EXIST.
+                 Barcode scanner is inside Add Product page.
+            -->
+
+            <a href="{% url 'add_product' %}">
+
+                <span class="icon">▣</span>
+
+                <span>
+                    Scan Product
+                </span>
+
+            </a>
+
+
             <!-- ADD PRODUCT -->
 
             <a href="{% url 'add_product' %}">
@@ -414,6 +440,19 @@
 
                 <span>
                     Products
+                </span>
+
+            </a>
+
+
+            <!-- PRODUCT STATUS -->
+
+            <a href="{% url 'staff_product_status' %}">
+
+                <span class="icon">◉</span>
+
+                <span>
+                    Product Status
                 </span>
 
             </a>
@@ -604,7 +643,7 @@
         <section class="actions">
 
 
-            <!-- SCAN / ADD PRODUCT -->
+            <!-- SCAN & ADD PRODUCT -->
 
             <a href="{% url 'add_product' %}" class="action-card">
 

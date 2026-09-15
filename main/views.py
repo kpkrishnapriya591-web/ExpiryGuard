@@ -1,21 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.contrib import messages
 
 
 # =========================
-# LOGIN
+# ADMIN LOGIN
 # =========================
 def login_page(request):
 
-    if request.user.is_authenticated:
-        return redirect('home')
+    if request.method == "POST":
 
-    if request.method == 'POST':
-
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        username = request.POST.get("username")
+        password = request.POST.get("password")
 
         user = authenticate(
             request,
@@ -25,87 +21,27 @@ def login_page(request):
 
         if user is not None:
 
+            # Create login session
             login(request, user)
 
-            return redirect('home')
+            # IMPORTANT:
+            # After successful login → HOME PAGE
+            return redirect("home")
 
         else:
 
-            messages.error(
+            return render(
                 request,
-                'Invalid username or password.'
+                "main/login.html",
+                {
+                    "error": "Invalid username or password"
+                }
             )
-
-            return redirect('login')
 
     return render(
         request,
-        'main/login.html'
+        "main/login.html"
     )
-
-
-# =========================
-# SIGNUP
-# =========================
-def signup_page(request):
-
-    if request.method == 'GET':
-
-        return render(
-            request,
-            'main/signup.html'
-        )
-
-    if request.method == 'POST':
-
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirm_password = request.POST.get('confirm_password')
-
-        if not username or not password or not confirm_password:
-
-            messages.error(
-                request,
-                'Please fill all required fields.'
-            )
-
-            return redirect('signup')
-
-        if password != confirm_password:
-
-            messages.error(
-                request,
-                'Passwords do not match.'
-            )
-
-            return redirect('signup')
-
-        if User.objects.filter(username=username).exists():
-
-            messages.error(
-                request,
-                'Username already exists.'
-            )
-
-            return redirect('signup')
-
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
-
-        user.save()
-
-        messages.success(
-            request,
-            'Account created successfully. Please login.'
-        )
-
-        return redirect('login')
-
-    return redirect('signup')
 
 
 # =========================
@@ -114,11 +50,11 @@ def signup_page(request):
 def home(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/home.html'
+        "main/home.html"
     )
 
 
@@ -128,11 +64,11 @@ def home(request):
 def dashboard(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/dashboard.html'
+        "main/dashboard.html"
     )
 
 
@@ -142,11 +78,11 @@ def dashboard(request):
 def reports(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/reports.html'
+        "main/reports.html"
     )
 
 
@@ -156,11 +92,11 @@ def reports(request):
 def notifications(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/notifications.html'
+        "main/notifications.html"
     )
 
 
@@ -170,57 +106,69 @@ def notifications(request):
 def manage_products(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/manage_products.html'
+        "main/manage_products.html"
     )
 
-def add_staff(request):
-    return render(request, 'main/add_staff.html')
+
+# =========================
+# ADD PRODUCT
+# =========================
 def add_product(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
-    if request.method == 'POST':
+    if request.method == "POST":
 
-        return redirect('manage_products')
-
-  
-    return render(request, 'main/add_product.html')
-    
-
-
-def view_product(request, product_id):
-
-    if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("manage_products")
 
     return render(
         request,
-        'main/manage_products.html'
+        "main/add_product.html"
     )
 
 
+# =========================
+# VIEW PRODUCT
+# =========================
+def view_product(request, product_id):
+
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    return render(
+        request,
+        "main/manage_products.html"
+    )
+
+
+# =========================
+# UPDATE PRODUCT
+# =========================
 def update_product(request, product_id):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
-    return redirect('manage_products')
+    return redirect("manage_products")
 
 
+# =========================
+# DELETE PRODUCT
+# =========================
 def delete_product(request, product_id):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         pass
 
-    return redirect('manage_products')
+    return redirect("manage_products")
 
 
 # =========================
@@ -229,11 +177,29 @@ def delete_product(request, product_id):
 def product_status(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/product_status.html'
+        "main/product_status.html"
+    )
+
+
+# =========================
+# ADD STAFF
+# =========================
+def add_staff(request):
+
+    if not request.user.is_authenticated:
+        return redirect("login")
+
+    if request.method == "POST":
+
+        return redirect("staff_management")
+
+    return render(
+        request,
+        "main/add_staff.html"
     )
 
 
@@ -243,51 +209,42 @@ def product_status(request):
 def staff_management(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     staff_members = []
 
     return render(
         request,
-        'main/staff_management.html',
+        "main/staff_management.html",
         {
-            'staff_members': staff_members
+            "staff_members": staff_members
         }
     )
 
 
-def add_staff(request):
-
-    if not request.user.is_authenticated:
-        return redirect('login')
-
-    if request.method == 'POST':
-
-        return redirect('staff_management')
-
-    return render(
-        request,
-        'main/add_staff.html'
-    )
-
-
+# =========================
+# UPDATE STAFF
+# =========================
 def update_staff(request, staff_id):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
-    return redirect('staff_management')
+    return redirect("staff_management")
 
 
+# =========================
+# DELETE STAFF
+# =========================
 def delete_staff(request, staff_id):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
-    if request.method == 'POST':
+    if request.method == "POST":
         pass
 
-    return redirect('staff_management')
+    return redirect("staff_management")
 
 
 # =========================
@@ -296,11 +253,11 @@ def delete_staff(request, staff_id):
 def activity_log(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/activity_log.html'
+        "main/activity_log.html"
     )
 
 
@@ -310,11 +267,11 @@ def activity_log(request):
 def account(request):
 
     if not request.user.is_authenticated:
-        return redirect('login')
+        return redirect("login")
 
     return render(
         request,
-        'main/account.html'
+        "main/account.html"
     )
 
 
@@ -325,4 +282,4 @@ def logout_page(request):
 
     logout(request)
 
-    return redirect('login')
+    return redirect("login")

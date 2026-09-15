@@ -1,4 +1,3 @@
-
 from django.urls import path
 from . import views
 
@@ -6,137 +5,122 @@ from . import views
 urlpatterns = [
 
     # =========================
-    # LOGIN
+    # ADMIN LOGIN
     # =========================
     path(
-        '',
+        "",
         views.login_page,
-        name='login'
-    ),
-
-    # =========================
-    # SIGNUP
-    # =========================
-    path(
-        'signup/',
-        views.signup_page,
-        name='signup'
+        name="login"
     ),
 
     # =========================
     # HOME
     # =========================
     path(
-        'home/',
+        "home/",
         views.home,
-        name='home'
+        name="home"
     ),
 
     # =========================
     # DASHBOARD
     # =========================
     path(
-        'dashboard/',
+        "dashboard/",
         views.dashboard,
-        name='dashboard'
+        name="dashboard"
     ),
 
     # =========================
     # REPORTS
     # =========================
     path(
-        'reports/',
+        "reports/",
         views.reports,
-        name='reports'
+        name="reports"
     ),
 
     # =========================
     # NOTIFICATIONS
     # =========================
     path(
-        'notifications/',
+        "notifications/",
         views.notifications,
-        name='notifications'
+        name="notifications"
     ),
 
     # =========================
     # STAFF MANAGEMENT
     # =========================
-
-    # Add new staff
     path(
-        'add-staff/',
+        "add-staff/",
         views.add_staff,
-        name='add_staff'
+        name="add_staff"
     ),
 
-    # Staff list
     path(
-        'staff-management/',
+        "staff-management/",
         views.staff_management,
-        name='staff_management'
+        name="staff_management"
     ),
 
-    # Update staff
     path(
-        'staff-management/update/<int:staff_id>/',
+        "staff-management/update/<int:staff_id>/",
         views.update_staff,
-        name='update_staff'
+        name="update_staff"
     ),
 
-    # Delete staff
     path(
-        'staff-management/delete/<int:staff_id>/',
+        "staff-management/delete/<int:staff_id>/",
         views.delete_staff,
-        name='delete_staff'
+        name="delete_staff"
     ),
 
     # =========================
     # PRODUCT MANAGEMENT
     # =========================
     path(
-        'products/',
+        "products/",
         views.manage_products,
-        name='manage_products'
+        name="manage_products"
     ),
 
     path(
-        'add-product/',
+        "add-product/",
         views.add_product,
-        name='add_product'
+        name="add_product"
     ),
 
     path(
-        'product-status/',
+        "product-status/",
         views.product_status,
-        name='product_status'
+        name="product_status"
     ),
 
     # =========================
     # ACTIVITY LOG
     # =========================
     path(
-        'activity-log/',
+        "activity-log/",
         views.activity_log,
-        name='activity_log'
+        name="activity_log"
     ),
 
     # =========================
     # ACCOUNT
     # =========================
     path(
-        'account/',
+        "account/",
         views.account,
-        name='account'
+        name="account"
     ),
 
     # =========================
     # LOGOUT
     # =========================
     path(
-        'logout/',
+        "logout/",
         views.logout_page,
-        name='logout'
+        name="logout"
     ),
 ]
-

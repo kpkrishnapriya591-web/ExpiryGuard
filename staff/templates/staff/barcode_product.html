@@ -7,7 +7,6 @@
 
     <title>Barcode Product Scanner - ExpiryGuard</title>
 
-    <!-- Barcode Scanner Library -->
     <script src="https://unpkg.com/html5-qrcode"></script>
 
     <style>
@@ -36,7 +35,7 @@
             font-size: 24px;
         }
 
-        .header span {
+        .header h1 span {
             color: #d4a017;
         }
 
@@ -61,12 +60,12 @@
             margin-top: 8px;
         }
 
-        .scanner-card {
+        .scanner-card,
+        .product-card {
             background: white;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
         #reader {
@@ -76,11 +75,12 @@
         }
 
         .status {
-            margin: 20px 0;
+            margin-top: 20px;
             padding: 15px;
             background: #f4f4f4;
             border-radius: 10px;
             color: #555;
+            text-align: center;
         }
 
         .success {
@@ -101,16 +101,22 @@
         .product-card {
             display: none;
             margin-top: 30px;
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
         .product-card h3 {
             font-size: 25px;
             margin-bottom: 20px;
             color: #18181b;
+        }
+
+        .new-product-badge {
+            background: #fff8df;
+            border-left: 5px solid #d4a017;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            color: #5c4a00;
+            font-weight: bold;
         }
 
         .details {
@@ -129,12 +135,26 @@
             display: block;
             color: #777;
             font-size: 13px;
-            margin-bottom: 5px;
+            margin-bottom: 7px;
         }
 
-        .detail span {
-            font-size: 16px;
+        .detail input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 15px;
+            background: white;
             color: #18181b;
+        }
+
+        .detail input:focus {
+            outline: none;
+            border-color: #d4a017;
+        }
+
+        .barcode-input {
+            background: #eeeeee !important;
             font-weight: bold;
         }
 
@@ -145,6 +165,191 @@
             border-left: 5px solid #d4a017;
             border-radius: 8px;
             color: #5c4a00;
+        }
+
+        .ocr-section {
+            margin-top: 30px;
+            padding: 25px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+        }
+
+        .ocr-section h3 {
+            color: #18181b;
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .ocr-section p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .ocr-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .ocr-btn {
+            padding: 12px 22px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .start-btn {
+            background: #18181b;
+            color: white;
+        }
+
+        .detect-btn {
+            background: #d4a017;
+            color: #18181b;
+        }
+
+        .stop-btn {
+            background: #555;
+            color: white;
+        }
+
+        .save-btn {
+            background: #198754;
+            color: white;
+        }
+
+        .reset-btn {
+            background: #777;
+            color: white;
+        }
+
+        .ocr-btn:hover {
+            opacity: 0.85;
+        }
+
+        #ocrCameraBox {
+            display: none;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .ocr-frame {
+            position: relative;
+            max-width: 650px;
+            margin: auto;
+        }
+
+        #ocrVideo {
+            width: 100%;
+            max-width: 650px;
+            height: 380px;
+            object-fit: cover;
+            background: black;
+            border-radius: 12px;
+            border: 3px solid #d4a017;
+        }
+
+        .ocr-guide {
+            position: absolute;
+            left: 8%;
+            right: 8%;
+            top: 30%;
+            height: 40%;
+            border: 2px solid #d4a017;
+            border-radius: 8px;
+            pointer-events: none;
+        }
+
+        .ocr-guide-text {
+            position: absolute;
+            top: 15px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            color: white;
+            font-weight: bold;
+            text-shadow: 0 1px 5px black;
+            pointer-events: none;
+        }
+
+        #ocrStatus {
+            margin-top: 15px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        #ocrResult {
+            display: none;
+            margin-top: 25px;
+        }
+
+        #ocrResult h4 {
+            font-size: 20px;
+            color: #18181b;
+            margin-bottom: 15px;
+        }
+
+        .ocr-result-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+        }
+
+        .ocr-result-card strong {
+            color: #777;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .ocr-result-card span {
+            color: #18181b;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .ocr-raw {
+            margin-top: 18px;
+            background: #18181b;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .ocr-raw h5 {
+            color: #d4a017;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        #ocrRawText {
+            white-space: pre-wrap;
+            line-height: 1.6;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .ocr-loader {
+            display: none;
+            width: 30px;
+            height: 30px;
+            margin: 15px auto;
+            border: 4px solid #ddd;
+            border-top: 4px solid #d4a017;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         .back-btn {
@@ -169,98 +374,417 @@
 
             .header {
                 padding: 15px 20px;
+                flex-direction: column;
+                gap: 10px;
             }
 
             .container {
                 margin: 20px auto;
             }
+
+            #ocrVideo {
+                height: 300px;
+            }
         }
     </style>
 </head>
 
+
 <body>
 
+    <!-- HEADER -->
     <div class="header">
-        <h1>Expiry<span>Guard</span></h1>
-        <div>Barcode Product Scanner</div>
+
+        <h1>
+            Expiry<span>Guard</span>
+        </h1>
+
+        <div>
+            Barcode Product Scanner
+        </div>
+
     </div>
+
 
     <div class="container">
 
+        <!-- TITLE -->
         <div class="title">
-            <h2>Scan Product Barcode</h2>
+
+            <h2>
+                Scan New Product
+            </h2>
+
             <p>
-                Scan a supermarket product barcode to automatically
-                retrieve and save its details.
+                Scan barcode first and use OCR to detect
+                BATCH / MFG / EXP.
             </p>
+
         </div>
 
+
+        <!-- BARCODE SCANNER -->
         <div class="scanner-card">
 
             <div id="reader"></div>
 
             <div class="status" id="scanStatus">
-                Starting camera...
+                Starting barcode camera...
             </div>
 
         </div>
 
-        <!-- Product Details -->
 
+        <!-- PRODUCT CARD -->
         <div class="product-card" id="productCard">
 
-            <h3>Product Details</h3>
+            <h3>
+                🆕 New Product Details
+            </h3>
 
+
+            <div class="new-product-badge">
+
+                ✓ NEW PRODUCT
+
+                <br><br>
+
+                Barcode detected successfully.
+                Enter the remaining product details manually.
+
+            </div>
+
+
+            <!-- PRODUCT DETAILS -->
             <div class="details">
 
+                <!-- PRODUCT NAME -->
                 <div class="detail">
-                    <strong>Product Name</strong>
-                    <span id="productName">-</span>
+
+                    <strong>
+                        Product Name
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productName"
+                        placeholder="Enter product name">
+
                 </div>
 
+
+                <!-- BARCODE -->
                 <div class="detail">
-                    <strong>Barcode</strong>
-                    <span id="productBarcode">-</span>
+
+                    <strong>
+                        Barcode
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productBarcode"
+                        class="barcode-input"
+                        readonly
+                        placeholder="Barcode number">
+
                 </div>
 
+
+                <!-- CATEGORY -->
                 <div class="detail">
-                    <strong>Category</strong>
-                    <span id="productCategory">-</span>
+
+                    <strong>
+                        Category
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productCategory"
+                        placeholder="Enter category">
+
                 </div>
 
+
+                <!-- QUANTITY -->
                 <div class="detail">
-                    <strong>Quantity</strong>
-                    <span id="productQuantity">-</span>
+
+                    <strong>
+                        Quantity
+                    </strong>
+
+                    <input
+                        type="number"
+                        id="productQuantity"
+                        placeholder="Enter quantity"
+                        value="0">
+
                 </div>
 
+
+                <!-- UNIT -->
                 <div class="detail">
-                    <strong>Unit</strong>
-                    <span id="productUnit">-</span>
+
+                    <strong>
+                        Unit
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productUnit"
+                        placeholder="Pieces"
+                        value="Pieces">
+
                 </div>
 
+
+                <!-- BATCH -->
                 <div class="detail">
-                    <strong>Batch Number</strong>
-                    <span id="productBatch">-</span>
+
+                    <strong>
+                        Batch Number
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productBatch"
+                        placeholder="OCR will detect batch">
+
                 </div>
 
+
+                <!-- MANUFACTURE DATE -->
                 <div class="detail">
-                    <strong>Manufacture Date</strong>
-                    <span id="productManufacture">-</span>
+
+                    <strong>
+                        Manufacture Date
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productManufacture"
+                        placeholder="DD/MM/YYYY">
+
                 </div>
 
+
+                <!-- EXPIRY DATE -->
                 <div class="detail">
-                    <strong>Expiry Date</strong>
-                    <span id="productExpiry">-</span>
+
+                    <strong>
+                        Expiry Date
+                    </strong>
+
+                    <input
+                        type="text"
+                        id="productExpiry"
+                        placeholder="DD/MM/YYYY">
+
                 </div>
 
             </div>
 
+
+            <!-- MESSAGE -->
             <div class="save-message" id="saveMessage">
-                Product information is being processed...
+
+                Scan the product packet using OCR to
+                automatically detect BATCH / MFG / EXP.
+
             </div>
 
-            <a href="{% url 'staff_home' %}" class="back-btn">
+
+            <!-- OCR SECTION -->
+            <div class="ocr-section">
+
+                <h3>
+                    📸 Product Information OCR
+                </h3>
+
+                <p>
+
+                    Start the camera and place the printed
+                    BATCH / MFG / EXP information inside
+                    the yellow box.
+
+                    <br><br>
+
+                    OCR detects only:
+
+                    <strong>
+                        BATCH / MFG / EXP
+                    </strong>
+
+                </p>
+
+
+                <!-- OCR BUTTONS -->
+                <div class="ocr-buttons">
+
+                    <button
+                        type="button"
+                        class="ocr-btn start-btn"
+                        onclick="startOCRCamera()">
+
+                        📷 Start OCR Camera
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="ocr-btn detect-btn"
+                        onclick="scanOCRText()">
+
+                        🔍 Detect BATCH / MFG / EXP
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="ocr-btn stop-btn"
+                        onclick="stopOCRCamera()">
+
+                        ⛔ Stop Camera
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="ocr-btn save-btn"
+                        onclick="saveProduct()">
+
+                        💾 Save New Product
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        class="ocr-btn reset-btn"
+                        onclick="resetPage()">
+
+                        🔄 Reset
+
+                    </button>
+
+                </div>
+
+
+                <!-- OCR CAMERA -->
+                <div id="ocrCameraBox">
+
+                    <div class="ocr-frame">
+
+                        <video
+                            id="ocrVideo"
+                            autoplay
+                            playsinline>
+                        </video>
+
+                        <div class="ocr-guide"></div>
+
+                        <div class="ocr-guide-text">
+
+                            Place BATCH / MFG / EXP
+                            inside the yellow box
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="ocr-loader"
+                        id="ocrLoader">
+                    </div>
+
+
+                    <p id="ocrStatus">
+
+                        Camera ready.
+
+                    </p>
+
+                </div>
+
+
+                <!-- OCR RESULT -->
+                <div id="ocrResult">
+
+                    <h4>
+                        Detected Information
+                    </h4>
+
+
+                    <div class="details">
+
+                        <div class="ocr-result-card">
+
+                            <strong>
+                                Batch Number
+                            </strong>
+
+                            <span id="ocrBatch">
+                                -
+                            </span>
+
+                        </div>
+
+
+                        <div class="ocr-result-card">
+
+                            <strong>
+                                Manufacture Date
+                            </strong>
+
+                            <span id="ocrManufacture">
+                                -
+                            </span>
+
+                        </div>
+
+
+                        <div class="ocr-result-card">
+
+                            <strong>
+                                Expiry Date
+                            </strong>
+
+                            <span id="ocrExpiry">
+                                -
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="ocr-raw">
+
+                        <h5>
+                            OCR Detected Text
+                        </h5>
+
+                        <div id="ocrRawText">
+                            No text detected yet.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BACK -->
+            <a
+                href="{% url 'staff_home' %}"
+                class="back-btn">
+
                 ← Back to Staff Home
+
             </a>
 
         </div>
@@ -268,170 +792,984 @@
     </div>
 
 
-    <script>
 
-        let scanner = null;
-        let alreadyScanned = false;
+<script>
 
+/* =========================================================
+   BARCODE SCANNER
+   ========================================================= */
 
-        function startScanner() {
-
-            scanner = new Html5Qrcode("reader");
-
-            const config = {
-                fps: 10,
-                qrbox: {
-                    width: 320,
-                    height: 180
-                }
-            };
+let scanner = null;
+let alreadyScanned = false;
+let scannedBarcode = "";
 
 
-            scanner.start(
-                {
-                    facingMode: "environment"
-                },
+/* =========================================================
+   START BARCODE SCANNER
+   ========================================================= */
 
-                config,
+function startScanner() {
 
-                function(decodedText, decodedResult) {
+    scanner = new Html5Qrcode("reader");
 
-                    if (alreadyScanned) {
-                        return;
-                    }
-
-                    alreadyScanned = true;
-
-                    console.log("Barcode detected:", decodedText);
-
-                    document.getElementById("scanStatus").innerHTML =
-                        '<span class="loading">Barcode detected. Getting product information...</span>';
-
-                    scanner.stop()
-                        .then(function() {
-                            console.log("Scanner stopped");
-                        })
-                        .catch(function(error) {
-                            console.log(error);
-                        });
+    const config = {
+        fps: 10,
+        qrbox: {
+            width: 320,
+            height: 180
+        }
+    };
 
 
-                    getProductDetails(decodedText);
+    scanner.start(
 
-                },
+        {
+            facingMode: "environment"
+        },
 
-                function(errorMessage) {
-                    // Scanner continuously checks the camera.
-                }
+        config,
 
-            )
+        function(decodedText) {
 
-            .then(function() {
+            if (alreadyScanned) {
+                return;
+            }
 
-                document.getElementById("scanStatus").innerHTML =
-                    "📷 Camera ready — Place the barcode inside the scanning box.";
 
-            })
+            alreadyScanned = true;
 
-            .catch(function(error) {
+            scannedBarcode = decodedText.trim();
 
-                document.getElementById("scanStatus").innerHTML =
-                    '<span class="error">❌ Camera access failed. Please allow camera permission.</span>';
 
-                console.log(error);
+            console.log(
+                "Barcode detected:",
+                scannedBarcode
+            );
 
-            });
+
+            /* STOP BARCODE CAMERA */
+
+            scanner.stop()
+                .then(function() {
+
+                    console.log(
+                        "Barcode scanner stopped."
+                    );
+
+                })
+                .catch(function(error) {
+
+                    console.log(error);
+
+                });
+
+
+            /* SHOW STATUS */
+
+            document.getElementById(
+                "scanStatus"
+            ).innerHTML =
+
+                '<span class="success">' +
+
+                '✓ Barcode detected: ' +
+
+                scannedBarcode +
+
+                '<br><br>' +
+
+                '🆕 NEW PRODUCT'
+
+                +
+
+                '</span>';
+
+
+            /* SHOW PRODUCT CARD */
+
+            document.getElementById(
+                "productCard"
+            ).style.display = "block";
+
+
+            /* SET BARCODE */
+
+            document.getElementById(
+                "productBarcode"
+            ).value = scannedBarcode;
+
+
+            /* CLEAR PRODUCT DETAILS */
+
+            document.getElementById(
+                "productName"
+            ).value = "";
+
+            document.getElementById(
+                "productCategory"
+            ).value = "";
+
+            document.getElementById(
+                "productQuantity"
+            ).value = "0";
+
+            document.getElementById(
+                "productUnit"
+            ).value = "Pieces";
+
+            document.getElementById(
+                "productBatch"
+            ).value = "";
+
+            document.getElementById(
+                "productManufacture"
+            ).value = "";
+
+            document.getElementById(
+                "productExpiry"
+            ).value = "";
+
+
+            /* MESSAGE */
+
+            document.getElementById(
+                "saveMessage"
+            ).innerHTML =
+
+                "🆕 <strong>New product detected.</strong>" +
+
+                "<br><br>" +
+
+                "Barcode number captured successfully. " +
+
+                "Enter the product details and use OCR.";
+
+        },
+
+        function(errorMessage) {
+
+            /* Ignore normal scanner errors */
+
         }
 
+    )
 
-        function getProductDetails(barcode) {
+    .then(function() {
 
-            fetch(
-                "{% url 'barcode_product_lookup' %}?barcode="
-                + encodeURIComponent(barcode)
-            )
+        document.getElementById(
+            "scanStatus"
+        ).innerHTML =
 
-            .then(response => response.json())
+            "📷 Camera ready — Place the barcode inside the scanning box.";
 
-            .then(data => {
+    })
+
+    .catch(function(error) {
+
+        console.error(error);
+
+        document.getElementById(
+            "scanStatus"
+        ).innerHTML =
+
+            '<span class="error">' +
+
+            '❌ Camera access failed. ' +
+
+            'Please allow camera permission.'
+
+            +
+
+            '</span>';
+
+    });
+
+}
+
+
+/* =========================================================
+   OCR VARIABLES
+   ========================================================= */
+
+let ocrStream = null;
+
+
+/* =========================================================
+   START OCR CAMERA
+   ========================================================= */
+
+async function startOCRCamera() {
+
+    const cameraBox =
+        document.getElementById(
+            "ocrCameraBox"
+        );
+
+    const video =
+        document.getElementById(
+            "ocrVideo"
+        );
+
+    const status =
+        document.getElementById(
+            "ocrStatus"
+        );
+
+
+    try {
+
+        ocrStream =
+            await navigator.mediaDevices.getUserMedia({
+
+                video: {
+                    facingMode: {
+                        ideal: "environment"
+                    },
+
+                    width: {
+                        ideal: 1280
+                    },
+
+                    height: {
+                        ideal: 720
+                    }
+                },
+
+                audio: false
+
+            });
+
+
+        video.srcObject = ocrStream;
+
+        cameraBox.style.display = "block";
+
+
+        status.innerText =
+
+            "📷 Camera ready. Keep BATCH / MFG / EXP inside the yellow box.";
+
+    }
+
+
+    catch (error) {
+
+        console.error(error);
+
+        status.innerText =
+
+            "❌ Camera access failed. Please allow camera permission.";
+
+    }
+
+}
+
+
+/* =========================================================
+   STOP OCR CAMERA
+   ========================================================= */
+
+function stopOCRCamera() {
+
+    if (ocrStream) {
+
+        ocrStream
+            .getTracks()
+            .forEach(function(track) {
+
+                track.stop();
+
+            });
+
+        ocrStream = null;
+    }
+
+
+    const video =
+        document.getElementById(
+            "ocrVideo"
+        );
+
+
+    video.srcObject = null;
+
+
+    document.getElementById(
+        "ocrStatus"
+    ).innerText =
+
+        "Camera stopped.";
+
+}
+
+
+/* =========================================================
+   OCR SCAN
+   ========================================================= */
+
+async function scanOCRText() {
+
+    /* CHECK BARCODE */
+
+    if (!scannedBarcode) {
+
+        alert(
+            "Please scan the barcode first."
+        );
+
+        return;
+    }
+
+
+    const video =
+        document.getElementById(
+            "ocrVideo"
+        );
+
+    const status =
+        document.getElementById(
+            "ocrStatus"
+        );
+
+    const loader =
+        document.getElementById(
+            "ocrLoader"
+        );
+
+
+    /* START CAMERA */
+
+    if (!ocrStream) {
+
+        await startOCRCamera();
+
+        await new Promise(function(resolve) {
+
+            setTimeout(resolve, 1000);
+
+        });
+
+    }
+
+
+    /* CHECK VIDEO */
+
+    if (!video.videoWidth) {
+
+        status.innerText =
+            "Waiting for camera...";
+
+        return;
+    }
+
+
+    status.innerText =
+        "🔍 Detecting BATCH / MFG / EXP...";
+
+
+    loader.style.display = "block";
+
+
+    /* CREATE CANVAS */
+
+    const canvas =
+        document.createElement("canvas");
+
+
+    let width = video.videoWidth;
+    let height = video.videoHeight;
+
+
+    const maxWidth = 900;
+
+
+    if (width > maxWidth) {
+
+        const ratio =
+            maxWidth / width;
+
+        width = maxWidth;
+
+        height =
+            Math.round(
+                height * ratio
+            );
+
+    }
+
+
+    canvas.width = width;
+    canvas.height = height;
+
+
+    const ctx =
+        canvas.getContext("2d");
+
+
+    ctx.drawImage(
+        video,
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    /* CONVERT TO IMAGE */
+
+    canvas.toBlob(
+
+        async function(blob) {
+
+            if (!blob) {
+
+                loader.style.display =
+                    "none";
+
+                status.innerText =
+                    "❌ Unable to capture camera image.";
+
+                return;
+            }
+
+
+            const formData =
+                new FormData();
+
+
+            formData.append(
+                "image",
+                blob,
+                "expiry_ocr.jpg"
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+
+                        "{% url 'ocr_camera' %}",
+
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "X-CSRFToken":
+                                    getCookie(
+                                        "csrftoken"
+                                    )
+                            },
+
+                            body: formData
+                        }
+
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                console.log(
+                    "OCR response:",
+                    data
+                );
+
 
                 if (data.success) {
 
-                    document.getElementById("productCard").style.display = "block";
+                    /* SHOW RESULT */
 
-                    const product = data.product;
-
-                    document.getElementById("productName").innerText =
-                        product.name || "-";
-
-                    document.getElementById("productBarcode").innerText =
-                        product.barcode || "-";
-
-                    document.getElementById("productCategory").innerText =
-                        product.category || "-";
-
-                    document.getElementById("productQuantity").innerText =
-                        product.quantity || "-";
-
-                    document.getElementById("productUnit").innerText =
-                        product.unit || "-";
-
-                    document.getElementById("productBatch").innerText =
-                        product.batch_number || "-";
-
-                    document.getElementById("productManufacture").innerText =
-                        product.manufacture_date || "-";
-
-                    document.getElementById("productExpiry").innerText =
-                        product.expiry_date || "-";
+                    document.getElementById(
+                        "ocrResult"
+                    ).style.display = "block";
 
 
-                    if (data.source === "api") {
+                    /* BATCH */
 
-                        document.getElementById("saveMessage").innerHTML =
-                            "✓ Product details retrieved from online product database and saved to ExpiryGuard database.";
+                    const batch =
+                        data.batch_number || "";
 
-                    } else {
 
-                        document.getElementById("saveMessage").innerHTML =
-                            "✓ Product already exists in ExpiryGuard database.";
+                    document.getElementById(
+                        "ocrBatch"
+                    ).innerText =
+                        batch || "-";
 
-                    }
+
+                    document.getElementById(
+                        "productBatch"
+                    ).value =
+                        batch;
+
+
+                    /* MFG */
+
+                    const mfg =
+                        data.manufacture_date || "";
+
+
+                    document.getElementById(
+                        "ocrManufacture"
+                    ).innerText =
+                        mfg || "-";
+
+
+                    document.getElementById(
+                        "productManufacture"
+                    ).value =
+                        mfg;
+
+
+                    /* EXP */
+
+                    const exp =
+                        data.expiry_date || "";
+
+
+                    document.getElementById(
+                        "ocrExpiry"
+                    ).innerText =
+                        exp || "-";
+
+
+                    document.getElementById(
+                        "productExpiry"
+                    ).value =
+                        exp;
+
+
+                    /* RAW TEXT */
+
+                    document.getElementById(
+                        "ocrRawText"
+                    ).innerText =
+
+                        data.ocr_text ||
+                        "No text detected.";
+
+
+                    status.innerText =
+                        "✅ BATCH / MFG / EXP detection completed.";
+
+
+                    document.getElementById(
+                        "saveMessage"
+                    ).innerHTML =
+
+                        '<span class="success">' +
+
+                        '✓ OCR information detected. ' +
+
+                        'Check the details and click Save New Product.'
+
+                        +
+
+                        '</span>';
 
                 }
 
                 else {
 
-                    document.getElementById("productCard").style.display = "block";
+                    status.innerText =
 
-                    document.getElementById("saveMessage").innerHTML =
-                        '<span class="error">❌ '
-                        + data.message
-                        + '</span>';
+                        "❌ " +
+
+                        (
+                            data.message ||
+                            data.error ||
+                            "Unable to detect BATCH / MFG / EXP."
+                        );
 
                 }
 
-            })
+            }
 
-            .catch(error => {
+            catch (error) {
 
-                console.log(error);
+                console.error(error);
 
-                document.getElementById("productCard").style.display = "block";
+                status.innerText =
+                    "❌ OCR server connection failed.";
 
-                document.getElementById("saveMessage").innerHTML =
-                    '<span class="error">❌ Unable to get product information.</span>';
+            }
 
-            });
+
+            loader.style.display = "none";
+
+        },
+
+        "image/jpeg",
+
+        0.85
+
+    );
+
+}
+
+
+/* =========================================================
+   SAVE NEW PRODUCT
+   ========================================================= */
+
+async function saveProduct() {
+
+    /* BARCODE */
+
+    const barcode =
+        scannedBarcode.trim();
+
+
+    if (!barcode) {
+
+        alert(
+            "Please scan the barcode first."
+        );
+
+        return;
+    }
+
+
+    /* NAME */
+
+    const name =
+        document.getElementById(
+            "productName"
+        ).value.trim();
+
+
+    if (!name) {
+
+        alert(
+            "Please enter the product name."
+        );
+
+        return;
+    }
+
+
+    /* OTHER DETAILS */
+
+    const category =
+        document.getElementById(
+            "productCategory"
+        ).value.trim();
+
+
+    const quantity =
+        document.getElementById(
+            "productQuantity"
+        ).value.trim();
+
+
+    const unit =
+        document.getElementById(
+            "productUnit"
+        ).value.trim();
+
+
+    const batch =
+        document.getElementById(
+            "productBatch"
+        ).value.trim();
+
+
+    const manufacture =
+        document.getElementById(
+            "productManufacture"
+        ).value.trim();
+
+
+    const expiry =
+        document.getElementById(
+            "productExpiry"
+        ).value.trim();
+
+
+    /* EXPIRY CHECK */
+
+    if (!expiry) {
+
+        alert(
+            "Please scan the packet using OCR and detect the expiry date first."
+        );
+
+        return;
+    }
+
+
+    /* FORM DATA */
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "barcode",
+        barcode
+    );
+
+    formData.append(
+        "name",
+        name
+    );
+
+    formData.append(
+        "category",
+        category
+    );
+
+    formData.append(
+        "quantity",
+        quantity || "0"
+    );
+
+    formData.append(
+        "unit",
+        unit || "Pieces"
+    );
+
+    formData.append(
+        "batch_number",
+        batch
+    );
+
+    formData.append(
+        "manufacture_date",
+        manufacture
+    );
+
+    formData.append(
+        "expiry_date",
+        expiry
+    );
+
+
+    const saveMessage =
+        document.getElementById(
+            "saveMessage"
+        );
+
+
+    saveMessage.innerHTML =
+
+        '<span class="loading">' +
+        'Saving new product...' +
+        '</span>';
+
+
+    try {
+
+        const response =
+            await fetch(
+
+                "{% url 'save_scanned_product' %}",
+
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "X-CSRFToken":
+                            getCookie(
+                                "csrftoken"
+                            )
+
+                    },
+
+                    body: formData
+                }
+
+            );
+
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Save response:",
+            data
+        );
+
+
+        if (data.success) {
+
+            const product =
+                data.product || {};
+
+
+            saveMessage.innerHTML =
+
+                '<span class="success">' +
+
+                '✓ NEW PRODUCT SAVED SUCCESSFULLY!' +
+
+                '<br><br>' +
+
+                'Product: ' +
+                (product.name || name) +
+
+                '<br>' +
+
+                'Barcode: ' +
+                (product.barcode || barcode) +
+
+                '<br>' +
+
+                'Batch: ' +
+                (product.batch_number || batch || "-") +
+
+                '<br>' +
+
+                'MFG: ' +
+                (
+                    product.manufacture_date ||
+                    manufacture ||
+                    "-"
+                ) +
+
+                '<br>' +
+
+                'EXP: ' +
+                (
+                    product.expiry_date ||
+                    expiry
+                ) +
+
+                '<br><br>' +
+
+                'Expiry Status: ' +
+                (
+                    data.status ||
+                    "Saved"
+                ) +
+
+                '</span>';
+
+
+            document.getElementById(
+                "ocrStatus"
+            ).innerText =
+
+                "✅ Product saved successfully to ExpiryGuard database.";
 
         }
 
+        else {
 
-        window.onload = function() {
-            startScanner();
-        };
+            saveMessage.innerHTML =
 
-    </script>
+                '<span class="error">' +
+
+                '❌ ' +
+
+                (
+                    data.message ||
+                    "Unable to save product."
+                ) +
+
+                '</span>';
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        saveMessage.innerHTML =
+
+            '<span class="error">' +
+
+            '❌ Database save failed. Check Django server.'
+
+            +
+
+            '</span>';
+
+    }
+
+}
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+function resetPage() {
+
+    location.reload();
+
+}
+
+
+/* =========================================================
+   CSRF COOKIE
+   ========================================================= */
+
+function getCookie(name) {
+
+    let cookieValue = null;
+
+
+    if (
+        document.cookie &&
+        document.cookie !== ""
+    ) {
+
+        const cookies =
+            document.cookie.split(";");
+
+
+        for (
+            let cookie of cookies
+        ) {
+
+            cookie =
+                cookie.trim();
+
+
+            if (
+                cookie.startsWith(
+                    name + "="
+                )
+            ) {
+
+                cookieValue =
+                    decodeURIComponent(
+                        cookie.substring(
+                            name.length + 1
+                        )
+                    );
+
+                break;
+            }
+
+        }
+
+    }
+
+
+    return cookieValue;
+
+}
+
+
+/* =========================================================
+   PAGE LOAD
+   ========================================================= */
+
+window.onload = function() {
+
+    startScanner();
+
+};
+
+</script>
 
 </body>
+
 </html>
