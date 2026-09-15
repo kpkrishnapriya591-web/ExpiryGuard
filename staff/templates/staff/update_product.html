@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Update Product - ExpiryGuard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #F4F4F5;
+            color: #27272A;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: #18181B;
+            color: white;
+            padding: 18px 35px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo span {
+            color: #D4A017;
+        }
+
+        .portal {
+            color: #D4A017;
+            font-size: 11px;
+            margin-top: 4px;
+        }
+
+        .home-btn {
+            text-decoration: none;
+            background: #D4A017;
+            color: #18181B;
+
+            padding: 10px 18px;
+            border-radius: 8px;
+
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 40px 20px;
+        }
+
+        .title {
+            margin-bottom: 25px;
+        }
+
+        .title h1 {
+            font-size: 30px;
+            color: #18181B;
+        }
+
+        .title p {
+            color: #71717A;
+            margin-top: 7px;
+        }
+
+        /* CARD */
+
+        .card {
+            background: white;
+            padding: 32px;
+            border-radius: 18px;
+            border: 1px solid #E4E4E7;
+        }
+
+        .card h2 {
+            color: #18181B;
+            margin-bottom: 25px;
+        }
+
+        /* MESSAGES */
+
+        .message {
+            padding: 13px 16px;
+            border-radius: 8px;
+            background: #FEE2E2;
+            color: #991B1B;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+
+            color: #3F3F46;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #D4D4D8;
+            border-radius: 8px;
+
+            font-size: 14px;
+            outline: none;
+
+            color: #27272A;
+            background: #FAFAFA;
+        }
+
+        .form-group input:focus {
+            border-color: #D4A017;
+
+            box-shadow:
+                0 0 0 3px rgba(212,160,23,0.12);
+
+            background: white;
+        }
+
+        /* BUTTONS */
+
+        .buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 28px;
+        }
+
+        .update-btn {
+            padding: 13px 25px;
+
+            background: #D4A017;
+            color: #18181B;
+
+            border: none;
+            border-radius: 8px;
+
+            font-size: 15px;
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .update-btn:hover {
+            background: #B8860B;
+        }
+
+        .cancel-btn {
+            display: inline-block;
+
+            padding: 13px 25px;
+
+            background: #18181B;
+            color: #D4A017;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .cancel-btn:hover {
+            background: #27272A;
+        }
+
+        /* PRODUCT INFO */
+
+        .product-info {
+            margin-bottom: 25px;
+
+            padding: 15px;
+
+            background: #FFFBEB;
+
+            border: 1px solid #FDE68A;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            color: #92400E;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 650px) {
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                padding: 25px 15px;
+            }
+
+            .card {
+                padding: 22px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .update-btn,
+            .cancel-btn {
+                width: 100%;
+                text-align: center;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div>
+
+        <div class="logo">
+            Expiry<span>Guard</span>
+        </div>
+
+        <div class="portal">
+            STAFF PORTAL
+        </div>
+
+    </div>
+
+    <a
+        href="{% url 'staff_home' %}"
+        class="home-btn"
+    >
+        ← Staff Home
+    </a>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <div class="title">
+
+        <h1>✏️ Update Product</h1>
+
+        <p>
+            Edit and update the selected product information.
+        </p>
+
+    </div>
+
+
+    <!-- MESSAGES -->
+
+    {% if messages %}
+
+        {% for message in messages %}
+
+            <div class="message">
+                {{ message }}
+            </div>
+
+        {% endfor %}
+
+    {% endif %}
+
+
+    <!-- UPDATE CARD -->
+
+    <div class="card">
+
+        <h2>
+            Product Details
+        </h2>
+
+
+        <div class="product-info">
+
+            📦 You are editing:
+
+            <strong>
+                {{ product.product_name }}
+            </strong>
+
+        </div>
+
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="form-grid">
+
+
+                <!-- PRODUCT NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Product Name *
+                    </label>
+
+                    <input
+                        type="text"
+                        name="name"
+                        value="{{ product.product_name }}"
+                        placeholder="Enter product name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- BARCODE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Barcode
+                    </label>
+
+                    <input
+                        type="text"
+                        name="barcode"
+                        value="{{ product.barcode|default:'' }}"
+                        placeholder="Enter barcode"
+                    >
+
+                </div>
+
+
+                <!-- BATCH NUMBER -->
+
+                <div class="form-group">
+
+                    <label>
+                        Batch Number
+                    </label>
+
+                    <input
+                        type="text"
+                        name="batch_number"
+                        value="{{ product.batch_number|default:'' }}"
+                        placeholder="Enter batch number"
+                    >
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div class="form-group">
+
+                    <label>
+                        Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        name="quantity"
+                        value="{{ product.quantity }}"
+                        min="0"
+                        placeholder="Enter quantity"
+                    >
+
+                </div>
+
+
+                <!-- MANUFACTURING DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Manufacturing Date
+                    </label>
+
+                    <input
+                        type="date"
+                        name="manufacturing_date"
+                        value="{{ product.manufacturing_date|date:'Y-m-d' }}"
+                    >
+
+                </div>
+
+
+                <!-- EXPIRY DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Expiry Date *
+                    </label>
+
+                    <input
+                        type="date"
+                        name="expiry_date"
+                        value="{{ product.expiry_date|date:'Y-m-d' }}"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="buttons">
+
+                <button
+                    type="submit"
+                    class="update-btn"
+                >
+                    ✓ Update Product
+                </button>
+
+
+                <a
+                    href="{% url 'staff_products' %}"
+                    class="cancel-btn"
+                >
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

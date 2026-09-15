@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Product Reports - ExpiryGuard</title>
+
+<style>
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        background: #eef8ff;
+        color: #263746;
+    }
+
+    .container {
+        width: 94%;
+        max-width: 1250px;
+        margin: 30px auto;
+    }
+
+    /* HEADER */
+
+    .header {
+        background: white;
+        padding: 25px 30px;
+        border-radius: 15px;
+        border: 1px solid #cceafa;
+        box-shadow: 0 5px 18px rgba(0, 120, 200, 0.08);
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        margin-bottom: 25px;
+    }
+
+    .header h1 {
+        color: #1677b7;
+        font-size: 28px;
+        margin-bottom: 6px;
+    }
+
+    .header p {
+        color: #72848e;
+        font-size: 14px;
+    }
+
+    .home-btn {
+        text-decoration: none;
+        background: #2196d2;
+        color: white;
+        padding: 11px 20px;
+        border-radius: 8px;
+        font-weight: bold;
+    }
+
+    .home-btn:hover {
+        background: #1677b7;
+    }
+
+    /* SUMMARY */
+
+    .summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-bottom: 25px;
+    }
+
+    .summary-card {
+        background: white;
+        border: 1px solid #cceafa;
+        border-radius: 14px;
+        padding: 22px;
+        box-shadow: 0 5px 18px rgba(0, 120, 200, 0.07);
+    }
+
+    .summary-card p {
+        color: #72848e;
+        font-size: 14px;
+    }
+
+    .summary-card h2 {
+        color: #1677b7;
+        font-size: 30px;
+        margin-top: 8px;
+    }
+
+    /* REPORT */
+
+    .report-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        border: 1px solid #cceafa;
+        box-shadow: 0 5px 18px rgba(0, 120, 200, 0.07);
+    }
+
+    .report-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .report-title h2 {
+        color: #1677b7;
+        font-size: 21px;
+    }
+
+    .report-title span {
+        color: #7a8d96;
+        font-size: 13px;
+    }
+
+    /* TABLE */
+
+    .table-wrapper {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background: #e9f7ff;
+        color: #1677b7;
+        padding: 14px;
+        text-align: left;
+        font-size: 14px;
+    }
+
+    td {
+        padding: 15px 14px;
+        border-bottom: 1px solid #edf3f6;
+        font-size: 14px;
+    }
+
+    tr:hover {
+        background: #f8fcff;
+    }
+
+    .product-name {
+        font-weight: bold;
+        color: #334b59;
+    }
+
+    .category {
+        color: #71838d;
+    }
+
+    .quantity {
+        font-weight: bold;
+        color: #1677b7;
+    }
+
+    /* STATUS */
+
+    .status {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        display: inline-block;
+    }
+
+    .safe {
+        background: #e4f8ed;
+        color: #23864d;
+    }
+
+    .soon {
+        background: #fff4d5;
+        color: #a87800;
+    }
+
+    .expired {
+        background: #ffe6e6;
+        color: #c03939;
+    }
+
+    /* EMPTY */
+
+    .empty {
+        text-align: center;
+        padding: 45px 20px;
+        color: #7a8d96;
+    }
+
+    .empty-icon {
+        font-size: 45px;
+        margin-bottom: 12px;
+    }
+
+    .empty h3 {
+        color: #526873;
+        margin-bottom: 7px;
+    }
+
+    /* FOOTER */
+
+    .footer {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .footer p {
+        color: #7a8d96;
+        font-size: 13px;
+    }
+
+    .print-btn {
+        border: none;
+        background: #2196d2;
+        color: white;
+        padding: 10px 18px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    .print-btn:hover {
+        background: #1677b7;
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 800px) {
+
+        .header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .summary {
+            grid-template-columns: 1fr;
+        }
+
+        .report-title {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 7px;
+        }
+
+        .footer {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+    }
+
+    /* PRINT */
+
+    @media print {
+
+        body {
+            background: white;
+        }
+
+        .home-btn,
+        .print-btn {
+            display: none;
+        }
+
+        .report-card,
+        .summary-card,
+        .header {
+            box-shadow: none;
+        }
+    }
+
+</style>
+
+
+</head>
+
+<body>
+
+<div class="container">
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div>
+
+        <h1>Product Reports</h1>
+
+        <p>
+            Product inventory and expiry status report
+        </p>
+
+    </div>
+
+    <a href="{% url 'home' %}" class="home-btn">
+        ← Back to Home
+    </a>
+
+</div>
+
+
+<!-- SUMMARY -->
+
+<div class="summary">
+
+    <div class="summary-card">
+
+        <p>Total Products</p>
+
+        <h2>
+            {{ products|length }}
+        </h2>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <p>Available Products</p>
+
+        <h2>
+            {{ products|length }}
+        </h2>
+
+    </div>
+
+
+    <div class="summary-card">
+
+        <p>Report Status</p>
+
+        <h2>
+            Active
+        </h2>
+
+    </div>
+
+</div>
+
+
+<!-- REPORT -->
+
+<div class="report-card">
+
+    <div class="report-title">
+
+        <h2>
+            Product Details
+        </h2>
+
+        <span>
+            Updated from inventory
+        </span>
+
+    </div>
+
+
+    <div class="table-wrapper">
+
+        {% if products %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Product Name</th>
+
+                    <th>Category</th>
+
+                    <th>Quantity</th>
+
+                    <th>Expiry Date</th>
+
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for product in products %}
+
+                <tr>
+
+                    <td class="product-name">
+                        {{ product.name }}
+                    </td>
+
+                    <td class="category">
+                        {{ product.category }}
+                    </td>
+
+                    <td class="quantity">
+                        {{ product.quantity }}
+                    </td>
+
+                    <td>
+                        {{ product.expiry_date }}
+                    </td>
+
+                    <td>
+
+                        {% if product.expiry_date %}
+
+                            {% now "Y-m-d" as today %}
+
+                            {% if product.expiry_date|date:"Y-m-d" < today %}
+
+                                <span class="status expired">
+                                    Expired
+                                </span>
+
+                            {% else %}
+
+                                <span class="status safe">
+                                    Active
+                                </span>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            <span class="status safe">
+                                Active
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📦
+            </div>
+
+            <h3>
+                No Products Found
+            </h3>
+
+            <p>
+                Products added by the user will appear here.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
+        <p>
+            ExpiryGuard Product Report
+        </p>
+
+        <button
+            class="print-btn"
+            onclick="window.print()">
+            🖨 Print Report
+        </button>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</body>
+
+</html>

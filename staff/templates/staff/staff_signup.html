@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Signup - ExpiryGuard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: #18181B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-card {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .icon {
+            width: 65px;
+            height: 65px;
+            background: #D4A017;
+            color: #18181B;
+            border-radius: 50%;
+            margin: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        h1 {
+            margin-top: 14px;
+            color: #18181B;
+        }
+
+        .header p {
+            color: #71717A;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #18181B;
+            color: #D4A017;
+            padding: 6px 14px;
+            border-radius: 20px;
+            margin-top: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .message {
+            padding: 12px;
+            background: #FEE2E2;
+            color: #991B1B;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 7px;
+            color: #27272A;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #D4D4D8;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        input:focus {
+            border-color: #D4A017;
+            box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+        }
+
+        .signup-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 9px;
+            background: #D4A017;
+            color: #18181B;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 5px;
+        }
+
+        .signup-btn:hover {
+            background: #B8860B;
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 22px;
+            color: #71717A;
+            font-size: 14px;
+        }
+
+        .login-link a {
+            color: #B8860B;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid #E4E4E7;
+        }
+
+        .back a {
+            color: #52525B;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="signup-card">
+
+    <div class="header">
+
+        <div class="icon">EG</div>
+
+        <h1>Create Staff Account</h1>
+
+        <p>ExpiryGuard Staff Portal</p>
+
+        <span class="badge">STAFF REGISTRATION</span>
+
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Username</label>
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Enter username"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Email</label>
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Enter email"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Create password"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Confirm Password</label>
+
+            <input
+                type="password"
+                name="confirm_password"
+                placeholder="Confirm password"
+                required
+            >
+        </div>
+
+        <button type="submit" class="signup-btn">
+            Create Staff Account
+        </button>
+
+    </form>
+
+    <div class="login-link">
+        Already have an account?
+        <a href="{% url 'staff_login' %}">
+            Login
+        </a>
+    </div>
+
+    <div class="back">
+        <a href="/">
+            ← Back to Admin Login
+        </a>
+    </div>
+
+</div>
+
+</body>
+</html>

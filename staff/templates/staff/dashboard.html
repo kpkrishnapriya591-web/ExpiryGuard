@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Dashboard - ExpiryGuard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #F4F4F5;
+            color: #27272A;
+        }
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #18181B;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            color: white;
+            text-align: center;
+            font-size: 23px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .logo span {
+            color: #D4A017;
+        }
+
+        .portal {
+            text-align: center;
+            color: #D4A017;
+            font-size: 11px;
+            margin-bottom: 35px;
+        }
+
+        .menu a {
+            display: block;
+            padding: 13px 15px;
+            margin-bottom: 7px;
+            border-radius: 8px;
+            color: #D4D4D8;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .menu a:hover,
+        .menu .active {
+            background: #D4A017;
+            color: #18181B;
+            font-weight: bold;
+        }
+
+        .logout {
+            position: absolute;
+            bottom: 25px;
+            left: 15px;
+            right: 15px;
+            background: #27272A;
+            text-align: center;
+        }
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .top {
+            margin-bottom: 30px;
+        }
+
+        .top h1 {
+            font-size: 30px;
+            color: #18181B;
+        }
+
+        .top p {
+            color: #71717A;
+            margin-top: 7px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat {
+            background: white;
+            padding: 25px;
+            border-radius: 14px;
+            border: 1px solid #E4E4E7;
+        }
+
+        .stat .icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .stat h2 {
+            font-size: 30px;
+            margin-bottom: 5px;
+        }
+
+        .stat p {
+            color: #71717A;
+            font-size: 14px;
+        }
+
+        .total {
+            border-top: 4px solid #18181B;
+        }
+
+        .safe {
+            border-top: 4px solid #D4A017;
+        }
+
+        .warning {
+            border-top: 4px solid #CA8A04;
+        }
+
+        .expired {
+            border-top: 4px solid #DC2626;
+        }
+
+        .actions {
+            background: white;
+            padding: 28px;
+            border-radius: 15px;
+            border: 1px solid #E4E4E7;
+        }
+
+        .actions h2 {
+            margin-bottom: 20px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .action {
+            text-decoration: none;
+            background: #18181B;
+            color: white;
+            padding: 18px;
+            border-radius: 10px;
+        }
+
+        .action strong {
+            display: block;
+            color: #D4A017;
+            margin-bottom: 5px;
+        }
+
+        .action span {
+            font-size: 13px;
+            color: #D4D4D8;
+        }
+
+        @media (max-width: 1000px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .logout {
+                position: static;
+                margin-top: 15px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .cards,
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+        Expiry<span>Guard</span>
+    </div>
+
+    <div class="portal">
+        STAFF PORTAL
+    </div>
+
+    <div class="menu">
+
+        <a href="{% url 'staff_home' %}">
+            🏠 Home
+        </a>
+
+        <a href="{% url 'staff_dashboard' %}" class="active">
+            📊 Dashboard
+        </a>
+
+        <a href="{% url 'barcode_scan' %}">
+            📷 Barcode Scan
+        </a>
+
+        <a href="{% url 'ocr_detection' %}">
+            🔍 OCR Detection
+        </a>
+
+        <a href="{% url 'staff_products' %}">
+            📦 Manage Products
+        </a>
+
+        <a href="{% url 'staff_expiry_dashboard' %}">
+            ⏳ Expiry Dashboard
+        </a>
+
+        <a href="{% url 'staff_product_status' %}">
+            📋 Product Status
+        </a>
+
+        <a href="{% url 'staff_notifications' %}">
+            🔔 Notifications
+        </a>
+
+        <a href="{% url 'staff_logout' %}" class="logout">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+<div class="main">
+
+    <div class="top">
+        <h1>Staff Dashboard</h1>
+        <p>Monitor product expiry information at a glance.</p>
+    </div>
+
+    <div class="cards">
+
+        <div class="stat total">
+            <div class="icon">📦</div>
+            <h2>{{ total_products }}</h2>
+            <p>Total Products</p>
+        </div>
+
+        <div class="stat safe">
+            <div class="icon">✅</div>
+            <h2>{{ safe_products }}</h2>
+            <p>Safe Products</p>
+        </div>
+
+        <div class="stat warning">
+            <div class="icon">⚠️</div>
+            <h2>{{ near_expiry }}</h2>
+            <p>Near Expiry</p>
+        </div>
+
+        <div class="stat expired">
+            <div class="icon">❌</div>
+            <h2>{{ expired_products }}</h2>
+            <p>Expired Products</p>
+        </div>
+
+    </div>
+
+    <div class="actions">
+
+        <h2>Quick Actions</h2>
+
+        <div class="action-grid">
+
+            <a href="{% url 'barcode_scan' %}" class="action">
+                <strong>📷 Barcode Scan</strong>
+                <span>Find product using barcode</span>
+            </a>
+
+            <a href="{% url 'ocr_detection' %}" class="action">
+                <strong>🔍 OCR Detection</strong>
+                <span>Detect expiry information</span>
+            </a>
+
+            <a href="{% url 'staff_products' %}" class="action">
+                <strong>📦 Manage Products</strong>
+                <span>Add and manage products</span>
+            </a>
+
+            <a href="{% url 'staff_expiry_dashboard' %}" class="action">
+                <strong>⏳ Expiry Dashboard</strong>
+                <span>View expiry analysis</span>
+            </a>
+
+            <a href="{% url 'staff_product_status' %}" class="action">
+                <strong>📋 Product Status</strong>
+                <span>Check product status</span>
+            </a>
+
+            <a href="{% url 'staff_notifications' %}" class="action">
+                <strong>🔔 Notifications</strong>
+                <span>View expiry alerts</span>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

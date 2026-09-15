@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>My Account - ExpiryGuard</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f8ff,
+                    #eaf2ff
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            padding: 20px;
+
+            color: #172033;
+        }
+
+
+        /* =========================
+           ACCOUNT BOX
+        ========================= */
+
+        .account-box {
+
+            width: 100%;
+
+            max-width: 440px;
+
+            background: white;
+
+            padding: 35px;
+
+            border-radius: 22px;
+
+            border:
+                1px solid #dbe7f5;
+
+            box-shadow:
+                0 20px 50px
+                rgba(30,64,175,0.12);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        /* TOP BLUE LINE */
+
+        .account-box::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1d4ed8,
+                    #3b82f6,
+                    #60a5fa
+                );
+        }
+
+
+        /* =========================
+           LOGO
+        ========================= */
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 28px;
+
+            font-weight: 700;
+
+            color: #123b68;
+
+            margin-top: 5px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 28px;
+        }
+
+
+        /* =========================
+           PROFILE
+        ========================= */
+
+        .profile {
+
+            text-align: center;
+
+            margin-bottom: 27px;
+        }
+
+
+        .profile-icon {
+
+            width: 85px;
+
+            height: 85px;
+
+            margin: auto;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #60a5fa
+                );
+
+            color: white;
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            font-size: 34px;
+
+            font-weight: 700;
+
+            box-shadow:
+                0 10px 25px
+                rgba(37,99,235,0.25);
+
+            border:
+                4px solid #eff6ff;
+        }
+
+
+        .username {
+
+            margin-top: 13px;
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            color: #102a43;
+        }
+
+
+        .account-label {
+
+            margin-top: 4px;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .info {
+
+            background:
+                #f7faff;
+
+            padding: 15px 17px;
+
+            border-radius: 12px;
+
+            margin-bottom: 12px;
+
+            border:
+                1px solid #e3edf9;
+
+            transition: 0.25s;
+        }
+
+
+        .info:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 7px 18px
+                rgba(30,64,175,0.07);
+
+            border-color:
+                #bfdbfe;
+        }
+
+
+        .info strong {
+
+            display: block;
+
+            color: #1d4ed8;
+
+            font-size: 12px;
+
+            margin-bottom: 6px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        .info span {
+
+            color: #334155;
+
+            font-size: 14px;
+
+            word-break: break-word;
+        }
+
+
+        /* ACTIVE STATUS */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            color: #1d4ed8 !important;
+
+            font-weight: 600;
+        }
+
+
+        .status-dot {
+
+            width: 8px;
+
+            height: 8px;
+
+            border-radius: 50%;
+
+            background: #3b82f6;
+
+            display: inline-block;
+
+            box-shadow:
+                0 0 0 4px #dbeafe;
+        }
+
+
+        /* =========================
+           BACK BUTTON
+        ========================= */
+
+        .back-btn {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            padding: 13px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #3b82f6
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            border-radius: 10px;
+
+            font-weight: 600;
+
+            font-size: 14px;
+
+            box-shadow:
+                0 8px 20px
+                rgba(37,99,235,0.20);
+
+            transition: 0.25s;
+        }
+
+
+        .back-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(37,99,235,0.28);
+        }
+
+
+        /* =========================
+           HOME ICON
+        ========================= */
+
+        .home-icon {
+
+            margin-right: 7px;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 500px) {
+
+            body {
+
+                padding: 15px;
+            }
+
+
+            .account-box {
+
+                padding: 30px 22px;
+
+                border-radius: 18px;
+            }
+
+
+            .logo {
+
+                font-size: 25px;
+            }
+
+
+            .profile-icon {
+
+                width: 78px;
+
+                height: 78px;
+
+                font-size: 31px;
+            }
+
+
+            .username {
+
+                font-size: 19px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="account-box">
+
+
+        <!-- LOGO -->
+
+        <div class="logo">
+
+            ExpiryGuard
+
+        </div>
+
+
+        <div class="subtitle">
+
+            My Account
+
+        </div>
+
+
+
+        <!-- PROFILE -->
+
+        <div class="profile">
+
+
+            <div class="profile-icon">
+
+                {{ request.user.username|first|upper }}
+
+            </div>
+
+
+            <div class="username">
+
+                {{ request.user.username }}
+
+            </div>
+
+
+            <div class="account-label">
+
+                ExpiryGuard User
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- USERNAME -->
+
+        <div class="info">
+
+            <strong>
+                Username
+            </strong>
+
+            <span>
+                {{ request.user.username }}
+            </span>
+
+        </div>
+
+
+
+        <!-- EMAIL -->
+
+        <div class="info">
+
+            <strong>
+                Email
+            </strong>
+
+            <span>
+                {{ request.user.email }}
+            </span>
+
+        </div>
+
+
+
+        <!-- STATUS -->
+
+        <div class="info">
+
+            <strong>
+                Account Status
+            </strong>
+
+            <span class="status">
+
+                <span class="status-dot"></span>
+
+                Active
+
+            </span>
+
+        </div>
+
+
+
+        <!-- HOME BUTTON -->
+
+        <a
+            href="{% url 'home' %}"
+            class="back-btn"
+        >
+
+            <span class="home-icon">
+                🏠
+            </span>
+
+            Back to Home
+
+        </a>
+
+
+
+        <div class="footer">
+
+            © 2026 ExpiryGuard
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
+

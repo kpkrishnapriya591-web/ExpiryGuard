@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Barcode Product Scanner - ExpiryGuard</title>
+
+    <!-- Barcode Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #18181b;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+        .header span {
+            color: #d4a017;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title h2 {
+            font-size: 30px;
+            color: #18181b;
+        }
+
+        .title p {
+            color: #666;
+            margin-top: 8px;
+        }
+
+        .scanner-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        #reader {
+            width: 100%;
+            max-width: 500px;
+            margin: auto;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f4f4f4;
+            border-radius: 10px;
+            color: #555;
+        }
+
+        .success {
+            color: green;
+            font-weight: bold;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .loading {
+            color: #d4a017;
+            font-weight: bold;
+        }
+
+        .product-card {
+            display: none;
+            margin-top: 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .product-card h3 {
+            font-size: 25px;
+            margin-bottom: 20px;
+            color: #18181b;
+        }
+
+        .details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail {
+            background: #f7f7f7;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .detail strong {
+            display: block;
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .detail span {
+            font-size: 16px;
+            color: #18181b;
+            font-weight: bold;
+        }
+
+        .save-message {
+            margin-top: 20px;
+            padding: 15px;
+            background: #fff8df;
+            border-left: 5px solid #d4a017;
+            border-radius: 8px;
+            color: #5c4a00;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            background: #18181b;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        .back-btn:hover {
+            background: #d4a017;
+            color: black;
+        }
+
+        @media (max-width: 700px) {
+            .details {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 15px 20px;
+            }
+
+            .container {
+                margin: 20px auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Expiry<span>Guard</span></h1>
+        <div>Barcode Product Scanner</div>
+    </div>
+
+    <div class="container">
+
+        <div class="title">
+            <h2>Scan Product Barcode</h2>
+            <p>
+                Scan a supermarket product barcode to automatically
+                retrieve and save its details.
+            </p>
+        </div>
+
+        <div class="scanner-card">
+
+            <div id="reader"></div>
+
+            <div class="status" id="scanStatus">
+                Starting camera...
+            </div>
+
+        </div>
+
+        <!-- Product Details -->
+
+        <div class="product-card" id="productCard">
+
+            <h3>Product Details</h3>
+
+            <div class="details">
+
+                <div class="detail">
+                    <strong>Product Name</strong>
+                    <span id="productName">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Barcode</strong>
+                    <span id="productBarcode">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Category</strong>
+                    <span id="productCategory">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Quantity</strong>
+                    <span id="productQuantity">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Unit</strong>
+                    <span id="productUnit">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Batch Number</strong>
+                    <span id="productBatch">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Manufacture Date</strong>
+                    <span id="productManufacture">-</span>
+                </div>
+
+                <div class="detail">
+                    <strong>Expiry Date</strong>
+                    <span id="productExpiry">-</span>
+                </div>
+
+            </div>
+
+            <div class="save-message" id="saveMessage">
+                Product information is being processed...
+            </div>
+
+            <a href="{% url 'staff_home' %}" class="back-btn">
+                ← Back to Staff Home
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        let scanner = null;
+        let alreadyScanned = false;
+
+
+        function startScanner() {
+
+            scanner = new Html5Qrcode("reader");
+
+            const config = {
+                fps: 10,
+                qrbox: {
+                    width: 320,
+                    height: 180
+                }
+            };
+
+
+            scanner.start(
+                {
+                    facingMode: "environment"
+                },
+
+                config,
+
+                function(decodedText, decodedResult) {
+
+                    if (alreadyScanned) {
+                        return;
+                    }
+
+                    alreadyScanned = true;
+
+                    console.log("Barcode detected:", decodedText);
+
+                    document.getElementById("scanStatus").innerHTML =
+                        '<span class="loading">Barcode detected. Getting product information...</span>';
+
+                    scanner.stop()
+                        .then(function() {
+                            console.log("Scanner stopped");
+                        })
+                        .catch(function(error) {
+                            console.log(error);
+                        });
+
+
+                    getProductDetails(decodedText);
+
+                },
+
+                function(errorMessage) {
+                    // Scanner continuously checks the camera.
+                }
+
+            )
+
+            .then(function() {
+
+                document.getElementById("scanStatus").innerHTML =
+                    "📷 Camera ready — Place the barcode inside the scanning box.";
+
+            })
+
+            .catch(function(error) {
+
+                document.getElementById("scanStatus").innerHTML =
+                    '<span class="error">❌ Camera access failed. Please allow camera permission.</span>';
+
+                console.log(error);
+
+            });
+        }
+
+
+        function getProductDetails(barcode) {
+
+            fetch(
+                "{% url 'barcode_product_lookup' %}?barcode="
+                + encodeURIComponent(barcode)
+            )
+
+            .then(response => response.json())
+
+            .then(data => {
+
+                if (data.success) {
+
+                    document.getElementById("productCard").style.display = "block";
+
+                    const product = data.product;
+
+                    document.getElementById("productName").innerText =
+                        product.name || "-";
+
+                    document.getElementById("productBarcode").innerText =
+                        product.barcode || "-";
+
+                    document.getElementById("productCategory").innerText =
+                        product.category || "-";
+
+                    document.getElementById("productQuantity").innerText =
+                        product.quantity || "-";
+
+                    document.getElementById("productUnit").innerText =
+                        product.unit || "-";
+
+                    document.getElementById("productBatch").innerText =
+                        product.batch_number || "-";
+
+                    document.getElementById("productManufacture").innerText =
+                        product.manufacture_date || "-";
+
+                    document.getElementById("productExpiry").innerText =
+                        product.expiry_date || "-";
+
+
+                    if (data.source === "api") {
+
+                        document.getElementById("saveMessage").innerHTML =
+                            "✓ Product details retrieved from online product database and saved to ExpiryGuard database.";
+
+                    } else {
+
+                        document.getElementById("saveMessage").innerHTML =
+                            "✓ Product already exists in ExpiryGuard database.";
+
+                    }
+
+                }
+
+                else {
+
+                    document.getElementById("productCard").style.display = "block";
+
+                    document.getElementById("saveMessage").innerHTML =
+                        '<span class="error">❌ '
+                        + data.message
+                        + '</span>';
+
+                }
+
+            })
+
+            .catch(error => {
+
+                console.log(error);
+
+                document.getElementById("productCard").style.display = "block";
+
+                document.getElementById("saveMessage").innerHTML =
+                    '<span class="error">❌ Unable to get product information.</span>';
+
+            });
+
+        }
+
+
+        window.onload = function() {
+            startScanner();
+        };
+
+    </script>
+
+</body>
+</html>

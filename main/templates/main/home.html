@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Home - ExpiryGuard</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family: "Segoe UI", Arial, sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f8ff,
+                    #eaf2ff
+                );
+
+            color: #172033;
+
+            overflow-x: hidden;
+        }
+
+
+        /* =================================
+           SIDEBAR
+        ================================= */
+
+        .sidebar {
+
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 255px;
+
+            height: 100vh;
+
+            padding: 24px 17px;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    #081b33,
+                    #0d2b4f,
+                    #123f70
+                );
+
+            color: white;
+
+            z-index: 1000;
+
+            box-shadow:
+                8px 0 30px
+                rgba(8,27,51,0.16);
+
+            transition: 0.3s;
+        }
+
+
+        /* =================================
+           BRAND
+        ================================= */
+
+        .brand {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding:
+                8px 12px 30px;
+        }
+
+
+        .brand-icon {
+
+            width: 46px;
+            height: 46px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #60a5fa
+                );
+
+            font-size: 23px;
+
+            box-shadow:
+                0 8px 22px
+                rgba(37,99,235,0.30);
+        }
+
+
+        .brand h2 {
+
+            font-size: 21px;
+
+            letter-spacing: 0.4px;
+        }
+
+
+        .brand span {
+
+            display: block;
+
+            margin-top: 3px;
+
+            font-size: 10px;
+
+            color: #b7c9df;
+        }
+
+
+        /* =================================
+           MENU
+        ================================= */
+
+        .menu-title {
+
+            padding:
+                0 14px;
+
+            margin-bottom: 10px;
+
+            color: #8da8c7;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1.5px;
+        }
+
+
+        .menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: flex-start;
+
+            gap: 13px;
+
+            padding:
+                13px 14px;
+
+            margin: 5px 0;
+
+            border-radius: 12px;
+
+            color: #dbeafe;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.25s;
+        }
+
+
+        .menu a:hover {
+
+            background:
+                rgba(96,165,250,0.15);
+
+            color: white;
+
+            transform:
+                translateX(4px);
+        }
+
+
+        .menu a.active {
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #3b82f6
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 22px
+                rgba(37,99,235,0.28);
+        }
+
+
+        .menu-icon {
+
+            width: 25px;
+
+            text-align: center;
+
+            font-size: 17px;
+        }
+
+
+        /* =================================
+           SIDEBAR FOOTER
+        ================================= */
+
+        .sidebar-bottom {
+
+            position: absolute;
+
+            left: 17px;
+            right: 17px;
+
+            bottom: 23px;
+
+            padding: 13px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.07);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.08);
+
+            color: #bfd1e6;
+
+            text-align: center;
+
+            font-size: 11px;
+        }
+
+
+        /* =================================
+           MAIN
+        ================================= */
+
+        .main {
+
+            margin-left: 255px;
+
+            min-height: 100vh;
+
+            padding:
+                25px 35px 40px;
+        }
+
+
+        /* =================================
+           TOP BAR
+        ================================= */
+
+        .topbar {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 28px;
+        }
+
+
+        .welcome-small {
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        .topbar h1 {
+
+            margin-top: 4px;
+
+            color: #102a43;
+
+            font-size: 27px;
+        }
+
+
+        /* =================================
+           TOP RIGHT ACTIONS
+        ================================= */
+
+        .topbar-actions {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        /* =================================
+           NOTIFICATION BUTTON
+        ================================= */
+
+        .notification-button {
+
+            width: 42px;
+            height: 42px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            position: relative;
+
+            border-radius: 50%;
+
+            background: white;
+
+            border:
+                1px solid #d8e5f5;
+
+            color: #1d4ed8;
+
+            text-decoration: none;
+
+            font-size: 19px;
+
+            box-shadow:
+                0 7px 25px
+                rgba(30,64,175,0.07);
+
+            transition: 0.25s;
+        }
+
+
+        .notification-button:hover {
+
+            transform:
+                translateY(-2px);
+
+            background: #eff6ff;
+
+            border-color: #bfdbfe;
+
+            box-shadow:
+                0 10px 28px
+                rgba(30,64,175,0.14);
+        }
+
+
+        /* =================================
+           NOTIFICATION BADGE
+        ================================= */
+
+        .notification-badge {
+
+            position: absolute;
+
+            top: -3px;
+            right: -2px;
+
+            min-width: 17px;
+            height: 17px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 0 4px;
+
+            border-radius: 20px;
+
+            background: #ef4444;
+
+            color: white;
+
+            font-size: 9px;
+
+            font-weight: 700;
+
+            border:
+                2px solid white;
+        }
+
+
+        /* =================================
+           USER BOX
+        ================================= */
+
+        .user-box {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 11px;
+
+            padding:
+                7px 14px 7px 7px;
+
+            background: white;
+
+            border:
+                1px solid #d8e5f5;
+
+            border-radius: 40px;
+
+            box-shadow:
+                0 7px 25px
+                rgba(30,64,175,0.07);
+
+            text-decoration: none;
+
+            cursor: pointer;
+
+            transition: 0.25s;
+        }
+
+
+        .user-box:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 10px 28px
+                rgba(30,64,175,0.14);
+
+            border-color:
+                #bfdbfe;
+        }
+
+
+        .avatar {
+
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #60a5fa
+                );
+
+            color: white;
+
+            font-weight: bold;
+        }
+
+
+        .user-name {
+
+            color: #334155;
+
+            font-size: 13px;
+
+            font-weight: 600;
+        }
+
+
+        /* =================================
+           HERO
+        ================================= */
+
+        .hero {
+
+            position: relative;
+
+            overflow: hidden;
+
+            min-height: 320px;
+
+            padding: 45px;
+
+            margin-bottom: 30px;
+
+            border-radius: 28px;
+
+            color: white;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #081b33,
+                    #123b68 55%,
+                    #2563eb
+                );
+
+            box-shadow:
+                0 20px 50px
+                rgba(30,64,175,0.23);
+        }
+
+
+        .hero::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 390px;
+            height: 390px;
+
+            right: -130px;
+            top: -160px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(96,165,250,0.13);
+        }
+
+
+        .hero::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 240px;
+            height: 240px;
+
+            right: 170px;
+            bottom: -160px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(147,197,253,0.08);
+        }
+
+
+        .hero-content {
+
+            position: relative;
+
+            z-index: 2;
+
+            max-width: 700px;
+        }
+
+
+        .hero-badge {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding:
+                7px 13px;
+
+            margin-bottom: 18px;
+
+            border-radius: 30px;
+
+            background:
+                rgba(255,255,255,0.10);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.16);
+
+            color: #dbeafe;
+
+            font-size: 12px;
+
+            backdrop-filter:
+                blur(8px);
+        }
+
+
+        .hero h2 {
+
+            font-size: 42px;
+
+            line-height: 1.15;
+
+            margin-bottom: 15px;
+        }
+
+
+        .hero h2 span {
+
+            color: #93c5fd;
+        }
+
+
+        .hero p {
+
+            max-width: 620px;
+
+            color: #dbeafe;
+
+            font-size: 15px;
+
+            line-height: 1.8;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =================================
+           BUTTONS
+        ================================= */
+
+        .hero-buttons {
+
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 12px;
+        }
+
+
+        .btn-primary {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                12px 19px;
+
+            border-radius: 11px;
+
+            background: white;
+
+            color: #1d4ed8;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            transition: 0.25s;
+        }
+
+
+        .btn-primary:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.18);
+        }
+
+
+        .btn-secondary {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding:
+                12px 19px;
+
+            border-radius: 11px;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.22);
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.25s;
+        }
+
+
+        .btn-secondary:hover {
+
+            background:
+                rgba(255,255,255,0.16);
+        }
+
+
+        /* =================================
+           SHIELD
+        ================================= */
+
+        .hero-icon {
+
+            position: absolute;
+
+            right: 8%;
+            top: 50%;
+
+            width: 165px;
+            height: 165px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            transform:
+                translateY(-50%);
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            border:
+                1px solid
+                rgba(255,255,255,0.14);
+
+            font-size: 76px;
+
+            animation:
+                floating 4s ease-in-out infinite;
+        }
+
+
+        @keyframes floating {
+
+            0%, 100% {
+
+                transform:
+                    translateY(-50%);
+            }
+
+            50% {
+
+                transform:
+                    translateY(
+                        calc(-50% - 12px)
+                    );
+            }
+        }
+
+
+        /* =================================
+           BENEFITS
+        ================================= */
+
+        .section-heading {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 18px;
+        }
+
+
+        .section-heading h3 {
+
+            color: #102a43;
+
+            font-size: 20px;
+        }
+
+
+        .section-heading span {
+
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+
+        .benefits {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .benefit-card {
+
+            position: relative;
+
+            overflow: hidden;
+
+            padding: 23px;
+
+            min-height: 185px;
+
+            background: white;
+
+            border:
+                1px solid #dbe7f5;
+
+            border-radius: 19px;
+
+            box-shadow:
+                0 8px 25px
+                rgba(30,64,175,0.06);
+
+            transition:
+                transform 0.3s,
+                box-shadow 0.3s;
+        }
+
+
+        .benefit-card:hover {
+
+            transform:
+                translateY(-7px);
+
+            box-shadow:
+                0 18px 38px
+                rgba(30,64,175,0.12);
+        }
+
+
+        .benefit-card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 90px;
+            height: 90px;
+
+            right: -35px;
+            bottom: -35px;
+
+            border-radius: 50%;
+
+            background:
+                #eff6ff;
+        }
+
+
+        .benefit-icon {
+
+            position: relative;
+
+            z-index: 2;
+
+            width: 48px;
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            margin-bottom: 15px;
+
+            border-radius: 13px;
+
+            background:
+                #eff6ff;
+
+            color: #2563eb;
+
+            font-size: 21px;
+        }
+
+
+        .benefit-card h4 {
+
+            position: relative;
+
+            z-index: 2;
+
+            margin-bottom: 8px;
+
+            color: #102a43;
+
+            font-size: 16px;
+        }
+
+
+        .benefit-card p {
+
+            position: relative;
+
+            z-index: 2;
+
+            color: #64748b;
+
+            font-size: 12.5px;
+
+            line-height: 1.7;
+        }
+
+
+        /* =================================
+           HIGHLIGHT
+        ================================= */
+
+        .highlight {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 25px;
+
+            padding:
+                27px 30px;
+
+            margin-bottom: 25px;
+
+            border-radius: 21px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #eaf2ff,
+                    #f7faff
+                );
+
+            border:
+                1px solid #c9ddf7;
+        }
+
+
+        .highlight-left {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 16px;
+        }
+
+
+        .highlight-icon {
+
+            width: 55px;
+            height: 55px;
+
+            flex-shrink: 0;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 15px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #60a5fa
+                );
+
+            color: white;
+
+            font-size: 23px;
+        }
+
+
+        .highlight h3 {
+
+            color: #163b68;
+
+            font-size: 18px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .highlight p {
+
+            color: #64748b;
+
+            font-size: 12.5px;
+
+            line-height: 1.6;
+        }
+
+
+        .highlight-button {
+
+            padding:
+                11px 18px;
+
+            border-radius: 10px;
+
+            background:
+                #1d4ed8;
+
+            color: white;
+
+            text-decoration: none;
+
+            white-space: nowrap;
+
+            font-size: 12px;
+
+            font-weight: 600;
+
+            transition: 0.25s;
+        }
+
+
+        .highlight-button:hover {
+
+            background:
+                #1e40af;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        /* =================================
+           FOOTER
+        ================================= */
+
+        footer {
+
+            padding:
+                20px 10px 5px;
+
+            color: #94a3b8;
+
+            text-align: center;
+
+            font-size: 12px;
+        }
+
+
+        /* =================================
+           MOBILE MENU
+        ================================= */
+
+        .mobile-menu {
+
+            display: none;
+
+            width: 42px;
+            height: 42px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: white;
+
+            color: #1d4ed8;
+
+            font-size: 20px;
+
+            cursor: pointer;
+
+            box-shadow:
+                0 5px 15px
+                rgba(30,64,175,0.10);
+        }
+
+
+        /* =================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 1100px) {
+
+            .benefits {
+
+                grid-template-columns:
+                    repeat(2, 1fr);
+            }
+
+            .hero-icon {
+
+                right: 3%;
+            }
+        }
+
+
+        @media (max-width: 850px) {
+
+            .sidebar {
+
+                left: -270px;
+            }
+
+
+            .sidebar.open {
+
+                left: 0;
+            }
+
+
+            .main {
+
+                margin-left: 0;
+
+                padding: 20px;
+            }
+
+
+            .mobile-menu {
+
+                display: block;
+            }
+
+
+            .hero {
+
+                padding: 32px;
+            }
+
+
+            .hero h2 {
+
+                font-size: 33px;
+            }
+
+
+            .hero-icon {
+
+                display: none;
+            }
+
+
+            .highlight {
+
+                align-items: flex-start;
+
+                flex-direction: column;
+            }
+        }
+
+
+        @media (max-width: 550px) {
+
+            .benefits {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .topbar h1 {
+
+                font-size: 21px;
+            }
+
+
+            .user-name {
+
+                display: none;
+            }
+
+
+            .hero {
+
+                padding: 25px;
+
+                border-radius: 20px;
+            }
+
+
+            .hero h2 {
+
+                font-size: 28px;
+            }
+
+
+            .hero p {
+
+                font-size: 13px;
+            }
+
+
+            .section-heading span {
+
+                display: none;
+            }
+
+
+            .highlight {
+
+                padding: 22px;
+            }
+
+
+            .notification-button {
+
+                width: 40px;
+                height: 40px;
+
+                font-size: 18px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =================================
+         SIDEBAR
+    ================================= -->
+
+    <aside class="sidebar" id="sidebar">
+
+
+        <div class="brand">
+
+            <div class="brand-icon">
+                🛡️
+            </div>
+
+            <div>
+
+                <h2>ExpiryGuard</h2>
+
+                <span>
+                    Product Expiry Management
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div class="menu">
+
+            <div class="menu-title">
+                Main Menu
+            </div>
+
+
+            <!-- HOME -->
+
+            <a
+                href="{% url 'home' %}"
+                class="active"
+            >
+
+                <span class="menu-icon">
+                    🏠
+                </span>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <!-- DASHBOARD -->
+
+            <a href="{% url 'dashboard' %}">
+
+                <span class="menu-icon">
+                    📊
+                </span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- PRODUCT MANAGEMENT -->
+
+            <a href="{% url 'manage_products' %}">
+
+                <span class="menu-icon">
+                    📦
+                </span>
+
+                <span>
+                    Product Management
+                </span>
+
+            </a>
+
+
+            <!-- REPORT -->
+
+            <a href="{% url 'reports' %}">
+
+                <span class="menu-icon">
+                    📑
+                </span>
+
+                <span>
+                    Report
+                </span>
+
+            </a>
+
+
+            <!-- PRODUCT STATUS -->
+
+            <a href="{% url 'product_status' %}">
+
+                <span class="menu-icon">
+                    ⏰
+                </span>
+
+                <span>
+                    Product Status
+                </span>
+
+            </a>
+
+
+            <!-- STAFF MANAGEMENT -->
+
+            <a href="{% url 'staff_management' %}">
+
+                <span class="menu-icon">
+                    👥
+                </span>
+
+                <span>
+                    Staff Management
+                </span>
+
+            </a>
+
+
+            <!-- ACTIVITY LOG -->
+
+            <a href="{% url 'activity_log' %}">
+
+                <span class="menu-icon">
+                    📋
+                </span>
+
+                <span>
+                    Activity Log
+                </span>
+
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <a href="{% url 'logout' %}">
+
+                <span class="menu-icon">
+                    🚪
+                </span>
+
+                <span>
+                    Logout
+                </span>
+
+            </a>
+
+
+        </div>
+
+
+        <div class="sidebar-bottom">
+
+            🛡️ Manage smarter. Stay safer.
+
+        </div>
+
+
+    </aside>
+
+
+
+    <!-- =================================
+         MAIN CONTENT
+    ================================= -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <div class="topbar">
+
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:14px;
+            ">
+
+
+                <button
+                    class="mobile-menu"
+                    onclick="toggleSidebar()"
+                >
+                    ☰
+                </button>
+
+
+                <div>
+
+                    <div class="welcome-small">
+                        Welcome back 👋
+                    </div>
+
+
+                    <h1>
+
+                        Welcome,
+
+                        {% if request.user.is_authenticated %}
+
+                            {{ request.user.username }}
+
+                        {% else %}
+
+                            User
+
+                        {% endif %}
+
+                    </h1>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================
+                 TOP RIGHT ACTIONS
+            ================================= -->
+
+            <div class="topbar-actions">
+
+
+                <!-- NOTIFICATION BUTTON -->
+
+                <a
+                    href="{% url 'notifications' %}"
+                    class="notification-button"
+                    title="Notifications"
+                    aria-label="Notifications"
+                >
+
+                    🔔
+
+                    <!-- Notification count -->
+
+                    <span class="notification-badge">
+                        3
+                    </span>
+
+                </a>
+
+
+                <!-- USER ACCOUNT -->
+
+                <a
+                    href="{% url 'account' %}"
+                    class="user-box"
+                    title="Open Account"
+                >
+
+                    <div class="avatar">
+
+                        {% if request.user.is_authenticated %}
+
+                            {{ request.user.username|first|upper }}
+
+                        {% else %}
+
+                            U
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <div class="user-name">
+
+                        {% if request.user.is_authenticated %}
+
+                            {{ request.user.username }}
+
+                        {% else %}
+
+                            User
+
+                        {% endif %}
+
+                    </div>
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================
+             HERO
+        ================================= -->
+
+        <section class="hero">
+
+
+            <div class="hero-content">
+
+
+                <div class="hero-badge">
+
+                    🛡️ Smart & Simple Product Management
+
+                </div>
+
+
+                <h2>
+
+                    Manage Products.
+                    <span>Never Miss an Expiry.</span>
+
+                </h2>
+
+
+                <p>
+
+                    Keep your products organized, monitor
+                    expiry dates easily, identify products
+                    that need attention and maintain better
+                    control over your inventory.
+
+                </p>
+
+
+                <div class="hero-buttons">
+
+
+                    <a
+                        href="{% url 'dashboard' %}"
+                        class="btn-primary"
+                    >
+
+                        📊 Go to Dashboard
+
+                    </a>
+
+
+                    <a
+                        href="{% url 'manage_products' %}"
+                        class="btn-secondary"
+                    >
+
+                        📦 Manage Products
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div class="hero-icon">
+                🛡️
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =================================
+             BENEFITS
+        ================================= -->
+
+        <div class="section-heading">
+
+            <h3>
+                Why Use ExpiryGuard?
+            </h3>
+
+            <span>
+                Simple tools for better product management
+            </span>
+
+        </div>
+
+
+
+        <div class="benefits">
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    ⏰
+                </div>
+
+                <h4>
+                    Easy Expiry Tracking
+                </h4>
+
+                <p>
+                    Track product expiry dates easily and
+                    quickly identify products that are
+                    approaching their expiry date.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    ⚠️
+                </div>
+
+                <h4>
+                    Identify Expiring Products
+                </h4>
+
+                <p>
+                    Quickly find products that are nearing
+                    expiry so that timely action can be taken.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    📦
+                </div>
+
+                <h4>
+                    Easy Product Management
+                </h4>
+
+                <p>
+                    Add, view, update and manage product
+                    information from one convenient place.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    📊
+                </div>
+
+                <h4>
+                    Quick Overview
+                </h4>
+
+                <p>
+                    Get a clear overview of your products
+                    and their current status through the
+                    dashboard.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    🔍
+                </div>
+
+                <h4>
+                    Fast Status Checking
+                </h4>
+
+                <p>
+                    Easily check whether products are active,
+                    expiring soon or already expired.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    🗂️
+                </div>
+
+                <h4>
+                    Organized Records
+                </h4>
+
+                <p>
+                    Keep product information organized and
+                    make inventory management more efficient.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    👥
+                </div>
+
+                <h4>
+                    Staff Management
+                </h4>
+
+                <p>
+                    Manage staff information easily and keep
+                    important staff records organized.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    📋
+                </div>
+
+                <h4>
+                    Activity Monitoring
+                </h4>
+
+                <p>
+                    Keep track of important activities and
+                    maintain better visibility of system usage.
+                </p>
+
+            </div>
+
+
+            <div class="benefit-card">
+
+                <div class="benefit-icon">
+                    🛡️
+                </div>
+
+                <h4>
+                    Better Inventory Control
+                </h4>
+
+                <p>
+                    Maintain better control over products and
+                    reduce the chance of overlooking expiry
+                    information.
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- =================================
+             HIGHLIGHT
+        ================================= -->
+
+        <div class="highlight">
+
+
+            <div class="highlight-left">
+
+
+                <div class="highlight-icon">
+                    🚀
+                </div>
+
+
+                <div>
+
+                    <h3>
+                        Everything You Need in One Place
+                    </h3>
+
+
+                    <p>
+
+                        Manage products, check expiry status,
+                        view important information and keep
+                        your inventory organized with ease.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+            <a
+                href="{% url 'manage_products' %}"
+                class="highlight-button"
+            >
+
+                Start Managing →
+
+            </a>
+
+
+        </div>
+
+
+
+        <!-- =================================
+             FOOTER
+        ================================= -->
+
+        <footer>
+
+            © 2026 ExpiryGuard
+            · Smart Product Expiry Management
+
+        </footer>
+
+
+    </main>
+
+
+
+    <!-- =================================
+         JAVASCRIPT
+    ================================= -->
+
+    <script>
+
+        function toggleSidebar() {
+
+            const sidebar =
+                document.getElementById("sidebar");
+
+            sidebar.classList.toggle("open");
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

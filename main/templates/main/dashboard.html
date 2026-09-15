@@ -1,0 +1,1666 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ExpiryGuard - Dashboard</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f8ff,
+                    #eaf2ff
+                );
+
+            color: #172033;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+
+            height: 70px;
+
+            background: #081b33;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            box-shadow:
+                0 4px 15px
+                rgba(8,27,51,0.15);
+        }
+
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            color: white;
+        }
+
+
+        .date {
+
+            color: #bfdbfe;
+
+            font-size: 14px;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================
+           MAIN CONTAINER
+        ========================= */
+
+        .container {
+
+            width: 92%;
+
+            max-width: 1400px;
+
+            margin: 35px auto;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+
+            font-size: 30px;
+
+            color: #123b68;
+
+            font-weight: 700;
+        }
+
+
+        .header p {
+
+            margin-top: 7px;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           HOME BUTTON
+        ========================= */
+
+        .home-btn {
+
+            display: inline-block;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #3b82f6
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            padding: 11px 22px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.25s;
+
+            box-shadow:
+                0 7px 18px
+                rgba(37,99,235,0.20);
+        }
+
+
+        .home-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 10px 23px
+                rgba(37,99,235,0.30);
+        }
+
+
+        /* =========================
+           SUMMARY CARDS
+        ========================= */
+
+        .cards {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(5, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .card {
+
+            background: white;
+
+            border-radius: 15px;
+
+            padding: 22px;
+
+            box-shadow:
+                0 10px 25px
+                rgba(30,64,175,0.08);
+
+            border:
+                1px solid #dbe7f5;
+
+            border-left:
+                5px solid #3b82f6;
+
+            transition: 0.25s;
+        }
+
+
+        .card:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 15px 30px
+                rgba(30,64,175,0.12);
+        }
+
+
+        .card h3 {
+
+            font-size: 14px;
+
+            color: #64748b;
+
+            margin-bottom: 12px;
+        }
+
+
+        .card .number {
+
+            font-size: 30px;
+
+            font-weight: 700;
+
+            color: #123b68;
+        }
+
+
+        /* CARD COLORS */
+
+        .expired-card {
+
+            border-left-color: #ef4444;
+        }
+
+
+        .seven-card {
+
+            border-left-color: #f59e0b;
+        }
+
+
+        .fifteen-card {
+
+            border-left-color: #facc15;
+        }
+
+
+        .thirty-card {
+
+            border-left-color: #3b82f6;
+        }
+
+
+        .expired-card .number {
+
+            color: #dc2626;
+        }
+
+
+        .seven-card .number {
+
+            color: #d97706;
+        }
+
+
+        .fifteen-card .number {
+
+            color: #ca8a04;
+        }
+
+
+        .thirty-card .number {
+
+            color: #2563eb;
+        }
+
+
+        /* =========================
+           PRODUCT TABLE
+        ========================= */
+
+        .section {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 25px;
+
+            margin-bottom: 30px;
+
+            border:
+                1px solid #dbe7f5;
+
+            box-shadow:
+                0 12px 30px
+                rgba(30,64,175,0.08);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .section::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 100%;
+
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1d4ed8,
+                    #3b82f6,
+                    #60a5fa
+                );
+        }
+
+
+        .section-title {
+
+            font-size: 21px;
+
+            font-weight: 700;
+
+            margin-bottom: 20px;
+
+            color: #123b68;
+        }
+
+
+        .table-container {
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 900px;
+        }
+
+
+        th {
+
+            background: #eff6ff;
+
+            color: #123b68;
+
+            font-size: 13px;
+
+            padding: 14px 12px;
+
+            text-align: left;
+
+            border-bottom:
+                1px solid #dbe7f5;
+        }
+
+
+        td {
+
+            padding: 14px 12px;
+
+            font-size: 13px;
+
+            border-bottom:
+                1px solid #e5edf7;
+
+            color: #475569;
+        }
+
+
+        tr {
+
+            transition: 0.2s;
+        }
+
+
+        tr:hover {
+
+            background: #f7faff;
+        }
+
+
+        /* =========================
+           STATUS BADGES
+        ========================= */
+
+        .status {
+
+            display: inline-block;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        .status-expired {
+
+            background: #fee2e2;
+
+            color: #b91c1c;
+        }
+
+
+        .status-seven {
+
+            background: #ffedd5;
+
+            color: #c2410c;
+        }
+
+
+        .status-fifteen {
+
+            background: #fef9c3;
+
+            color: #a16207;
+        }
+
+
+        .status-thirty {
+
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        .status-safe {
+
+            background: #e0f2fe;
+
+            color: #0369a1;
+        }
+
+
+        /* =========================
+           EXPIRY SUMMARY
+        ========================= */
+
+        .expiry-summary {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 35px;
+
+            align-items: center;
+        }
+
+
+        /* =========================
+           DONUT AREA
+        ========================= */
+
+        .chart-area {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 40px;
+        }
+
+
+        .donut-chart {
+
+            width: 190px;
+
+            height: 190px;
+
+            border-radius: 50%;
+
+            position: relative;
+
+            flex-shrink: 0;
+
+            background:
+                conic-gradient(
+
+                    #ef4444
+                    0 var(--expired),
+
+                    #f59e0b
+                    var(--expired)
+                    calc(
+                        var(--expired)
+                        + var(--seven)
+                    ),
+
+                    #facc15
+                    calc(
+                        var(--expired)
+                        + var(--seven)
+                    )
+                    calc(
+                        var(--expired)
+                        + var(--seven)
+                        + var(--fifteen)
+                    ),
+
+                    #3b82f6
+                    calc(
+                        var(--expired)
+                        + var(--seven)
+                        + var(--fifteen)
+                    )
+                    100%
+                );
+
+            box-shadow:
+                0 10px 25px
+                rgba(30,64,175,0.10);
+        }
+
+
+        .donut-hole {
+
+            position: absolute;
+
+            width: 110px;
+
+            height: 110px;
+
+            background: white;
+
+            border-radius: 50%;
+
+            top: 50%;
+
+            left: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            box-shadow:
+                inset 0 0 10px
+                rgba(30,64,175,0.04);
+        }
+
+
+        /* =========================
+           LEGEND
+        ========================= */
+
+        .legend {
+
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 15px;
+        }
+
+
+        .legend-item {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            font-size: 14px;
+        }
+
+
+        .legend-color {
+
+            width: 13px;
+
+            height: 13px;
+
+            border-radius: 50%;
+
+            flex-shrink: 0;
+        }
+
+
+        .legend-text {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            min-width: 180px;
+        }
+
+
+        .legend-name {
+
+            color: #64748b;
+        }
+
+
+        .legend-value {
+
+            font-weight: 700;
+
+            color: #123b68;
+        }
+
+
+        .red {
+
+            background: #ef4444;
+        }
+
+
+        .orange {
+
+            background: #f59e0b;
+        }
+
+
+        .yellow {
+
+            background: #facc15;
+        }
+
+
+        .green {
+
+            background: #3b82f6;
+        }
+
+
+        /* =========================
+           DASHBOARD INFO
+        ========================= */
+
+        .info-box {
+
+            background:
+                #f7faff;
+
+            border:
+                1px solid #dbe7f5;
+
+            border-radius: 12px;
+
+            padding: 25px;
+        }
+
+
+        .info-box h3 {
+
+            color: #1d4ed8;
+
+            margin-bottom: 15px;
+
+            font-size: 18px;
+        }
+
+
+        .info-box p {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            margin-bottom: 10px;
+        }
+
+
+        .info-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            padding: 10px 0;
+
+            border-bottom:
+                1px solid #dbe7f5;
+
+            font-size: 14px;
+        }
+
+
+        .info-row:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .info-label {
+
+            color: #64748b;
+        }
+
+
+        .info-value {
+
+            font-weight: 700;
+
+            color: #123b68;
+        }
+
+
+        /* =========================
+           NO PRODUCTS
+        ========================= */
+
+        .no-products {
+
+            text-align: center;
+
+            padding: 40px;
+
+            color: #94a3b8;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            text-align: center;
+
+            padding: 20px;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .cards {
+
+                grid-template-columns:
+                    repeat(3, 1fr);
+            }
+
+
+            .expiry-summary {
+
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            .navbar {
+
+                padding: 0 18px;
+            }
+
+
+            .logo {
+
+                font-size: 21px;
+            }
+
+
+            .date {
+
+                font-size: 12px;
+            }
+
+
+            .container {
+
+                width: 94%;
+
+                margin-top: 25px;
+            }
+
+
+            .header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            .header h1 {
+
+                font-size: 25px;
+            }
+
+
+            .home-btn {
+
+                width: 100%;
+
+                text-align: center;
+            }
+
+
+            .cards {
+
+                grid-template-columns: 1fr;
+            }
+
+
+            .section {
+
+                padding: 20px 15px;
+            }
+
+
+            .chart-area {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 25px;
+            }
+
+
+            .donut-chart {
+
+                width: 170px;
+
+                height: 170px;
+            }
+
+
+            .donut-hole {
+
+                width: 100px;
+
+                height: 100px;
+            }
+
+
+            .legend-text {
+
+                min-width: 160px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav class="navbar">
+ <a
+            href="{% url 'home' %}"
+            class="home-btn">
+
+           ◀
+
+        </a>
+
+    <div class="logo">
+
+        ExpiryGuard
+
+    </div>
+
+
+    <div class="date">
+
+        📅 {% now "d F Y" %}
+
+    </div>
+
+
+</nav>
+
+
+
+<!-- =====================================================
+     MAIN CONTAINER
+===================================================== -->
+
+<div class="container">
+
+
+    <!-- =================================================
+         HEADER
+    ================================================= -->
+
+    <div class="header">
+
+
+        <div>
+
+            <h1>
+
+                Expiry Dashboard
+
+            </h1>
+
+
+            <p>
+
+                Monitor product expiry dates and stock status
+
+            </p>
+
+        </div>
+
+
+
+        <!-- HOME BUTTON -->
+
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         SUMMARY CARDS
+    ================================================= -->
+
+    <div class="cards">
+
+
+        <!-- EXPIRED -->
+
+        <div class="card expired-card">
+
+            <h3>
+
+                Expired Products
+
+            </h3>
+
+
+            <div class="number">
+
+                {{ expired_count }}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- 7 DAYS -->
+
+        <div class="card seven-card">
+
+            <h3>
+
+                Expiring in 7 Days
+
+            </h3>
+
+
+            <div class="number">
+
+                {{ seven_days_count }}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- 15 DAYS -->
+
+        <div class="card fifteen-card">
+
+            <h3>
+
+                Expiring in 15 Days
+
+            </h3>
+
+
+            <div class="number">
+
+                {{ fifteen_days_count }}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- 30 DAYS -->
+
+        <div class="card thirty-card">
+
+            <h3>
+
+                Expiring in 30 Days
+
+            </h3>
+
+
+            <div class="number">
+
+                {{ thirty_days_count }}
+
+            </div>
+
+        </div>
+
+
+
+        <!-- TOTAL -->
+
+        <div class="card">
+
+            <h3>
+
+                Total Products
+
+            </h3>
+
+
+            <div class="number">
+
+                {{ total_count }}
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         PRODUCT EXPIRY OVERVIEW
+    ================================================= -->
+
+    <div class="section">
+
+
+        <div class="section-title">
+
+            📦 Product Expiry Overview
+
+        </div>
+
+
+
+        <div class="table-container">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Product Name
+                        </th>
+
+                        <th>
+                            Barcode
+                        </th>
+
+                        <th>
+                            Batch Number
+                        </th>
+
+                        <th>
+                            Quantity
+                        </th>
+
+                        <th>
+                            Manufacturing Date
+                        </th>
+
+                        <th>
+                            Expiry Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+
+                <tbody>
+
+
+                {% for item in product_list %}
+
+
+                    <tr>
+
+
+                        <!-- PRODUCT NAME -->
+
+                        <td>
+
+                            {{ item.product.product_name }}
+
+                        </td>
+
+
+
+                        <!-- BARCODE -->
+
+                        <td>
+
+                            {{ item.product.barcode }}
+
+                        </td>
+
+
+
+                        <!-- BATCH NUMBER -->
+
+                        <td>
+
+                            {{ item.product.batch_number }}
+
+                        </td>
+
+
+
+                        <!-- QUANTITY -->
+
+                        <td>
+
+                            {{ item.product.quantity }}
+
+                        </td>
+
+
+
+                        <!-- MANUFACTURING DATE -->
+
+                        <td>
+
+                            {{ item.product.manufacturing_date|date:"d-m-Y" }}
+
+                        </td>
+
+
+
+                        <!-- EXPIRY DATE -->
+
+                        <td>
+
+                            {{ item.product.expiry_date|date:"d-m-Y" }}
+
+                        </td>
+
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+
+                            {% if item.status == "Expired" %}
+
+                                <span class="status status-expired">
+
+                                    Expired
+
+                                </span>
+
+
+                            {% elif item.status == "Expires within 7 days" %}
+
+                                <span class="status status-seven">
+
+                                    Expires within 7 days
+
+                                </span>
+
+
+                            {% elif item.status == "Expires within 15 days" %}
+
+                                <span class="status status-fifteen">
+
+                                    Expires within 15 days
+
+                                </span>
+
+
+                            {% elif item.status == "Expires within 30 days" %}
+
+                                <span class="status status-thirty">
+
+                                    Expires within 30 days
+
+                                </span>
+
+
+                            {% else %}
+
+                                <span class="status status-safe">
+
+                                    Safe
+
+                                </span>
+
+                            {% endif %}
+
+
+                        </td>
+
+
+                    </tr>
+
+
+                {% empty %}
+
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            class="no-products">
+
+                            No products available.
+
+                        </td>
+
+                    </tr>
+
+
+                {% endfor %}
+
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+
+    <!-- =================================================
+         EXPIRY SUMMARY
+    ================================================= -->
+
+    <div class="section">
+
+
+        <div class="section-title">
+
+            📊 Expiry Summary
+
+        </div>
+
+
+
+        <div class="expiry-summary">
+
+
+            <!-- =========================================
+                 DONUT CHART + LEGEND
+            ========================================== -->
+
+            <div class="chart-area">
+
+
+                <!-- DONUT -->
+
+                <div
+                    class="donut-chart"
+
+                    style="
+                        --expired: {{ expired_percentage }}%;
+                        --seven: {{ seven_percentage }}%;
+                        --fifteen: {{ fifteen_percentage }}%;
+                        --thirty: {{ thirty_percentage }}%;
+                    ">
+
+
+                    <div class="donut-hole">
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- LEGEND -->
+
+                <div class="legend">
+
+
+                    <!-- EXPIRED -->
+
+                    <div class="legend-item">
+
+
+                        <span class="legend-color red">
+                        </span>
+
+
+                        <div class="legend-text">
+
+
+                            <span class="legend-name">
+
+                                Expired
+
+                            </span>
+
+
+                            <span class="legend-value">
+
+                                {{ expired_percentage|floatformat:1 }}%
+
+                                ({{ expired_count }})
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- 7 DAYS -->
+
+                    <div class="legend-item">
+
+
+                        <span class="legend-color orange">
+                        </span>
+
+
+                        <div class="legend-text">
+
+
+                            <span class="legend-name">
+
+                                Within 7 Days
+
+                            </span>
+
+
+                            <span class="legend-value">
+
+                                {{ seven_percentage|floatformat:1 }}%
+
+                                ({{ seven_days_count }})
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- 15 DAYS -->
+
+                    <div class="legend-item">
+
+
+                        <span class="legend-color yellow">
+                        </span>
+
+
+                        <div class="legend-text">
+
+
+                            <span class="legend-name">
+
+                                Within 15 Days
+
+                            </span>
+
+
+                            <span class="legend-value">
+
+                                {{ fifteen_percentage|floatformat:1 }}%
+
+                                ({{ fifteen_days_count }})
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+
+                    <!-- 30 DAYS -->
+
+                    <div class="legend-item">
+
+
+                        <span class="legend-color green">
+                        </span>
+
+
+                        <div class="legend-text">
+
+
+                            <span class="legend-name">
+
+                                Within 30 Days
+
+                            </span>
+
+
+                            <span class="legend-value">
+
+                                {{ thirty_percentage|floatformat:1 }}%
+
+                                ({{ thirty_days_count }})
+
+                            </span>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+
+            <!-- =========================================
+                 DASHBOARD INFO
+            ========================================== -->
+
+            <div class="info-box">
+
+
+                <h3>
+
+                    Dashboard Info
+
+                </h3>
+
+
+                <p>
+
+                    This dashboard provides an overview
+                    of products based on their expiry dates.
+
+                </p>
+
+
+
+                <div class="info-row">
+
+
+                    <span class="info-label">
+
+                        Total Products
+
+                    </span>
+
+
+                    <span class="info-value">
+
+                        {{ total_count }}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="info-row">
+
+
+                    <span class="info-label">
+
+                        Expired
+
+                    </span>
+
+
+                    <span class="info-value">
+
+                        {{ expired_count }}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="info-row">
+
+
+                    <span class="info-label">
+
+                        Expiring within 7 Days
+
+                    </span>
+
+
+                    <span class="info-value">
+
+                        {{ seven_days_count }}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="info-row">
+
+
+                    <span class="info-label">
+
+                        Expiring within 15 Days
+
+                    </span>
+
+
+                    <span class="info-value">
+
+                        {{ fifteen_days_count }}
+
+                    </span>
+
+
+                </div>
+
+
+
+                <div class="info-row">
+
+
+                    <span class="info-label">
+
+                        Expiring within 30 Days
+
+                    </span>
+
+
+                    <span class="info-value">
+
+                        {{ thirty_days_count }}
+
+                    </span>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+    © 2026 ExpiryGuard · Smart Product Expiry Management
+
+</footer>
+
+
+</body>
+
+</html>

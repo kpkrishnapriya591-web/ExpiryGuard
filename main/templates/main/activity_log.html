@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Activity Log - ExpiryGuard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Arial, sans-serif;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f8ff,
+                    #eaf2ff
+                );
+
+            color: #172033;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+
+            background: #081b33;
+
+            color: white;
+
+            padding: 18px 40px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            box-shadow:
+                0 4px 15px
+                rgba(15, 45, 80, 0.15);
+        }
+
+
+        .logo {
+
+            font-size: 25px;
+
+            font-weight: 700;
+
+            color: white;
+        }
+
+
+        .home-btn {
+
+            color: white;
+
+            text-decoration: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #3b82f6
+                );
+
+            padding: 10px 20px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            transition: 0.25s;
+
+            box-shadow:
+                0 5px 15px
+                rgba(37, 99, 235, 0.20);
+        }
+
+
+        .home-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 8px 20px
+                rgba(37, 99, 235, 0.30);
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+
+            max-width: 1200px;
+
+            margin: 40px auto;
+
+            padding: 0 20px;
+        }
+
+
+        .title {
+
+            font-size: 30px;
+
+            color: #123b68;
+
+            margin-bottom: 8px;
+
+            font-weight: 700;
+        }
+
+
+        .subtitle {
+
+            color: #64748b;
+
+            margin-bottom: 30px;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           ACTIVITY CARD
+        ========================= */
+
+        .activity-card {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 18px;
+
+            border:
+                1px solid #dbe7f5;
+
+            box-shadow:
+                0 15px 35px
+                rgba(30, 64, 175, 0.10);
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        .activity-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            top: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            height: 4px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1d4ed8,
+                    #3b82f6,
+                    #60a5fa
+                );
+        }
+
+
+        /* =========================
+           TABLE
+        ========================= */
+
+        .table-container {
+
+            overflow-x: auto;
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            background: #eff6ff;
+
+            padding: 15px;
+
+            text-align: left;
+
+            font-size: 14px;
+
+            color: #123b68;
+
+            font-weight: 700;
+
+            border-bottom:
+                1px solid #dbe7f5;
+        }
+
+
+        td {
+
+            padding: 15px;
+
+            border-bottom:
+                1px solid #e5edf7;
+
+            font-size: 14px;
+
+            color: #334155;
+        }
+
+
+        tr {
+
+            transition: 0.2s;
+        }
+
+
+        tr:hover {
+
+            background: #f7faff;
+        }
+
+
+        /* =========================
+           STAFF
+        ========================= */
+
+        .staff-name {
+
+            font-weight: 700;
+
+            color: #1d4ed8;
+        }
+
+
+        /* =========================
+           ACTIVITY
+        ========================= */
+
+        .activity {
+
+            color: #475569;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            padding: 6px 12px;
+
+            border-radius: 20px;
+
+            background: #dbeafe;
+
+            color: #1d4ed8;
+
+            font-size: 13px;
+
+            font-weight: 700;
+        }
+
+
+        .status::before {
+
+            content: "";
+
+            width: 7px;
+
+            height: 7px;
+
+            border-radius: 50%;
+
+            background: #3b82f6;
+        }
+
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+
+            text-align: center;
+
+            padding: 45px 20px;
+
+            color: #94a3b8;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 30px;
+
+            padding-bottom: 20px;
+
+            color: #94a3b8;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .header {
+
+                padding: 15px 20px;
+            }
+
+
+            .logo {
+
+                font-size: 21px;
+            }
+
+
+            .home-btn {
+
+                padding: 9px 15px;
+
+                font-size: 13px;
+            }
+
+
+            .container {
+
+                margin-top: 25px;
+
+                padding: 0 15px;
+            }
+
+
+            .title {
+
+                font-size: 25px;
+            }
+
+
+            .subtitle {
+
+                font-size: 14px;
+
+                margin-bottom: 22px;
+            }
+
+
+            .activity-card {
+
+                padding: 15px;
+
+                border-radius: 15px;
+            }
+
+
+            th,
+            td {
+
+                padding: 12px;
+
+                font-size: 13px;
+            }
+
+        }
+
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <div class="header">
+<a
+            href="{% url 'home' %}"
+            class="home-btn">
+
+           ◀
+
+       
+
+    </a>
+        <div class="logo">
+
+            ExpiryGuard
+
+        </div>
+
+
+        
+
+    </div>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================= -->
+
+    <div class="container">
+
+
+        <h1 class="title">
+
+            Activity Log
+
+        </h1>
+
+
+        <p class="subtitle">
+
+            View staff activity history and system activities.
+
+        </p>
+
+
+
+        <!-- =========================
+             ACTIVITY CARD
+        ========================= -->
+
+        <div class="activity-card">
+
+
+            <div class="table-container">
+
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Staff
+                            </th>
+
+                            <th>
+                                Activity
+                            </th>
+
+                            <th>
+                                Date & Time
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+
+                    <tbody>
+
+
+                        {% if activities %}
+
+
+                            {% for activity in activities %}
+
+                            <tr>
+
+
+                                <td>
+
+                                    <span class="staff-name">
+
+                                        {{ activity.staff }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="activity">
+
+                                        {{ activity.action }}
+
+                                    </span>
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ activity.created_at|date:"d M Y, h:i A" }}
+
+                                </td>
+
+
+                                <td>
+
+                                    <span class="status">
+
+                                        Completed
+
+                                    </span>
+
+                                </td>
+
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+
+                            <tr>
+
+                                <td colspan="4">
+
+                                    <div class="empty">
+
+                                        📋 No activity history available.
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+
+
+                        {% endif %}
+
+
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+
+
+        </div>
+
+
+        <div class="footer">
+
+            © 2026 ExpiryGuard · Smart Product Expiry Management
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

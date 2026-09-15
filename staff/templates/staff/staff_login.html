@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Login - ExpiryGuard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+            background: #18181B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 430px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            width: 70px;
+            height: 70px;
+            background: #D4A017;
+            color: #18181B;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .logo h1 {
+            margin-top: 15px;
+            color: #18181B;
+            font-size: 28px;
+        }
+
+        .logo p {
+            color: #71717A;
+            margin-top: 6px;
+            font-size: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            margin-top: 12px;
+            background: #18181B;
+            color: #D4A017;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #27272A;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #D4D4D8;
+            border-radius: 9px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #D4A017;
+            box-shadow: 0 0 0 3px rgba(212,160,23,0.15);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #D4A017;
+            color: #18181B;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-btn:hover {
+            background: #B8860B;
+        }
+
+        .signup {
+            text-align: center;
+            margin-top: 22px;
+            color: #71717A;
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: #B8860B;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #E4E4E7;
+        }
+
+        .back a {
+            color: #52525B;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .security {
+            text-align: center;
+            margin-top: 22px;
+            color: #A1A1AA;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="login-card">
+
+    <div class="logo">
+        <div class="logo-icon">EG</div>
+
+        <h1>ExpiryGuard</h1>
+
+        <p>Product Expiry Management System</p>
+
+        <span class="badge">STAFF PORTAL</span>
+    </div>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Staff Username</label>
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Enter your username"
+                required
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Password</label>
+
+            <input
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                required
+            >
+        </div>
+
+        <button type="submit" class="login-btn">
+            Login
+        </button>
+
+    </form>
+
+    <div class="signup">
+        Don't have a staff account?
+        <a href="{% url 'staff_signup' %}">
+            Create Account
+        </a>
+    </div>
+
+    <div class="back">
+        <a href="/">
+            ← Back to Admin Login
+        </a>
+    </div>
+
+    <div class="security">
+        🔐 Secure Staff Access • ExpiryGuard
+    </div>
+
+</div>
+
+</body>
+</html>

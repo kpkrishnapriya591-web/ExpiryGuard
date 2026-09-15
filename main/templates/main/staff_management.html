@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ExpiryGuard | Manage Staff</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #f4f8ff,
+                    #eaf2ff
+                );
+
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .header {
+            height: 70px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #081b33,
+                    #123f70
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            padding: 0 35px;
+
+            box-shadow:
+                0 5px 20px rgba(15, 55, 100, 0.20);
+        }
+
+
+        .logo {
+            font-size: 24px;
+
+            font-weight: bold;
+
+            color: white;
+        }
+
+
+        .logo span {
+            color: #60a5fa;
+        }
+
+
+        /* =========================
+           HOME BUTTON
+        ========================= */
+
+        .home-btn {
+            text-decoration: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #2563eb,
+                    #3b82f6
+                );
+
+            color: white;
+
+            padding: 10px 20px;
+
+            border-radius: 8px;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 5px 15px rgba(37, 99, 235, 0.25);
+        }
+
+
+        .home-btn:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #2563eb
+                );
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            max-width: 1100px;
+
+            margin: 35px auto;
+
+            padding: 20px;
+        }
+
+
+        /* =========================
+           TOP SECTION
+        ========================= */
+
+        .top {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        h1 {
+            margin: 0;
+
+            font-size: 30px;
+
+            color: #123b68;
+        }
+
+
+        /* =========================
+           ADD STAFF BUTTON
+        ========================= */
+
+        .add-btn {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1d4ed8,
+                    #3b82f6
+                );
+
+            color: white;
+
+            padding: 12px 20px;
+
+            border-radius: 8px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            transition: 0.3s;
+
+            box-shadow:
+                0 6px 18px rgba(37, 99, 235, 0.20);
+        }
+
+
+        .add-btn:hover {
+            background:
+                linear-gradient(
+                    135deg,
+                    #1e40af,
+                    #2563eb
+                );
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================
+           MESSAGES
+        ========================= */
+
+        .messages {
+            margin-bottom: 20px;
+        }
+
+
+        .message {
+            padding: 13px 16px;
+
+            border-radius: 8px;
+
+            margin-bottom: 10px;
+
+            background: #dbeafe;
+
+            color: #1d4ed8;
+
+            border: 1px solid #bfdbfe;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================
+           STAFF TABLE SECTION
+        ========================= */
+
+        .section {
+            background: white;
+
+            border: 1px solid #dbe7f5;
+
+            border-radius: 16px;
+
+            overflow-x: auto;
+
+            box-shadow:
+                0 12px 35px rgba(30, 64, 175, 0.10);
+
+            position: relative;
+        }
+
+
+        .section::before {
+            content: "";
+
+            display: block;
+
+            height: 5px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #1d4ed8,
+                    #3b82f6,
+                    #60a5fa
+                );
+        }
+
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 750px;
+        }
+
+
+        th {
+            background: #eff6ff;
+
+            padding: 16px;
+
+            text-align: left;
+
+            font-size: 14px;
+
+            color: #1d4ed8;
+
+            font-weight: 700;
+        }
+
+
+        td {
+            padding: 16px;
+
+            border-top: 1px solid #e5edf7;
+
+            color: #475569;
+
+            font-size: 14px;
+        }
+
+
+        tbody tr {
+            transition: 0.2s;
+        }
+
+
+        tbody tr:hover {
+            background: #f8fbff;
+        }
+
+
+        td strong {
+            color: #123b68;
+        }
+
+
+        /* =========================
+           STATUS
+        ========================= */
+
+        .status {
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            display: inline-block;
+        }
+
+
+        .active {
+            background: #dbeafe;
+
+            color: #1d4ed8;
+        }
+
+
+        .inactive {
+            background: #fee2e2;
+
+            color: #dc2626;
+        }
+
+
+        /* =========================
+           EDIT BUTTON
+        ========================= */
+
+        .edit-btn {
+            background: #dbeafe;
+
+            color: #2563eb;
+
+            padding: 7px 12px;
+
+            border-radius: 7px;
+
+            text-decoration: none;
+
+            font-weight: bold;
+
+            display: inline-block;
+
+            transition: 0.2s;
+        }
+
+
+        .edit-btn:hover {
+            background: #bfdbfe;
+
+            color: #1d4ed8;
+        }
+
+
+        /* =========================
+           DELETE BUTTON
+        ========================= */
+
+        .delete-btn {
+            background: #fee2e2;
+
+            color: #dc2626;
+
+            border: none;
+
+            padding: 8px 12px;
+
+            border-radius: 7px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-left: 5px;
+
+            transition: 0.2s;
+        }
+
+
+        .delete-btn:hover {
+            background: #fecaca;
+
+            color: #b91c1c;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 45px;
+
+            color: #64748b;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 600px) {
+
+            .header {
+                height: auto;
+
+                padding: 18px 20px;
+
+                gap: 15px;
+            }
+
+
+            .logo {
+                font-size: 21px;
+            }
+
+
+            .container {
+                padding: 15px;
+
+                margin: 20px auto;
+            }
+
+
+            .top {
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+            }
+
+
+            h1 {
+                font-size: 25px;
+            }
+
+
+            .add-btn {
+                width: 100%;
+
+                text-align: center;
+            }
+
+
+            .home-btn {
+                padding: 9px 16px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+  <div class="header">
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+<a
+            href="{% url 'home' %}"
+            class="home-btn">
+
+           ◀
+
+       
+
+    </a>
+  
+
+        <div class="logo">
+            ExpiryGuard
+        </div>
+
+
+        
+    </div>
+
+
+    <!-- =========================
+         MAIN CONTAINER
+    ========================= -->
+
+    <div class="container">
+
+
+        <!-- TOP -->
+
+        <div class="top">
+
+            <h1>
+                👥 Manage Staff
+            </h1>
+
+
+            <a
+                href="{% url 'add_staff' %}"
+                class="add-btn"
+            >
+                + Add Staff
+            </a>
+
+        </div>
+
+
+        <!-- =========================
+             DJANGO MESSAGES
+        ========================= -->
+
+        {% if messages %}
+
+            <div class="messages">
+
+                {% for message in messages %}
+
+                    <div class="message">
+                        {{ message }}
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- =========================
+             STAFF TABLE
+        ========================= -->
+
+        <div class="section">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Username
+                        </th>
+
+                        <th>
+                            Email
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for staff in staff_members %}
+
+                    <tr>
+
+
+                        <!-- USERNAME -->
+
+                        <td>
+
+                            <strong>
+                                {{ staff.username }}
+                            </strong>
+
+                        </td>
+
+
+                        <!-- EMAIL -->
+
+                        <td>
+                            {{ staff.email }}
+                        </td>
+
+
+                        <!-- STATUS -->
+
+                        <td>
+
+                            {% if staff.is_active %}
+
+                                <span class="status active">
+                                    ● Active
+                                </span>
+
+                            {% else %}
+
+                                <span class="status inactive">
+                                    ● Inactive
+                                </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTIONS -->
+
+                        <td>
+
+                            <a
+                                href="{% url 'update_staff' staff.id %}"
+                                class="edit-btn"
+                            >
+                                ✏️ Edit
+                            </a>
+
+
+                            <form
+                                method="POST"
+                                action="{% url 'delete_staff' staff.id %}"
+                                style="display:inline;"
+                            >
+
+                                {% csrf_token %}
+
+
+                                <button
+                                    type="submit"
+                                    class="delete-btn"
+                                    onclick="return confirm('Are you sure you want to remove this staff?');"
+                                >
+
+                                    🗑 Remove
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty"
+                        >
+
+                            👥 No staff members found.
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>

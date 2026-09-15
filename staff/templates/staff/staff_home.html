@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Staff Home - ExpiryGuard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #111111;
+            color: #f5f5f5;
+            min-height: 100vh;
+        }
+
+        /* ================================
+           SIDEBAR
+        ================================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #181818;
+            border-right: 1px solid #333333;
+            padding: 25px 15px;
+            z-index: 1000;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo h1 {
+            font-size: 27px;
+            color: #d4af37;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            font-size: 12px;
+            color: #999999;
+            margin-top: 5px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: #cccccc;
+            padding: 14px 16px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: 0.3s;
+            font-size: 14px;
+        }
+
+        .nav a:hover {
+            background: #292929;
+            color: #ffffff;
+        }
+
+        .nav a.active {
+            background: #d4af37;
+            color: #111111;
+            font-weight: bold;
+        }
+
+        .nav .icon {
+            width: 24px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .logout {
+            margin-top: 25px;
+            border-top: 1px solid #333333;
+            padding-top: 18px;
+        }
+
+        .logout a {
+            color: #ff7777;
+        }
+
+        .logout a:hover {
+            background: #351c1c;
+            color: #ff9999;
+        }
+
+        /* ================================
+           MAIN CONTENT
+        ================================= */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+            padding: 30px;
+        }
+
+        /* ================================
+           TOP BAR
+        ================================= */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .welcome h2 {
+            font-size: 28px;
+            color: #ffffff;
+        }
+
+        .welcome p {
+            color: #999999;
+            margin-top: 7px;
+            font-size: 14px;
+        }
+
+        .user-box {
+            background: #1c1c1c;
+            border: 1px solid #333333;
+            border-radius: 10px;
+            padding: 12px 18px;
+            color: #cccccc;
+        }
+
+        .user-box strong {
+            color: #d4af37;
+        }
+
+        /* ================================
+           STAT CARDS
+        ================================= */
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #1b1b1b;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 24px;
+            transition: 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+        }
+
+        .stat-title {
+            color: #999999;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-number {
+            font-size: 34px;
+            font-weight: bold;
+            margin-top: 10px;
+            color: #ffffff;
+        }
+
+        .safe {
+            color: #66cc88;
+        }
+
+        .warning {
+            color: #e5b84b;
+        }
+
+        .danger {
+            color: #ff6666;
+        }
+
+        /* ================================
+           QUICK ACTIONS
+        ================================= */
+
+        .section-title {
+            font-size: 21px;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: #1b1b1b;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: #ffffff;
+            transition: 0.3s;
+        }
+
+        .action-card:hover {
+            transform: translateY(-3px);
+            border-color: #d4af37;
+            background: #202020;
+        }
+
+        .action-icon {
+            font-size: 30px;
+            color: #d4af37;
+            margin-bottom: 15px;
+        }
+
+        .action-card h3 {
+            font-size: 17px;
+            margin-bottom: 8px;
+        }
+
+        .action-card p {
+            color: #999999;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* ================================
+           INFO PANEL
+        ================================= */
+
+        .info-panel {
+            background: #1b1b1b;
+            border: 1px solid #333333;
+            border-radius: 12px;
+            padding: 25px;
+        }
+
+        .info-panel h3 {
+            color: #d4af37;
+            margin-bottom: 15px;
+        }
+
+        .workflow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .workflow-step {
+            flex: 1;
+            min-width: 130px;
+            text-align: center;
+            padding: 15px 10px;
+            background: #222222;
+            border-radius: 8px;
+            color: #cccccc;
+            font-size: 13px;
+        }
+
+        .workflow-arrow {
+            color: #d4af37;
+            font-size: 20px;
+        }
+
+        /* ================================
+           RESPONSIVE
+        ================================= */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .actions {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #333333;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .stats,
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .workflow {
+                flex-direction: column;
+            }
+
+            .workflow-step {
+                width: 100%;
+            }
+
+            .workflow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- ==========================================
+         SIDEBAR
+    =========================================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+
+            <h1>ExpiryGuard</h1>
+
+            <p>Staff Portal</p>
+
+        </div>
+
+
+        <nav class="nav">
+
+            <!-- HOME -->
+
+            <a href="{% url 'staff_home' %}" class="active">
+
+                <span class="icon">⌂</span>
+
+                <span>
+                    Home
+                </span>
+
+            </a>
+
+
+            <!-- DASHBOARD -->
+
+            <a href="{% url 'staff_dashboard' %}">
+
+                <span class="icon">▦</span>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </a>
+
+
+            <!-- ADD PRODUCT -->
+
+            <a href="{% url 'add_product' %}">
+
+                <span class="icon">＋</span>
+
+                <span>
+                    Add Product
+                </span>
+
+            </a>
+
+
+            <!-- PRODUCTS -->
+
+            <a href="{% url 'staff_products' %}">
+
+                <span class="icon">▤</span>
+
+                <span>
+                    Products
+                </span>
+
+            </a>
+
+
+            <!-- NOTIFICATIONS -->
+
+            <a href="{% url 'staff_notifications' %}">
+
+                <span class="icon">🔔</span>
+
+                <span>
+                    Notifications
+                </span>
+
+            </a>
+
+
+            <!-- ACCOUNT -->
+
+            <a href="{% url 'staff_account' %}">
+
+                <span class="icon">◉</span>
+
+                <span>
+                    Account
+                </span>
+
+            </a>
+
+
+            <!-- LOGOUT -->
+
+            <div class="logout">
+
+                <a href="{% url 'staff_logout' %}">
+
+                    <span class="icon">↪</span>
+
+                    <span>
+                        Logout
+                    </span>
+
+                </a>
+
+            </div>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- ==========================================
+         MAIN
+    =========================================== -->
+
+    <main class="main">
+
+
+        <!-- TOP BAR -->
+
+        <div class="topbar">
+
+            <div class="welcome">
+
+                <h2>
+                    Welcome to ExpiryGuard
+                </h2>
+
+                <p>
+                    Manage products and monitor expiry information easily.
+                </p>
+
+            </div>
+
+
+            <div class="user-box">
+
+                Staff:
+
+                <strong>
+                    {{ request.user.username }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- ==========================================
+             STATISTICS
+        =========================================== -->
+
+        <h2 class="section-title">
+            Product Overview
+        </h2>
+
+
+        <section class="stats">
+
+
+            <!-- TOTAL -->
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Total Products
+                </div>
+
+                <div class="stat-number">
+
+                    {{ total_products|default:"0" }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- SAFE -->
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Safe Products
+                </div>
+
+                <div class="stat-number safe">
+
+                    {{ safe_products|default:"0" }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- NEAR EXPIRY -->
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Expiring Soon
+                </div>
+
+                <div class="stat-number warning">
+
+                    {{ near_expiry|default:"0" }}
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EXPIRED -->
+
+            <div class="stat-card">
+
+                <div class="stat-title">
+                    Expired Products
+                </div>
+
+                <div class="stat-number danger">
+
+                    {{ expired_products|default:"0" }}
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             QUICK ACTIONS
+        =========================================== -->
+
+        <h2 class="section-title">
+            Quick Actions
+        </h2>
+
+
+        <section class="actions">
+
+
+            <!-- SCAN / ADD PRODUCT -->
+
+            <a href="{% url 'add_product' %}" class="action-card">
+
+                <div class="action-icon">
+                    ▣
+                </div>
+
+                <h3>
+                    Scan & Add Product
+                </h3>
+
+                <p>
+                    Scan a product barcode and automatically retrieve
+                    product information.
+                </p>
+
+            </a>
+
+
+
+            <!-- PRODUCTS -->
+
+            <a href="{% url 'staff_products' %}" class="action-card">
+
+                <div class="action-icon">
+                    ▤
+                </div>
+
+                <h3>
+                    Manage Products
+                </h3>
+
+                <p>
+                    View and manage all products stored in the
+                    ExpiryGuard database.
+                </p>
+
+            </a>
+
+
+
+            <!-- PRODUCT STATUS -->
+
+            <a href="{% url 'staff_product_status' %}" class="action-card">
+
+                <div class="action-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    Product Status
+                </h3>
+
+                <p>
+                    Check expired, expiring soon and safe products.
+                </p>
+
+            </a>
+
+
+
+            <!-- DASHBOARD -->
+
+            <a href="{% url 'staff_dashboard' %}" class="action-card">
+
+                <div class="action-icon">
+                    ▦
+                </div>
+
+                <h3>
+                    Dashboard
+                </h3>
+
+                <p>
+                    View detailed product and expiry statistics.
+                </p>
+
+            </a>
+
+
+
+            <!-- NOTIFICATIONS -->
+
+            <a href="{% url 'staff_notifications' %}" class="action-card">
+
+                <div class="action-icon">
+                    🔔
+                </div>
+
+                <h3>
+                    Notifications
+                </h3>
+
+                <p>
+                    View alerts for products approaching their expiry date.
+                </p>
+
+            </a>
+
+
+
+            <!-- ACCOUNT -->
+
+            <a href="{% url 'staff_account' %}" class="action-card">
+
+                <div class="action-icon">
+                    ◉
+                </div>
+
+                <h3>
+                    My Account
+                </h3>
+
+                <p>
+                    View and manage your staff account information.
+                </p>
+
+            </a>
+
+
+        </section>
+
+
+
+        <!-- ==========================================
+             WORKFLOW
+        =========================================== -->
+
+        <div class="info-panel">
+
+            <h3>
+                ExpiryGuard Product Workflow
+            </h3>
+
+
+            <div class="workflow">
+
+
+                <div class="workflow-step">
+                    Scan Barcode
+                </div>
+
+
+                <div class="workflow-arrow">
+                    →
+                </div>
+
+
+                <div class="workflow-step">
+                    Identify Product
+                </div>
+
+
+                <div class="workflow-arrow">
+                    →
+                </div>
+
+
+                <div class="workflow-step">
+                    OCR Details
+                </div>
+
+
+                <div class="workflow-arrow">
+                    →
+                </div>
+
+
+                <div class="workflow-step">
+                    Save Database
+                </div>
+
+
+                <div class="workflow-arrow">
+                    →
+                </div>
+
+
+                <div class="workflow-step">
+                    Expiry Analysis
+                </div>
+
+
+                <div class="workflow-arrow">
+                    →
+                </div>
+
+
+                <div class="workflow-step">
+                    Alert
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</body>
+
+</html>
