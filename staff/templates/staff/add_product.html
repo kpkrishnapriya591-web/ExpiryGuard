@@ -7,102 +7,59 @@
 
     <title>Add Product - ExpiryGuard</title>
 
-    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
-
     <style>
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #0b0b0b;
-            color: #f5f5f5;
+            background: #f5f7fa;
             min-height: 100vh;
         }
 
         .header {
-            height: 70px;
-            background: #111111;
-            border-bottom: 1px solid #333;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-        }
-
-        .logo {
-            font-size: 25px;
+            background: #242936;
+            color: white;
+            padding: 20px 35px;
+            font-size: 24px;
             font-weight: bold;
-            color: #d4af37;
-        }
-
-        .back-btn {
-            text-decoration: none;
-            color: #ffffff;
-            background: #222;
-            padding: 10px 18px;
-            border-radius: 8px;
-            border: 1px solid #444;
-        }
-
-        .back-btn:hover {
-            background: #333;
         }
 
         .container {
-            width: 95%;
-            max-width: 1200px;
-            margin: 30px auto;
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
         }
 
         .title {
-            font-size: 30px;
-            color: #d4af37;
-            margin-bottom: 10px;
+            margin-bottom: 25px;
         }
 
-        .subtitle {
-            color: #aaa;
-            margin-bottom: 25px;
+        .title h1 {
+            color: #242936;
+            font-size: 30px;
+        }
+
+        .title p {
+            color: #777;
+            margin-top: 7px;
         }
 
         .card {
-            background: #151515;
-            border: 1px solid #333;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .card h2 {
-            color: #d4af37;
-            margin-bottom: 20px;
-        }
-
-        #barcode-reader {
-            width: 100%;
-            max-width: 550px;
-            margin: auto;
-            border: 2px solid #444;
+            background: white;
+            padding: 35px;
             border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-        }
-
-        .scanner-status {
-            text-align: center;
-            margin-top: 15px;
-            color: #ccc;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
         }
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 18px;
+            grid-template-columns: 1fr 1fr;
+            gap: 22px;
         }
 
         .form-group {
@@ -111,1819 +68,257 @@
         }
 
         .form-group.full {
-            grid-column: 1 / -1;
+            grid-column: span 2;
         }
 
         label {
-            margin-bottom: 7px;
-            color: #ddd;
             font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
         }
 
         input,
-        textarea,
         select {
-            width: 100%;
             padding: 12px;
-            background: #0d0d0d;
-            border: 1px solid #444;
-            color: white;
-            border-radius: 8px;
-            outline: none;
+            border: 1px solid #d5d8dc;
+            border-radius: 7px;
             font-size: 15px;
+            outline: none;
         }
 
         input:focus,
-        textarea:focus,
         select:focus {
-            border-color: #d4af37;
+            border-color: #242936;
         }
 
-        textarea {
-            min-height: 100px;
-            resize: vertical;
+        .required {
+            color: red;
         }
 
-        .ocr-camera-box {
-            width: 100%;
-            max-width: 650px;
-            margin: auto;
-            background: #000;
-            border: 2px solid #444;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        #ocrCamera {
-            width: 100%;
-            min-height: 350px;
+        .buttons {
+            margin-top: 30px;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #000;
-        }
-
-        #ocrVideo {
-            width: 100%;
-            max-height: 500px;
-            object-fit: cover;
-            display: block;
-        }
-
-        .camera-status {
-            text-align: center;
-            padding: 15px;
-            color: #ccc;
-        }
-
-        .button-row {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: 18px;
-        }
-
-        button {
-            border: none;
-            padding: 12px 22px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .btn-gold {
-            background: #d4af37;
-            color: #111;
-        }
-
-        .btn-gold:hover {
-            background: #e5c04b;
-        }
-
-        .btn-dark {
-            background: #333;
-            color: white;
-        }
-
-        .btn-dark:hover {
-            background: #444;
-        }
-
-        .btn-green {
-            background: #287a42;
-            color: white;
-        }
-
-        .btn-green:hover {
-            background: #349653;
-        }
-
-        .ocr-result {
-            margin-top: 25px;
-            display: none;
-        }
-
-        .result-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-        }
-
-        .result-box {
-            background: #0d0d0d;
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        .result-label {
-            color: #999;
-            font-size: 13px;
-            margin-bottom: 6px;
-        }
-
-        .result-value {
-            color: #d4af37;
-            font-size: 17px;
-            font-weight: bold;
-            word-break: break-word;
-        }
-
-        .raw-text {
-            margin-top: 18px;
-            background: #0d0d0d;
-            border: 1px solid #333;
-            border-radius: 10px;
-            padding: 15px;
-        }
-
-        .raw-text h4 {
-            color: #d4af37;
-            margin-bottom: 10px;
-        }
-
-        #ocrRawText {
-            color: #ccc;
-            white-space: pre-wrap;
-            word-break: break-word;
-            line-height: 1.5;
-        }
-
-        .expiry-status {
-            margin-top: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            background: #1b1b1b;
-            border: 1px solid #444;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .save-section {
-            text-align: center;
+            gap: 15px;
         }
 
         .save-btn {
-            width: 250px;
-            background: #d4af37;
-            color: #111;
-            font-size: 17px;
+            background: #242936;
+            color: white;
+            border: none;
+            padding: 13px 30px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .save-btn:hover {
+            background: #161a22;
+        }
+
+        .cancel-btn {
+            background: #e5e7eb;
+            color: #333;
+            text-decoration: none;
+            padding: 13px 30px;
+            border-radius: 7px;
         }
 
         .message {
-            margin-top: 15px;
-            text-align: center;
             padding: 12px;
-            border-radius: 8px;
-            display: none;
+            margin-bottom: 20px;
+            background: #fff3cd;
+            border-radius: 7px;
+            color: #664d03;
         }
 
-        @media (max-width: 800px) {
+        @media(max-width: 700px) {
+
             .form-grid {
                 grid-template-columns: 1fr;
             }
 
             .form-group.full {
-                grid-column: auto;
+                grid-column: span 1;
             }
 
-            .result-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
         }
 
-        @media (max-width: 500px) {
-            .result-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header {
-                padding: 0 15px;
-            }
-
-            .container {
-                width: 92%;
-            }
-
-            .card {
-                padding: 18px;
-            }
-        }
     </style>
+
 </head>
 
 <body>
 
     <div class="header">
-        <div class="logo">
-            ExpiryGuard
-        </div>
-
-        <a href="{% url 'staff_home' %}" class="back-btn">
-            ← Back to Home
-        </a>
+        ExpiryGuard — Staff
     </div>
 
     <div class="container">
 
-        <h1 class="title">Add Product</h1>
+        <div class="title">
+            <h1>Add New Product</h1>
+            <p>Enter the product details below.</p>
+        </div>
 
-        <p class="subtitle">
-            Scan the product barcode, identify the product and use camera OCR
-            to extract Batch Number, MFG, EXP and MRP.
-        </p>
-
-
-        <!-- ================= BARCODE SCANNER ================= -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
         <div class="card">
 
-            <h2>📷 Step 1 - Scan Barcode</h2>
+            <form method="POST">
 
-            <div id="barcode-reader"></div>
+                {% csrf_token %}
 
-            <div class="scanner-status" id="barcodeStatus">
-                Starting barcode scanner...
-            </div>
+                <div class="form-grid">
 
-        </div>
+                    <div class="form-group">
+                        <label>
+                            Product Name <span class="required">*</span>
+                        </label>
 
-
-        <!-- ================= PRODUCT INFORMATION ================= -->
-
-        <div class="card">
-
-            <h2>📦 Product Information</h2>
-
-            <div class="form-grid">
-
-                <div class="form-group">
-                    <label for="productName">Product Name</label>
-                    <input
-                        type="text"
-                        id="productName"
-                        placeholder="Product name"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="barcode">Barcode</label>
-                    <input
-                        type="text"
-                        id="barcode"
-                        placeholder="Barcode"
-                        readonly
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="brand">Brand</label>
-                    <input
-                        type="text"
-                        id="brand"
-                        placeholder="Brand"
-                    >
-                </div>
-
-                
-                </div>
-
-                <div class="form-group">
-                    <label for="category">Category</label>
-                    <input
-                        type="text"
-                        id="category"
-                        placeholder="Category"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="quantity">Quantity</label>
-                    <input
-                        type="number"
-                        id="quantity"
-                        value="1"
-                        min="0"
-                    >
-                </div>
-
-                
-
-                   
-
-                <div class="form-group">
-                    <label for="batchNumber">Batch Number</label>
-                    <input
-                        type="text"
-                        id="batchNumber"
-                        placeholder="Automatically detected by OCR"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="manufactureDate">Manufacture Date</label>
-                    <input
-                        type="date"
-                        id="manufactureDate"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="expiryDate">Expiry Date</label>
-                    <input
-                        type="date"
-                        id="expiryDate"
-                    >
-                </div>
-
-                <div class="form-group">
-                    <label for="price">MRP / Price (₹)</label>
-                    <input
-                        type="number"
-                        id="price"
-                        step="0.01"
-                        placeholder="Automatically detected by OCR"
-                    >
-                </div>
-
-
-              
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= OCR CAMERA ================= -->
-
-        <div class="card">
-
-            <h2>🔎 Step 2 - Camera OCR</h2>
-
-            <p class="subtitle">
-                Point the camera towards the area containing
-                Batch Number, MFG, EXP and MRP.
-            </p>
-
-            <div class="ocr-camera-box">
-
-                <div id="ocrCamera">
-
-                    <div id="ocrCameraMessage">
-                        Camera is not started.
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="camera-status" id="cameraStatus">
-                Click "Start OCR Camera".
-            </div>
-
-            <div class="button-row">
-
-                <button
-                    type="button"
-                    class="btn-gold"
-                    onclick="startCameraOCR()"
-                >
-                    📷 Start OCR Camera
-                </button>
-
-                <button
-                    type="button"
-                    class="btn-green"
-                    onclick="captureOCRImage()"
-                >
-                    🔍 Capture & OCR
-                </button>
-
-                <button
-                    type="button"
-                    class="btn-dark"
-                    onclick="stopCameraOCR()"
-                >
-                    ⛔ Stop Camera
-                </button>
-
-            </div>
-
-
-            <!-- OCR RESULT -->
-
-            <div class="ocr-result" id="ocrResult">
-
-                <h2>OCR Detected Information</h2>
-
-                <div class="result-grid">
-
-                    <div class="result-box">
-
-                        <div class="result-label">
-                            Batch Number
-                        </div>
-
-                        <div
-                            class="result-value"
-                            id="ocrBatch"
-                        >
-                            -
-                        </div>
-
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter product name"
+                            required>
                     </div>
 
 
-                    <div class="result-box">
+                    <div class="form-group">
+                        <label>
+                            Barcode <span class="required">*</span>
+                        </label>
 
-                        <div class="result-label">
-                            Manufacture Date
-                        </div>
-
-                        <div
-                            class="result-value"
-                            id="ocrMfg"
-                        >
-                            -
-                        </div>
-
+                        <input
+                            type="text"
+                            name="barcode"
+                            placeholder="Enter barcode"
+                            required>
                     </div>
 
 
-                    <div class="result-box">
+                    <div class="form-group">
+                        <label>
+                            Batch Number <span class="required">*</span>
+                        </label>
 
-                        <div class="result-label">
-                            Expiry Date
-                        </div>
-
-                        <div
-                            class="result-value"
-                            id="ocrExp"
-                        >
-                            -
-                        </div>
-
+                        <input
+                            type="text"
+                            name="batch_number"
+                            placeholder="Enter batch number"
+                            required>
                     </div>
 
 
-                    <div class="result-box">
+                    <div class="form-group">
+                        <label>Category</label>
 
-                        <div class="result-label">
-                            MRP / Price
-                        </div>
+                        <input
+                            type="text"
+                            name="category"
+                            placeholder="Example: Food, Medicine">
+                    </div>
 
-                        <div
-                            class="result-value"
-                            id="ocrPrice"
-                        >
-                            -
-                        </div>
+
+                    <div class="form-group">
+                        <label>
+                            Manufacture Date <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="manufacture_date"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>
+                            Expiry Date <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="expiry_date"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>
+                            MRP / Price <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="number"
+                            name="price"
+                            step="0.01"
+                            min="0"
+                            placeholder="Enter MRP"
+                            required>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Quantity</label>
+
+                        <input
+                            type="number"
+                            name="quantity"
+                            min="0"
+                            value="0"
+                            placeholder="Enter quantity">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Unit</label>
+
+                        <select name="unit">
+
+                            <option value="">Select unit</option>
+                            <option value="Pieces">Pieces</option>
+                            <option value="Packets">Packets</option>
+                            <option value="Boxes">Boxes</option>
+                            <option value="Bottles">Bottles</option>
+                            <option value="Kg">Kg</option>
+                            <option value="Grams">Grams</option>
+                            <option value="Litres">Litres</option>
+                            <option value="Ml">Ml</option>
+
+                        </select>
 
                     </div>
 
                 </div>
 
 
-                <div class="raw-text">
+                <div class="buttons">
 
-                    <h4>
-                        Raw OCR Text
-                    </h4>
+                    <button
+                        type="submit"
+                        class="save-btn">
+                        Save Product
+                    </button>
 
-                    <div id="ocrRawText">
-                        -
-                    </div>
+                    <a
+                        href="{% url 'manage_products' %}"
+                        class="cancel-btn">
+                        Cancel
+                    </a>
 
                 </div>
 
-                <div
-                    class="expiry-status"
-                    id="expiryStatus"
-                >
-                    Expiry status will appear here.
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ================= SAVE ================= -->
-
-        <div class="card save-section">
-
-            <h2>💾 Step 3 - Save Product</h2>
-
-            <p class="subtitle">
-                After barcode identification and OCR extraction,
-                save the product into ExpiryGuard database.
-            </p>
-
-            <button
-                type="button"
-                class="save-btn"
-                onclick="saveProduct()"
-            >
-                💾 Save Product
-            </button>
-
-            <div
-                class="message"
-                id="saveMessage"
-            ></div>
+            </form>
 
         </div>
 
     </div>
-
-
-    <script>
-
-        /* =========================================================
-           CSRF TOKEN
-        ========================================================= */
-
-        function getCSRFToken() {
-
-            const name = "csrftoken=";
-
-            const decodedCookie =
-                decodeURIComponent(document.cookie);
-
-            const cookies =
-                decodedCookie.split(";");
-
-            for (let cookie of cookies) {
-
-                cookie = cookie.trim();
-
-                if (cookie.indexOf(name) === 0) {
-
-                    return cookie.substring(
-                        name.length,
-                        cookie.length
-                    );
-                }
-            }
-
-            return "";
-        }
-
-
-        /* =========================================================
-           BARCODE SCANNER
-        ========================================================= */
-
-        let barcodeScanner = null;
-
-        let barcodeAlreadyDetected = false;
-
-
-        window.addEventListener(
-            "load",
-            startBarcodeScanner
-        );
-
-
-        function startBarcodeScanner() {
-
-            const status =
-                document.getElementById("barcodeStatus");
-
-            barcodeAlreadyDetected = false;
-
-            barcodeScanner =
-                new Html5Qrcode("barcode-reader");
-
-
-            const config = {
-
-                fps: 10,
-
-                qrbox: {
-                    width: 300,
-                    height: 150
-                },
-
-                rememberLastUsedCamera: true,
-
-                supportedScanTypes: [
-                    Html5QrcodeScanType.SCAN_TYPE_CAMERA
-                ]
-
-            };
-
-
-            barcodeScanner.start(
-
-                {
-                    facingMode: "environment"
-                },
-
-                config,
-
-                onBarcodeDetected,
-
-                function(errorMessage) {
-
-                    /* Scanner continuously checks frames.
-                       Do not show every frame error. */
-
-                }
-
-            ).then(function() {
-
-                status.innerHTML =
-                    "📷 Camera active. Point at the barcode.";
-
-            }).catch(function(error) {
-
-                console.error(
-                    "Barcode camera error:",
-                    error
-                );
-
-                status.innerHTML =
-                    "⚠️ Unable to access camera. Please allow camera permission.";
-
-            });
-
-        }
-
-
-        async function onBarcodeDetected(
-            decodedText,
-            decodedResult
-        ) {
-
-            if (barcodeAlreadyDetected) {
-                return;
-            }
-
-            barcodeAlreadyDetected = true;
-
-            console.log(
-                "Barcode detected:",
-                decodedText
-            );
-
-
-            document.getElementById(
-                "barcode"
-            ).value = decodedText;
-
-
-            document.getElementById(
-                "barcodeStatus"
-            ).innerHTML =
-                "✅ Barcode detected: " +
-                decodedText;
-
-
-            try {
-
-                await barcodeScanner.stop();
-
-            } catch (error) {
-
-                console.log(
-                    "Scanner stop error:",
-                    error
-                );
-
-            }
-
-
-            getProductInformation(
-                decodedText
-            );
-
-        }
-
-
-        /* =========================================================
-           GET PRODUCT INFORMATION
-        ========================================================= */
-
-        async function getProductInformation(
-            barcode
-        ) {
-
-            const status =
-                document.getElementById(
-                    "barcodeStatus"
-                );
-
-
-            status.innerHTML =
-                "🔎 Identifying product...";
-
-
-            try {
-
-                const response =
-                    await fetch(
-                        "{% url 'get_product_from_barcode' %}?barcode=" +
-                        encodeURIComponent(barcode)
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                console.log(
-                    "BARCODE RESULT:",
-                    data
-                );
-
-
-                if (
-                    data.success ||
-                    data.product_name
-                ) {
-
-                    document.getElementById(
-                        "productName"
-                    ).value =
-                        data.product_name || "";
-
-
-                    document.getElementById(
-                        "brand"
-                    ).value =
-                        data.brand || "";
-
-
-                    document.getElementById(
-                        "manufacturer"
-                    ).value =
-                        data.manufacturer || "";
-
-
-                    document.getElementById(
-                        "category"
-                    ).value =
-                        data.category || "";
-
-
-                    document.getElementById(
-                        "description"
-                    ).value =
-                        data.description || "";
-
-
-                    document.getElementById(
-                        "ingredients"
-                    ).value =
-                        data.ingredients || "";
-
-
-                    status.innerHTML =
-                        "✅ Product identified. Now scan MFG / EXP / Batch / MRP using OCR.";
-
-                } else {
-
-                    status.innerHTML =
-                        "⚠️ Product information not found online. Continue with OCR.";
-
-                }
-
-            }
-            catch (error) {
-
-                console.error(
-                    "Product lookup error:",
-                    error
-                );
-
-                status.innerHTML =
-                    "⚠️ Product lookup failed. OCR can still be used.";
-
-            }
-
-        }
-
-
-        /* =========================================================
-           OCR CAMERA
-        ========================================================= */
-
-        let ocrStream = null;
-
-
-        async function startCameraOCR() {
-
-            const camera =
-                document.getElementById(
-                    "ocrCamera"
-                );
-
-            const status =
-                document.getElementById(
-                    "cameraStatus"
-                );
-
-
-            try {
-
-                if (ocrStream) {
-
-                    stopCameraOCR();
-
-                }
-
-
-                ocrStream =
-                    await navigator.mediaDevices.getUserMedia({
-
-                        video: {
-                            facingMode: {
-                                ideal: "environment"
-                            },
-
-                            width: {
-                                ideal: 1920
-                            },
-
-                            height: {
-                                ideal: 1080
-                            }
-                        },
-
-                        audio: false
-
-                    });
-
-
-                camera.innerHTML = "";
-
-
-                const video =
-                    document.createElement(
-                        "video"
-                    );
-
-
-                video.id =
-                    "ocrVideo";
-
-
-                video.autoplay =
-                    true;
-
-                video.playsInline =
-                    true;
-
-                video.muted =
-                    true;
-
-
-                video.srcObject =
-                    ocrStream;
-
-
-                camera.appendChild(
-                    video
-                );
-
-
-                status.innerHTML =
-                    "📷 OCR camera started. Keep the MFG / EXP / Batch / MRP text clear and steady.";
-
-
-            }
-            catch (error) {
-
-                console.error(
-                    "OCR camera error:",
-                    error
-                );
-
-
-                status.innerHTML =
-                    "❌ Unable to access OCR camera. Allow camera permission and try again.";
-
-            }
-
-        }
-
-
-        /* =========================================================
-           CAPTURE OCR IMAGE
-        ========================================================= */
-
-        async function captureOCRImage() {
-
-            const video =
-                document.getElementById(
-                    "ocrVideo"
-                );
-
-            const status =
-                document.getElementById(
-                    "cameraStatus"
-                );
-
-
-            if (!video) {
-
-                status.innerHTML =
-                    "⚠️ Start OCR Camera first.";
-
-                return;
-
-            }
-
-
-            if (
-                video.videoWidth === 0 ||
-                video.videoHeight === 0
-            ) {
-
-                status.innerHTML =
-                    "⚠️ Camera is not ready. Wait a moment and try again.";
-
-                return;
-
-            }
-
-
-            status.innerHTML =
-                "📸 Capturing image...";
-
-
-            const canvas =
-                document.createElement(
-                    "canvas"
-                );
-
-
-            canvas.width =
-                video.videoWidth;
-
-
-            canvas.height =
-                video.videoHeight;
-
-
-            const context =
-                canvas.getContext(
-                    "2d"
-                );
-
-
-            context.drawImage(
-                video,
-                0,
-                0,
-                canvas.width,
-                canvas.height
-            );
-
-
-            canvas.toBlob(
-
-                function(blob) {
-
-                    if (!blob) {
-
-                        status.innerHTML =
-                            "❌ Could not capture image.";
-
-                        return;
-
-                    }
-
-
-                    sendCameraImageToOCR(
-                        blob
-                    );
-
-                },
-
-                "image/jpeg",
-
-                0.95
-
-            );
-
-        }
-
-
-        /* =========================================================
-           SEND CAMERA IMAGE TO DJANGO OCR
-        ========================================================= */
-
-        async function sendCameraImageToOCR(
-            blob
-        ) {
-
-            const status =
-                document.getElementById(
-                    "cameraStatus"
-                );
-
-
-            status.innerHTML =
-                "🔎 OCR is reading Batch / MFG / EXP / MRP...";
-
-
-            const formData =
-                new FormData();
-
-
-            /*
-                IMPORTANT:
-
-                Backend expects:
-
-                    request.FILES["image"]
-
-                Therefore do NOT use:
-
-                    product_image
-
-                Use:
-
-                    image
-            */
-
-            formData.append(
-                "image",
-                blob,
-                "camera_capture.jpg"
-            );
-
-
-            try {
-
-                const response =
-                    await fetch(
-
-                        "{% url 'extract_product_details_from_image' %}",
-
-                        {
-                            method: "POST",
-
-                            body: formData,
-
-                            headers: {
-                                "X-CSRFToken":
-                                    getCSRFToken()
-                            }
-                        }
-
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                console.log(
-                    "OCR RESULT:",
-                    data
-                );
-
-
-                if (!data.success) {
-
-                    status.innerHTML =
-                        "⚠️ " +
-                        (
-                            data.message ||
-                            "Could not detect product information. Move closer and capture again."
-                        );
-
-                    return;
-
-                }
-
-
-                /* =========================
-                   BATCH NUMBER
-                ========================= */
-
-                const batchNumber =
-                    data.batch_number || "";
-
-
-                document.getElementById(
-                    "batchNumber"
-                ).value =
-                    batchNumber;
-
-
-                document.getElementById(
-                    "ocrBatch"
-                ).textContent =
-                    batchNumber || "-";
-
-
-                /* =========================
-                   MANUFACTURE DATE
-                ========================= */
-
-                let mfgDate = "";
-
-
-                if (
-                    data.manufacture_date
-                ) {
-
-                    mfgDate =
-                        convertOCRDate(
-                            data.manufacture_date
-                        );
-
-                }
-
-
-                document.getElementById(
-                    "manufactureDate"
-                ).value =
-                    mfgDate;
-
-
-                document.getElementById(
-                    "ocrMfg"
-                ).textContent =
-                    mfgDate || "-";
-
-
-                /* =========================
-                   EXPIRY DATE
-                ========================= */
-
-                let expDate = "";
-
-
-                if (
-                    data.expiry_date
-                ) {
-
-                    expDate =
-                        convertOCRDate(
-                            data.expiry_date
-                        );
-
-                }
-
-
-                document.getElementById(
-                    "expiryDate"
-                ).value =
-                    expDate;
-
-
-                document.getElementById(
-                    "ocrExp"
-                ).textContent =
-                    expDate || "-";
-
-
-                /* =========================
-                   PRICE / MRP
-                ========================= */
-
-                let price = "";
-
-
-                if (
-                    data.price !== null &&
-                    data.price !== undefined &&
-                    data.price !== ""
-                ) {
-
-                    price =
-                        data.price;
-
-                }
-
-
-                document.getElementById(
-                    "price"
-                ).value =
-                    price;
-
-
-                document.getElementById(
-                    "ocrPrice"
-                ).textContent =
-
-                    price !== ""
-                        ? "₹ " + price
-                        : "-";
-
-
-                /* =========================
-                   RAW OCR TEXT
-                ========================= */
-
-                document.getElementById(
-                    "ocrRawText"
-                ).textContent =
-                    data.ocr_text || "-";
-
-
-                document.getElementById(
-                    "ocrResult"
-                ).style.display =
-                    "block";
-
-
-                /* =========================
-                   EXPIRY STATUS
-                ========================= */
-
-                checkExpiryStatus();
-
-
-                /* =========================
-                   DETECTED FIELDS
-                ========================= */
-
-                let detectedFields = [];
-
-
-                if (batchNumber) {
-
-                    detectedFields.push(
-                        "Batch"
-                    );
-
-                }
-
-
-                if (mfgDate) {
-
-                    detectedFields.push(
-                        "MFG"
-                    );
-
-                }
-
-
-                if (expDate) {
-
-                    detectedFields.push(
-                        "EXP"
-                    );
-
-                }
-
-
-                if (price !== "") {
-
-                    detectedFields.push(
-                        "MRP"
-                    );
-
-                }
-
-
-                if (
-                    detectedFields.length > 0
-                ) {
-
-                    status.innerHTML =
-                        "✅ OCR completed. Detected: " +
-                        detectedFields.join(
-                            ", "
-                        );
-
-                }
-                else {
-
-                    status.innerHTML =
-                        "⚠️ No Batch / MFG / EXP / MRP detected. Move closer and capture again.";
-
-                }
-
-            }
-            catch (error) {
-
-                console.error(
-                    "OCR ERROR:",
-                    error
-                );
-
-
-                status.innerHTML =
-                    "❌ OCR server error. Check the Django terminal.";
-
-            }
-
-        }
-
-
-        /* =========================================================
-           CONVERT OCR DATE
-        ========================================================= */
-
-        function convertOCRDate(
-            value
-        ) {
-
-            if (!value) {
-
-                return "";
-
-            }
-
-
-            value =
-                String(value).trim();
-
-
-            /*
-                YYYY-MM-DD
-            */
-
-            if (
-                /^\d{4}-\d{2}-\d{2}$/.test(
-                    value
-                )
-            ) {
-
-                return value;
-
-            }
-
-
-            /*
-                DD/MM/YYYY
-            */
-
-            let match =
-                value.match(
-                    /^(\d{2})\/(\d{2})\/(\d{4})$/
-                );
-
-
-            if (match) {
-
-                return (
-                    match[3] +
-                    "-" +
-                    match[2] +
-                    "-" +
-                    match[1]
-                );
-
-            }
-
-
-            /*
-                DD.MM.YYYY
-            */
-
-            match =
-                value.match(
-                    /^(\d{2})\.(\d{2})\.(\d{4})$/
-                );
-
-
-            if (match) {
-
-                return (
-                    match[3] +
-                    "-" +
-                    match[2] +
-                    "-" +
-                    match[1]
-                );
-
-            }
-
-
-            /*
-                DD-MM-YYYY
-            */
-
-            match =
-                value.match(
-                    /^(\d{2})-(\d{2})-(\d{4})$/
-                );
-
-
-            if (match) {
-
-                return (
-                    match[3] +
-                    "-" +
-                    match[2] +
-                    "-" +
-                    match[1]
-                );
-
-            }
-
-
-            return value;
-
-        }
-
-
-        /* =========================================================
-           EXPIRY STATUS
-        ========================================================= */
-
-        function checkExpiryStatus() {
-
-            const expiry =
-                document.getElementById(
-                    "expiryDate"
-                ).value;
-
-
-            const status =
-                document.getElementById(
-                    "expiryStatus"
-                );
-
-
-            if (!expiry) {
-
-                status.innerHTML =
-                    "Expiry status will appear here.";
-
-                return;
-
-            }
-
-
-            const expiryDate =
-                new Date(
-                    expiry + "T00:00:00"
-                );
-
-
-            const today =
-                new Date();
-
-
-            today.setHours(
-                0,
-                0,
-                0,
-                0
-            );
-
-
-            const difference =
-                expiryDate.getTime() -
-                today.getTime();
-
-
-            const daysLeft =
-                Math.ceil(
-                    difference /
-                    (
-                        1000 *
-                        60 *
-                        60 *
-                        24
-                    )
-                );
-
-
-            if (daysLeft < 0) {
-
-                status.innerHTML =
-                    "❌ EXPIRED — Product has expired.";
-
-            }
-            else if (daysLeft === 0) {
-
-                status.innerHTML =
-                    "⚠️ EXPIRES TODAY";
-
-            }
-            else if (daysLeft <= 7) {
-
-                status.innerHTML =
-                    "⚠️ EXPIRING SOON — " +
-                    daysLeft +
-                    " day(s) remaining.";
-
-            }
-            else if (daysLeft <= 30) {
-
-                status.innerHTML =
-                    "🟡 NEAR EXPIRY — " +
-                    daysLeft +
-                    " day(s) remaining.";
-
-            }
-            else {
-
-                status.innerHTML =
-                    "✅ SAFE — " +
-                    daysLeft +
-                    " day(s) remaining.";
-
-            }
-
-        }
-
-
-        document
-            .getElementById("expiryDate")
-            .addEventListener(
-                "change",
-                checkExpiryStatus
-            );
-
-
-        /* =========================================================
-           STOP OCR CAMERA
-        ========================================================= */
-
-        function stopCameraOCR() {
-
-            if (ocrStream) {
-
-                const tracks =
-                    ocrStream.getTracks();
-
-
-                tracks.forEach(
-                    function(track) {
-
-                        track.stop();
-
-                    }
-                );
-
-
-                ocrStream = null;
-
-            }
-
-
-            const camera =
-                document.getElementById(
-                    "ocrCamera"
-                );
-
-
-            camera.innerHTML =
-                '<div id="ocrCameraMessage">Camera is stopped.</div>';
-
-
-            document.getElementById(
-                "cameraStatus"
-            ).innerHTML =
-                "Camera stopped.";
-
-        }
-
-
-        /* =========================================================
-           SAVE PRODUCT
-        ========================================================= */
-
-        async function saveProduct() {
-
-            const message =
-                document.getElementById(
-                    "saveMessage"
-                );
-
-
-            message.style.display =
-                "block";
-
-
-            message.innerHTML =
-                "💾 Saving product...";
-
-
-            const formData =
-                new FormData();
-
-
-            formData.append(
-                "name",
-                document.getElementById(
-                    "productName"
-                ).value
-            );
-
-
-            formData.append(
-                "barcode",
-                document.getElementById(
-                    "barcode"
-                ).value
-            );
-
-
-            formData.append(
-                "brand",
-                document.getElementById(
-                    "brand"
-                ).value
-            );
-
-
-            formData.append(
-                "manufacturer",
-                document.getElementById(
-                    "manufacturer"
-                ).value
-            );
-
-
-            formData.append(
-                "category",
-                document.getElementById(
-                    "category"
-                ).value
-            );
-
-
-            formData.append(
-                "quantity",
-                document.getElementById(
-                    "quantity"
-                ).value
-            );
-
-
-            formData.append(
-                "unit",
-                document.getElementById(
-                    "unit"
-                ).value
-            );
-
-
-            formData.append(
-                "batch_number",
-                document.getElementById(
-                    "batchNumber"
-                ).value
-            );
-
-
-            formData.append(
-                "manufacture_date",
-                document.getElementById(
-                    "manufactureDate"
-                ).value
-            );
-
-
-            formData.append(
-                "expiry_date",
-                document.getElementById(
-                    "expiryDate"
-                ).value
-            );
-
-
-            formData.append(
-                "price",
-                document.getElementById(
-                    "price"
-                ).value
-            );
-
-
-            formData.append(
-                "description",
-                document.getElementById(
-                    "description"
-                ).value
-            );
-
-
-            formData.append(
-                "ingredients",
-                document.getElementById(
-                    "ingredients"
-                ).value
-            );
-
-
-            try {
-
-                const response =
-                    await fetch(
-
-                        "{% url 'save_scanned_product' %}",
-
-                        {
-                            method: "POST",
-
-                            body: formData,
-
-                            headers: {
-
-                                "X-CSRFToken":
-                                    getCSRFToken()
-
-                            }
-
-                        }
-
-                    );
-
-
-                const data =
-                    await response.json();
-
-
-                console.log(
-                    "SAVE RESULT:",
-                    data
-                );
-
-
-                if (data.success) {
-
-                    message.innerHTML =
-                        "✅ Product saved successfully!";
-
-
-                    message.style.background =
-                        "#174d2a";
-
-
-                    message.style.color =
-                        "#ffffff";
-
-
-                }
-                else {
-
-                    message.innerHTML =
-                        "❌ " +
-                        (
-                            data.message ||
-                            "Could not save product."
-                        );
-
-
-                    message.style.background =
-                        "#5a1d1d";
-
-
-                    message.style.color =
-                        "#ffffff";
-
-                }
-
-            }
-            catch (error) {
-
-                console.error(
-                    "SAVE ERROR:",
-                    error
-                );
-
-
-                message.innerHTML =
-                    "❌ Server error. Check Django terminal.";
-
-
-                message.style.background =
-                    "#5a1d1d";
-
-
-                message.style.color =
-                    "#ffffff";
-
-            }
-
-        }
-
-    </script>
 
 </body>
 

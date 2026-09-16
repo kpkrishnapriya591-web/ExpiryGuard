@@ -50,57 +50,13 @@ urlpatterns = [
 
 
     # ============================================================
-    # ADD PRODUCT / BARCODE SCANNER PAGE
+    # ADD PRODUCT
     # ============================================================
 
     path(
         "products/add/",
         views.add_product,
         name="add_product"
-    ),
-path("barcode-info/", views.get_product_from_barcode, name="get_product_from_barcode"),
-path(
-    "barcode-save/",
-    views.save_scanned_product,
-    name="save_scanned_product"
-),
-    # ============================================================
-    # BARCODE → ONLINE PRODUCT INFORMATION
-    # ============================================================
-
-    path(
-        "barcode-info/",
-        views.get_product_from_barcode,
-        name="get_product_from_barcode"
-    ),
-
-
-    # ============================================================
-    # CAMERA OCR
-    # ============================================================
-
-    path(
-        "ocr-extract/",
-        views.extract_product_details_from_image,
-        name="extract_product_details_from_image"
-    ),
-
-    # Optional OCR camera endpoint
-    path(
-        "ocr-camera/",
-        views.ocr_camera,
-        name="ocr_camera"
-    ),
-
-
-    # ============================================================
-    # SAVE SCANNED PRODUCT
-    # ============================================================
-
-    path(
-        "barcode-save/",
-        views.save_scanned_product,
-        name="save_scanned_product"
     ),
 
 
@@ -168,11 +124,7 @@ path(
         views.staff_notifications,
         name="staff_notifications"
     ),
-path(
-    "ocr-camera/",
-    views.ocr_camera,
-    name="ocr_camera"
-),
+
 
     # ============================================================
     # ACCOUNT
