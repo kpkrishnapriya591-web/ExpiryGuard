@@ -22,23 +22,9 @@ urlpatterns = [
         name="home"
     ),
 
-    # =========================
-    # DASHBOARD
-    # =========================
-    path(
-        "dashboard/",
-        views.dashboard,
-        name="dashboard"
-    ),
+   
 
-    # =========================
-    # REPORTS
-    # =========================
-    path(
-        "reports/",
-        views.reports,
-        name="reports"
-    ),
+   
 
     # =========================
     # NOTIFICATIONS
@@ -69,27 +55,32 @@ urlpatterns = [
         views.update_staff,
         name="update_staff"
     ),
-
-    path(
-        "staff-management/delete/<int:staff_id>/",
-        views.delete_staff,
-        name="delete_staff"
-    ),
+path(
+    "products/update/<int:product_id>/",
+    views.update_product,
+    name="admin_product_update"
+),
+  path(
+    "staff-management/delete/<int:staff_id>/",
+    views.delete_staff,
+    name="delete_staff"
+),
 
     # =========================
     # PRODUCT MANAGEMENT
     # =========================
-    path(
-        "products/",
-        views.manage_products,
-        name="manage_products"
-    ),
+   path(
+    "products/",
+    views.manage_products,
+    name="manage_products"
+),
+path(
+    "products/view/<int:product_id>/",
+    views.view_product,
+    name="view_product"
+),
 
-    path(
-        "add-product/",
-        views.add_product,
-        name="add_product"
-    ),
+  path("add-product/", views.add_product, name="admin_add_product"),
 
     path(
         "product-status/",
@@ -97,14 +88,7 @@ urlpatterns = [
         name="product_status"
     ),
 
-    # =========================
-    # ACTIVITY LOG
-    # =========================
-    path(
-        "activity-log/",
-        views.activity_log,
-        name="activity_log"
-    ),
+    
 
     # =========================
     # ACCOUNT
@@ -114,7 +98,11 @@ urlpatterns = [
         views.account,
         name="account"
     ),
-
+path(
+    "products/delete/<int:product_id>/",
+    views.delete_product,
+    name="delete_product"
+),
     # =========================
     # LOGOUT
     # =========================

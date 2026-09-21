@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Expiry Simulator - ExpiryGuard</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111111;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            color: #d4af37;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .menu a {
+            display: block;
+            text-decoration: none;
+            color: #ddd;
+            padding: 14px 18px;
+            margin-bottom: 8px;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .menu a:hover,
+        .menu a.active {
+            background: #d4af37;
+            color: #111;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 240px;
+            padding: 35px;
+        }
+
+        .header {
+            margin-bottom: 25px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            color: #222;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* TABLE CONTAINER */
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1000px;
+        }
+
+        th {
+            background: #111111;
+            color: #d4af37;
+            padding: 15px 12px;
+            text-align: left;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .product-name {
+            font-weight: bold;
+            color: #222;
+        }
+
+        .barcode {
+            font-family: monospace;
+            color: #555;
+        }
+
+        .batch {
+            font-family: monospace;
+            color: #555;
+        }
+
+        .stock {
+            font-weight: bold;
+        }
+
+        /* STATUS */
+
+        .days {
+            font-weight: bold;
+        }
+
+        .safe {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: #d68a00;
+            font-weight: bold;
+        }
+
+        .critical {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .expired {
+            color: #b00020;
+            font-weight: bold;
+        }
+
+        /* DAILY SALE */
+
+        .daily-sale {
+            background: #fff4cf;
+            color: #8a6800;
+            padding: 7px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* MESSAGE */
+
+        .message {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.5;
+            max-width: 280px;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: #777;
+            font-size: 16px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                padding: 20px;
+            }
+
+        }
+
+    </style>
+</head>
+
+<body>
+
+<!-- ================= SIDEBAR ================= -->
+
+<div class="sidebar">
+
+    <div class="logo">
+        ExpiryGuard
+    </div>
+
+    <div class="menu">
+
+        <a href="{% url 'staff_home' %}">
+            🏠 Home
+        </a>
+
+        <a href="{% url 'staff_dashboard' %}">
+            📊 Dashboard
+        </a>
+
+        <a href="{% url 'add_product' %}">
+            ➕ Add Products
+        </a>
+
+        <a href="{% url 'expiry_simulator' %}" class="active">
+            ⏳ Expiry Simulator
+        </a>
+
+        <a href="{% url 'staff_product_status' %}">
+            📦 Product Status
+        </a>
+
+        <a href="{% url 'staff_notifications' %}">
+            🔔 Notifications
+        </a>
+
+        <a href="{% url 'staff_account' %}">
+            👤 My Account
+        </a>
+
+        <a href="{% url 'staff_logout' %}">
+            🚪 Logout
+        </a>
+
+    </div>
+
+</div>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="main">
+
+    <div class="header">
+
+        <h1>Expiry Simulator</h1>
+
+        <p>
+            Check expiry dates and calculate the minimum daily sales
+            required to reduce product wastage.
+        </p>
+
+    </div>
+
+
+    <!-- ================= TABLE ================= -->
+
+    <div class="table-container">
+
+        {% if product_data %}
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Product</th>
+
+                    <th>Barcode</th>
+
+                    <th>Batch Number</th>
+
+                    <th>Current Stock</th>
+
+                    <th>Expiry Date</th>
+
+                    <th>Days Until Expiry</th>
+
+                    <th>Required Daily Sale</th>
+
+                    <th>Action / Status</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody>
+
+                {% for item in product_data %}
+
+                <tr>
+
+                    <!-- PRODUCT -->
+
+                    <td>
+                        <span class="product-name">
+                            {{ item.product.name }}
+                        </span>
+                    </td>
+
+
+                    <!-- BARCODE -->
+
+                    <td>
+                        <span class="barcode">
+                            {{ item.product.barcode|default:"-" }}
+                        </span>
+                    </td>
+
+
+                    <!-- BATCH -->
+
+                    <td>
+                        <span class="batch">
+                            {{ item.product.batch_number|default:"-" }}
+                        </span>
+                    </td>
+
+
+                    <!-- STOCK -->
+
+                    <td>
+                        <span class="stock">
+                            {{ item.product.stock_quantity }}
+                        </span>
+                        Pieces
+                    </td>
+
+
+                    <!-- EXPIRY DATE -->
+
+                    <td>
+                        {{ item.product.expiry_date|date:"M d, Y" }}
+                    </td>
+
+
+                    <!-- DAYS -->
+
+                    <td>
+
+                        {% if item.days_until_expiry < 0 %}
+
+                            <span class="expired">
+                                Expired
+                            </span>
+
+                        {% elif item.days_until_expiry == 0 %}
+
+                            <span class="critical">
+                                Today
+                            </span>
+
+                        {% elif item.days_until_expiry <= 7 %}
+
+                            <span class="warning">
+                                {{ item.days_until_expiry }} days
+                            </span>
+
+                        {% else %}
+
+                            <span class="safe">
+                                {{ item.days_until_expiry }} days
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- DAILY SALE -->
+
+                    <td>
+
+                        {% if item.required_daily_sale > 0 %}
+
+                            <span class="daily-sale">
+                                {{ item.required_daily_sale }} / day
+                            </span>
+
+                        {% else %}
+
+                            <span class="daily-sale">
+                                0 / day
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+
+                    <!-- MESSAGE -->
+
+                    <td>
+
+                        <div class="message">
+                            {{ item.expiry_message }}
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+
+        {% else %}
+
+        <div class="empty">
+
+            No products available.
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

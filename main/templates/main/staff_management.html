@@ -335,6 +335,19 @@
 
 
         /* =========================
+           ACTIONS
+        ========================= */
+
+        .actions {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+        }
+
+
+        /* =========================
            EDIT BUTTON
         ========================= */
 
@@ -368,6 +381,11 @@
            DELETE BUTTON
         ========================= */
 
+        .delete-form {
+            margin: 0;
+        }
+
+
         .delete-btn {
             background: #fee2e2;
 
@@ -382,8 +400,6 @@
             font-weight: bold;
 
             cursor: pointer;
-
-            margin-left: 5px;
 
             transition: 0.2s;
         }
@@ -463,6 +479,13 @@
                 padding: 9px 16px;
             }
 
+
+            .actions {
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
         }
 
     </style>
@@ -471,29 +494,28 @@
 
 
 <body>
-  <div class="header">
+
 
     <!-- =========================
          HEADER
     ========================= -->
-<a
+
+    <div class="header">
+
+        <a
             href="{% url 'home' %}"
-            class="home-btn">
+            class="home-btn"
+        >
+            ◀
+        </a>
 
-           ◀
-
-       
-
-    </a>
-  
 
         <div class="logo">
             ExpiryGuard
         </div>
 
-
-        
     </div>
+
 
 
     <!-- =========================
@@ -503,7 +525,9 @@
     <div class="container">
 
 
-        <!-- TOP -->
+        <!-- =========================
+             TOP SECTION
+        ========================= -->
 
         <div class="top">
 
@@ -520,6 +544,7 @@
             </a>
 
         </div>
+
 
 
         <!-- =========================
@@ -541,6 +566,7 @@
             </div>
 
         {% endif %}
+
 
 
         <!-- =========================
@@ -581,7 +607,7 @@
 
                     {% for staff in staff_members %}
 
-                    <tr>
+                    <tr id="staff-row-{{ staff.id }}">
 
 
                         <!-- USERNAME -->
@@ -598,7 +624,9 @@
                         <!-- EMAIL -->
 
                         <td>
+
                             {{ staff.email }}
+
                         </td>
 
 
@@ -627,34 +655,41 @@
 
                         <td>
 
-                            <a
-                                href="{% url 'update_staff' staff.id %}"
-                                class="edit-btn"
-                            >
-                                ✏️ Edit
-                            </a>
+                            <div class="actions">
 
 
-                            <form
-                                method="POST"
-                                action="{% url 'delete_staff' staff.id %}"
-                                style="display:inline;"
-                            >
+                                <!-- EDIT -->
 
-                                {% csrf_token %}
+                                <a
+                                    href="{% url 'update_staff' staff.id %}"
+                                    class="edit-btn"
+                                >
+                                    ✏️ Edit
+                                </a>
 
 
-                                <button
-                                    type="submit"
-                                    class="delete-btn"
-                                    onclick="return confirm('Are you sure you want to remove this staff?');"
+                                <!-- DELETE -->
+
+                                <form
+                                    method="POST"
+                                    action="{% url 'delete_staff' staff.id %}"
+                                    class="delete-form"
+                                    onsubmit="return confirm('Are you sure you want to delete {{ staff.username }}?');"
                                 >
 
-                                    🗑 Remove
+                                    {% csrf_token %}
 
-                                </button>
+                                    <button
+                                        type="submit"
+                                        class="delete-btn"
+                                    >
+                                        🗑 Delete
+                                    </button>
 
-                            </form>
+                                </form>
+
+
+                            </div>
 
                         </td>
 
@@ -663,6 +698,7 @@
 
 
                     {% empty %}
+
 
                     <tr>
 
@@ -676,6 +712,7 @@
                         </td>
 
                     </tr>
+
 
                     {% endfor %}
 

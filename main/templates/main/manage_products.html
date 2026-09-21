@@ -632,15 +632,9 @@
 
             </h1>
 
-
-            <a
-                href="{% url 'add_product' %}"
-                class="add"
-            >
-
-                + Add Product
-
-            </a>
+<a href="{% url 'admin_add_product' %}" class="edit">
+    + Add Product
+</a>
 
 
         </div>
@@ -790,55 +784,24 @@
                         <td>
 
 
-                            <!-- VIEW -->
-
-                            <a
-                                href="{% url 'view_product' product.id %}"
-                                class="view"
-                            >
-
-                                👁 View
-
-                            </a>
+                           
 
 
 
                             <!-- UPDATE -->
+<a href="{% url 'admin_product_update' product.id %}" class="edit">
+    Update
+</a>
 
-                            <a
-                                href="{% url 'update_product' product.id %}"
-                                class="edit"
-                            >
-
-                                ✏️ Update
-
-                            </a>
-
+<form method="POST" action="/products/delete/{{ product.id }}/"class="edit">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+</form>
 
 
                             <!-- DELETE -->
 
-                            <form
-                                method="POST"
-                                action="{% url 'delete_product' product.id %}"
-                                style="display:inline;"
-                            >
-
-                                {% csrf_token %}
-
-
-                                <button
-                                    type="submit"
-                                    class="delete"
-                                    onclick="return confirm('Are you sure you want to delete this product?');"
-                                >
-
-                                    🗑 Delete
-
-                                </button>
-
-                            </form>
-
+    
 
                         </td>
 

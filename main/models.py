@@ -11,6 +11,13 @@ class Product(models.Model):
         max_length=100
     )
 
+    barcode = models.CharField(
+        max_length=100,
+        unique=True,
+        blank=True,
+        null=True
+    )
+
     quantity = models.PositiveIntegerField(
         default=1
     )

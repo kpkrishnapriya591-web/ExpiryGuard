@@ -1,26 +1,21 @@
-# ============================================================
-# STAFF / VIEWS.PY
-# EXPIRYGUARD
-# ============================================================
-
 from datetime import date, datetime, timedelta
-
+from decimal import Decimal, InvalidOperation
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.views.decorators.http import require_POST
-
+import math
 from .models import Product
-
-
+from django.shortcuts import render
+from .models import Product
+from main.models import Product as MainProduct
 # ============================================================
 # COMMON LOGIN CHECK
 # ============================================================
 
 def staff_login_required(request):
-
     if not request.user.is_authenticated:
         return redirect("staff_login")
 
@@ -38,15 +33,8 @@ def staff_login(request):
 
     if request.method == "POST":
 
-        username = request.POST.get(
-            "username",
-            ""
-        ).strip()
-
-        password = request.POST.get(
-            "password",
-            ""
-        )
+        username = request.POST.get("username")
+        password = request.POST.get("password")
 
         user = authenticate(
             request,
@@ -56,52 +44,31 @@ def staff_login(request):
 
         if user is not None:
 
-            login(
+            login(request, user)
+
+            return redirect("staff_home")
+
+        else:
+
+            return render(
                 request,
-                user
+                "staff/staff_login.html",
+                {
+                    "error": "Invalid username or password"
+                }
             )
-
-            return redirect(
-                "staff_home"
-            )
-
-        return render(
-            request,
-            "staff/staff_login.html",
-            {
-                "error":
-                    "Invalid username or password."
-            }
-        )
 
     return render(
         request,
         "staff/staff_login.html"
     )
-
-
-# ============================================================
-# STAFF SIGNUP
-# ============================================================
-
 def staff_signup(request):
 
     if request.method == "POST":
 
-        username = request.POST.get(
-            "username",
-            ""
-        ).strip()
-
-        password = request.POST.get(
-            "password",
-            ""
-        )
-
-        confirm_password = request.POST.get(
-            "confirm_password",
-            ""
-        )
+        username = request.POST.get("username", "").strip()
+        password = request.POST.get("password", "")
+        confirm_password = request.POST.get("confirm_password", "")
 
         first_name = request.POST.get(
             "first_name",
@@ -118,6 +85,10 @@ def staff_signup(request):
             ""
         ).strip()
 
+        # ----------------------------------------------------
+        # REQUIRED FIELD CHECK
+        # ----------------------------------------------------
+
         if not username or not password:
 
             return render(
@@ -129,6 +100,10 @@ def staff_signup(request):
                 }
             )
 
+        # ----------------------------------------------------
+        # PASSWORD CHECK
+        # ----------------------------------------------------
+
         if password != confirm_password:
 
             return render(
@@ -139,6 +114,10 @@ def staff_signup(request):
                         "Passwords do not match."
                 }
             )
+
+        # ----------------------------------------------------
+        # USERNAME DUPLICATE CHECK
+        # ----------------------------------------------------
 
         if User.objects.filter(
             username=username
@@ -152,6 +131,10 @@ def staff_signup(request):
                         "Username already exists."
                 }
             )
+
+        # ----------------------------------------------------
+        # CREATE USER
+        # ----------------------------------------------------
 
         user = User.objects.create_user(
             username=username,
@@ -169,9 +152,7 @@ def staff_signup(request):
             "Staff account created successfully."
         )
 
-        return redirect(
-            "staff_login"
-        )
+        return redirect("staff_login")
 
     return render(
         request,
@@ -187,9 +168,7 @@ def staff_logout(request):
 
     logout(request)
 
-    return redirect(
-        "staff_login"
-    )
+    return redirect("staff_login")
 
 
 # ============================================================
@@ -223,21 +202,11 @@ def staff_home(request):
     ).count()
 
     context = {
-
-        "products":
-            products,
-
-        "total_products":
-            total_products,
-
-        "expired_products":
-            expired_products,
-
-        "near_expiry_products":
-            near_expiry_products,
-
-        "safe_products":
-            safe_products,
+        "products": products,
+        "total_products": total_products,
+        "expired_products": expired_products,
+        "near_expiry_products": near_expiry_products,
+        "safe_products": safe_products,
     }
 
     return render(
@@ -278,21 +247,11 @@ def staff_dashboard(request):
     ).count()
 
     context = {
-
-        "products":
-            products,
-
-        "total_products":
-            total_products,
-
-        "expired_products":
-            expired_products,
-
-        "near_expiry_products":
-            near_expiry_products,
-
-        "safe_products":
-            safe_products,
+        "products": products,
+        "total_products": total_products,
+        "expired_products": expired_products,
+        "near_expiry_products": near_expiry_products,
+        "safe_products": safe_products,
     }
 
     return render(
@@ -302,193 +261,21 @@ def staff_dashboard(request):
     )
 
 
-# ============================================================
-# ADD PRODUCT
-# ============================================================
 
-def add_product(request):
+def calculate_expiry_status(expiry_date):
 
-    check = staff_login_required(request)
+    if not expiry_date:
+        return "UNKNOWN"
 
-    if check:
-        return check
+    today = date.today()
 
-    if request.method == "POST":
+    if expiry_date < today:
+        return "EXPIRED"
 
-        # ----------------------------------------------------
-        # GET FORM DATA
-        # ----------------------------------------------------
+    if expiry_date <= today + timedelta(days=30):
+        return "NEAR EXPIRY"
 
-        name = request.POST.get(
-            "name",
-            ""
-        ).strip()
-
-        barcode = request.POST.get(
-            "barcode",
-            ""
-        ).strip()
-
-        batch_number = request.POST.get(
-            "batch_number",
-            ""
-        ).strip()
-
-        category = request.POST.get(
-            "category",
-            ""
-        ).strip()
-
-        manufacture_date = request.POST.get(
-            "manufacture_date"
-        ) or None
-
-        expiry_date = request.POST.get(
-            "expiry_date"
-        ) or None
-
-        price = request.POST.get(
-            "price"
-        ) or None
-
-        quantity = request.POST.get(
-            "quantity"
-        ) or 0
-
-        unit = request.POST.get(
-            "unit",
-            ""
-        ).strip()
-
-        # ----------------------------------------------------
-        # REQUIRED FIELD CHECK
-        # ----------------------------------------------------
-
-        if not name or not barcode or not batch_number:
-
-            return render(
-                request,
-                "staff/add_product.html",
-                {
-                    "error":
-                        "Product Name, Barcode and Batch Number are required."
-                }
-            )
-
-        if not manufacture_date or not expiry_date:
-
-            return render(
-                request,
-                "staff/add_product.html",
-                {
-                    "error":
-                        "Manufacture Date and Expiry Date are required."
-                }
-            )
-
-        if not price:
-
-            return render(
-                request,
-                "staff/add_product.html",
-                {
-                    "error":
-                        "MRP / Price is required."
-                }
-            )
-
-        # ----------------------------------------------------
-        # DUPLICATE BARCODE CHECK
-        # ----------------------------------------------------
-
-        if Product.objects.filter(
-            barcode=barcode
-        ).exists():
-
-            return render(
-                request,
-                "staff/add_product.html",
-                {
-                    "error":
-                        "This barcode already exists."
-                }
-            )
-
-        # ----------------------------------------------------
-        # QUANTITY CONVERSION
-        # ----------------------------------------------------
-
-        try:
-
-            quantity = int(quantity)
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            quantity = 0
-
-        # ----------------------------------------------------
-        # PRICE CONVERSION
-        # ----------------------------------------------------
-
-        try:
-
-            price = float(price)
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
-            return render(
-                request,
-                "staff/add_product.html",
-                {
-                    "error":
-                        "Please enter a valid price."
-                }
-            )
-
-        # ----------------------------------------------------
-        # SAVE PRODUCT
-        # ----------------------------------------------------
-
-        Product.objects.create(
-
-            name=name,
-
-            barcode=barcode,
-
-            batch_number=batch_number,
-
-            manufacture_date=manufacture_date,
-
-            expiry_date=expiry_date,
-
-            category=category,
-
-            quantity=quantity,
-
-            unit=unit,
-
-            price=price
-        )
-
-        messages.success(
-            request,
-            "Product added successfully."
-        )
-
-        return redirect(
-            "staff_product_status"
-        )
-
-    return render(
-        request,
-        "staff/add_product.html"
-    )
+    return "SAFE"
 
 
 # ============================================================
@@ -502,66 +289,31 @@ def staff_products(request):
     if check:
         return check
 
-    products = Product.objects.all().order_by(
-        "-id"
-    )
+    products = Product.objects.all().order_by("-id")
 
     today = date.today()
 
     for product in products:
 
-        product.expiry_status = (
-            calculate_expiry_status(
-                product.expiry_date
-            )
+        product.expiry_status = calculate_expiry_status(
+            product.expiry_date
         )
 
     return render(
         request,
         "staff/manage_products.html",
         {
-            "products":
-                products,
-
-            "today":
-                today,
+            "products": products,
+            "today": today,
         }
     )
-
-
-# ============================================================
-# CALCULATE EXPIRY STATUS
-# ============================================================
-
-def calculate_expiry_status(expiry_date):
-
-    if not expiry_date:
-
-        return "UNKNOWN"
-
-    today = date.today()
-
-    if expiry_date < today:
-
-        return "EXPIRED"
-
-    elif expiry_date <= today + timedelta(days=30):
-
-        return "NEAR EXPIRY"
-
-    else:
-
-        return "SAFE"
 
 
 # ============================================================
 # UPDATE STAFF PRODUCT
 # ============================================================
 
-def update_staff_product(
-    request,
-    product_id
-):
+def update_staff_product(request, product_id):
 
     check = staff_login_required(request)
 
@@ -579,30 +331,66 @@ def update_staff_product(
         # BASIC DETAILS
         # ----------------------------------------------------
 
-        product.name = request.POST.get(
+        name = request.POST.get(
             "name",
             product.name
         ).strip()
 
-        product.barcode = request.POST.get(
+        barcode = request.POST.get(
             "barcode",
             product.barcode
         ).strip()
 
-        product.category = request.POST.get(
+        category = request.POST.get(
             "category",
             product.category or ""
         ).strip()
 
-        product.batch_number = request.POST.get(
+        batch_number = request.POST.get(
             "batch_number",
             product.batch_number
         ).strip()
 
-        product.unit = request.POST.get(
+        unit = request.POST.get(
             "unit",
             product.unit or ""
         ).strip()
+
+        # ----------------------------------------------------
+        # REQUIRED FIELD CHECK
+        # ----------------------------------------------------
+
+        if not name or not barcode or not batch_number:
+
+            return render(
+                request,
+                "staff/update_product.html",
+                {
+                    "product": product,
+                    "error":
+                        "Product Name, Barcode and Batch Number are required."
+                }
+            )
+
+        # ----------------------------------------------------
+        # DUPLICATE BARCODE CHECK
+        # ----------------------------------------------------
+
+        if Product.objects.filter(
+            barcode=barcode
+        ).exclude(
+            id=product.id
+        ).exists():
+
+            return render(
+                request,
+                "staff/update_product.html",
+                {
+                    "product": product,
+                    "error":
+                        "This barcode already exists."
+                }
+            )
 
         # ----------------------------------------------------
         # QUANTITY
@@ -615,16 +403,50 @@ def update_staff_product(
 
         try:
 
-            product.quantity = int(
-                quantity_text
+            quantity = int(quantity_text)
+
+            if quantity < 0:
+                raise ValueError
+
+        except (ValueError, TypeError):
+
+            return render(
+                request,
+                "staff/update_product.html",
+                {
+                    "product": product,
+                    "error":
+                        "Please enter a valid quantity."
+                }
             )
 
-        except (
-            ValueError,
-            TypeError
-        ):
+        # ----------------------------------------------------
+        # DAILY SALES
+        # ----------------------------------------------------
 
-            pass
+        daily_sales_text = request.POST.get(
+            "daily_sales",
+            product.daily_sales
+        )
+
+        try:
+
+            daily_sales = int(daily_sales_text)
+
+            if daily_sales < 0:
+                raise ValueError
+
+        except (ValueError, TypeError):
+
+            return render(
+                request,
+                "staff/update_product.html",
+                {
+                    "product": product,
+                    "error":
+                        "Please enter valid daily sales."
+                }
+            )
 
         # ----------------------------------------------------
         # PRICE
@@ -639,66 +461,129 @@ def update_staff_product(
 
             try:
 
-                product.price = float(
-                    price_text
+                price = float(price_text)
+
+                if price < 0:
+                    raise ValueError
+
+            except (ValueError, TypeError):
+
+                return render(
+                    request,
+                    "staff/update_product.html",
+                    {
+                        "product": product,
+                        "error":
+                            "Please enter a valid price."
+                    }
                 )
 
-            except (
-                ValueError,
-                TypeError
-            ):
+        else:
 
-                pass
+            price = product.price
 
         # ----------------------------------------------------
         # MANUFACTURE DATE
         # ----------------------------------------------------
 
-        manufacture_date = request.POST.get(
-            "manufacture_date"
-        )
+        manufacture_date_text = request.POST.get(
+            "manufacture_date",
+            ""
+        ).strip()
 
-        if manufacture_date:
+        if manufacture_date_text:
 
             try:
 
-                product.manufacture_date = (
-                    datetime.strptime(
-                        manufacture_date,
-                        "%Y-%m-%d"
-                    ).date()
-                )
+                manufacture_date = datetime.strptime(
+                    manufacture_date_text,
+                    "%Y-%m-%d"
+                ).date()
 
             except ValueError:
 
-                pass
+                return render(
+                    request,
+                    "staff/update_product.html",
+                    {
+                        "product": product,
+                        "error":
+                            "Invalid manufacture date."
+                    }
+                )
+
+        else:
+
+            manufacture_date = product.manufacture_date
 
         # ----------------------------------------------------
         # EXPIRY DATE
         # ----------------------------------------------------
 
-        expiry_date = request.POST.get(
-            "expiry_date"
-        )
+        expiry_date_text = request.POST.get(
+            "expiry_date",
+            ""
+        ).strip()
 
-        if expiry_date:
+        if expiry_date_text:
 
             try:
 
-                product.expiry_date = (
-                    datetime.strptime(
-                        expiry_date,
-                        "%Y-%m-%d"
-                    ).date()
-                )
+                expiry_date = datetime.strptime(
+                    expiry_date_text,
+                    "%Y-%m-%d"
+                ).date()
 
             except ValueError:
 
-                pass
+                return render(
+                    request,
+                    "staff/update_product.html",
+                    {
+                        "product": product,
+                        "error":
+                            "Invalid expiry date."
+                    }
+                )
+
+        else:
+
+            expiry_date = product.expiry_date
 
         # ----------------------------------------------------
-        # SAVE UPDATED PRODUCT
+        # DATE VALIDATION
         # ----------------------------------------------------
+
+        if (
+            manufacture_date
+            and expiry_date
+            and expiry_date < manufacture_date
+        ):
+
+            return render(
+                request,
+                "staff/update_product.html",
+                {
+                    "product": product,
+                    "error":
+                        "Expiry date cannot be before manufacture date."
+                }
+            )
+
+        # ----------------------------------------------------
+        # UPDATE PRODUCT
+        # ----------------------------------------------------
+
+        product.name = name
+        product.barcode = barcode
+        product.category = category
+        product.batch_number = batch_number
+        product.unit = unit
+        product.quantity = quantity
+        product.daily_sales = daily_sales
+        product.price = price
+        product.manufacture_date = manufacture_date
+        product.expiry_date = expiry_date
 
         product.save()
 
@@ -715,8 +600,7 @@ def update_staff_product(
         request,
         "staff/update_product.html",
         {
-            "product":
-                product
+            "product": product
         }
     )
 
@@ -726,10 +610,7 @@ def update_staff_product(
 # ============================================================
 
 @require_POST
-def delete_staff_product(
-    request,
-    product_id
-):
+def delete_staff_product(request, product_id):
 
     check = staff_login_required(request)
 
@@ -769,80 +650,45 @@ def staff_expiry_dashboard(request):
     today = date.today()
 
     expired_products = []
-
     near_expiry_products = []
-
     safe_products = []
-
     unknown_products = []
 
     for product in products:
 
-        if not product.expiry_date:
+        status = calculate_expiry_status(
+            product.expiry_date
+        )
 
-            product.expiry_status = "UNKNOWN"
+        product.expiry_status = status
 
-            unknown_products.append(
-                product
-            )
+        if status == "UNKNOWN":
 
-        elif product.expiry_date < today:
+            unknown_products.append(product)
 
-            product.expiry_status = "EXPIRED"
+        elif status == "EXPIRED":
 
-            expired_products.append(
-                product
-            )
+            expired_products.append(product)
 
-        elif product.expiry_date <= (
-            today + timedelta(days=30)
-        ):
+        elif status == "NEAR EXPIRY":
 
-            product.expiry_status = "NEAR EXPIRY"
-
-            near_expiry_products.append(
-                product
-            )
+            near_expiry_products.append(product)
 
         else:
 
-            product.expiry_status = "SAFE"
-
-            safe_products.append(
-                product
-            )
+            safe_products.append(product)
 
     context = {
-
-        "products":
-            products,
-
-        "expired_products":
-            expired_products,
-
-        "near_expiry_products":
-            near_expiry_products,
-
-        "safe_products":
-            safe_products,
-
-        "unknown_products":
-            unknown_products,
-
-        "expired_count":
-            len(expired_products),
-
-        "near_expiry_count":
-            len(near_expiry_products),
-
-        "safe_count":
-            len(safe_products),
-
-        "unknown_count":
-            len(unknown_products),
-
-        "today":
-            today,
+        "products": products,
+        "expired_products": expired_products,
+        "near_expiry_products": near_expiry_products,
+        "safe_products": safe_products,
+        "unknown_products": unknown_products,
+        "expired_count": len(expired_products),
+        "near_expiry_count": len(near_expiry_products),
+        "safe_count": len(safe_products),
+        "unknown_count": len(unknown_products),
+        "today": today,
     }
 
     return render(
@@ -855,7 +701,6 @@ def staff_expiry_dashboard(request):
 # ============================================================
 # STAFF PRODUCT STATUS
 # ============================================================
-
 def staff_product_status(request):
 
     check = staff_login_required(request)
@@ -863,97 +708,47 @@ def staff_product_status(request):
     if check:
         return check
 
-    products = Product.objects.all()
+    products = Product.objects.all().order_by("expiry_date")
 
     today = date.today()
 
-    expired_products = []
-
-    near_expiry_products = []
-
-    safe_products = []
-
-    unknown_products = []
+    product_data = []
 
     for product in products:
 
-        if not product.expiry_date:
+        days_left = (product.expiry_date - today).days
 
-            product.expiry_status = "UNKNOWN"
+        if days_left < 0:
+            status = "Expired"
+            status_class = "expired"
 
-            unknown_products.append(
-                product
-            )
+        elif days_left == 0:
+            status = "Expires Today"
+            status_class = "critical"
 
-        elif product.expiry_date < today:
-
-            product.expiry_status = "EXPIRED"
-
-            expired_products.append(
-                product
-            )
-
-        elif product.expiry_date <= (
-            today + timedelta(days=30)
-        ):
-
-            product.expiry_status = "NEAR EXPIRY"
-
-            near_expiry_products.append(
-                product
-            )
+        elif days_left <= 7:
+            status = "Expiring Soon"
+            status_class = "warning"
 
         else:
+            status = "Safe"
+            status_class = "safe"
 
-            product.expiry_status = "SAFE"
-
-            safe_products.append(
-                product
-            )
-
-    context = {
-
-        "products":
-            products,
-
-        "today":
-            today,
-
-        "expired_products":
-            expired_products,
-
-        "near_expiry_products":
-            near_expiry_products,
-
-        "safe_products":
-            safe_products,
-
-        "unknown_products":
-            unknown_products,
-
-        "expired_count":
-            len(expired_products),
-
-        "near_expiry_count":
-            len(near_expiry_products),
-
-        "safe_count":
-            len(safe_products),
-
-        "unknown_count":
-            len(unknown_products),
-    }
+        product_data.append({
+            "product": product,
+            "days_left": days_left,
+            "status": status,
+            "status_class": status_class,
+        })
 
     return render(
         request,
         "staff/product_status.html",
-        context
+        {
+            "product_data": product_data,
+            "today": today,
+        }
     )
-
-
-# ============================================================
-# STAFF NOTIFICATIONS
-# ============================================================
 
 def staff_notifications(request):
 
@@ -979,6 +774,10 @@ def staff_notifications(request):
         expiry_date__gt=today + timedelta(days=30)
     )
 
+    unknown_products = products.filter(
+        expiry_date__isnull=True
+    )
+
     notifications = []
 
     # --------------------------------------------------------
@@ -990,18 +789,11 @@ def staff_notifications(request):
         product_name = str(product)
 
         notifications.append({
-
-            "type":
-                "expired",
-
-            "title":
-                "Product Expired",
-
+            "type": "expired",
+            "title": "Product Expired",
             "message":
                 f"{product_name} has expired.",
-
-            "product":
-                product,
+            "product": product,
         })
 
     # --------------------------------------------------------
@@ -1017,48 +809,42 @@ def staff_notifications(request):
         ).days
 
         notifications.append({
-
-            "type":
-                "warning",
-
-            "title":
-                "Product Expiring Soon",
-
+            "type": "warning",
+            "title": "Product Expiring Soon",
             "message":
                 f"{product_name} will expire "
                 f"in {days_left} day(s).",
+            "product": product,
+        })
 
-            "product":
-                product,
+    # --------------------------------------------------------
+    # UNKNOWN EXPIRY
+    # --------------------------------------------------------
+
+    for product in unknown_products:
+
+        notifications.append({
+            "type": "unknown",
+            "title": "Expiry Date Missing",
+            "message":
+                f"{str(product)} does not have an expiry date.",
+            "product": product,
         })
 
     return render(
         request,
         "staff/notifications.html",
         {
-            "notifications":
-                notifications,
-
-            "products":
-                products,
-
-            "expired_products":
-                expired_products,
-
-            "near_expiry_products":
-                near_expiry_products,
-
-            "safe_products":
-                safe_products,
-
-            "expired_count":
-                expired_products.count(),
-
-            "near_expiry_count":
-                near_expiry_products.count(),
-
-            "safe_count":
-                safe_products.count(),
+            "notifications": notifications,
+            "products": products,
+            "expired_products": expired_products,
+            "near_expiry_products": near_expiry_products,
+            "safe_products": safe_products,
+            "unknown_products": unknown_products,
+            "expired_count": expired_products.count(),
+            "near_expiry_count": near_expiry_products.count(),
+            "safe_count": safe_products.count(),
+            "unknown_count": unknown_products.count(),
         }
     )
 
@@ -1108,7 +894,394 @@ def staff_account(request):
         request,
         "staff/account.html",
         {
-            "user":
-                user
+            "user": user
         }
+    )
+
+
+# ============================================================
+# EXPIRY SIMULATOR
+# ============================================================
+
+
+
+
+
+def update_product(request, product_id):
+
+    product = get_object_or_404(
+        Product,
+        id=product_id
+    )
+
+    if request.method == "POST":
+
+        product.name = request.POST.get("name")
+        product.barcode = request.POST.get("barcode")
+        product.batch_number = request.POST.get("batch_number")
+        product.quantity = request.POST.get("quantity")
+        product.expiry_date = request.POST.get("expiry_date")
+
+        product.save()
+
+        return redirect("expiry_simulator")
+
+    return render(
+        request,
+        "update_product.html",
+        {
+            "product": product
+        }
+    )
+
+
+def delete_product(request, product_id):
+
+    product = get_object_or_404(
+        Product,
+        id=product_id
+    )
+
+    if request.method == "POST":
+
+        product.delete()
+
+        return redirect("expiry_simulator")
+
+    return render(
+        request,
+        "delete_product.html",
+        {
+            "product": product
+        }
+    )
+
+
+
+def products(request):
+    products = Product.objects.all()
+
+    today = date.today()
+
+    for product in products:
+        
+        remaining_days = (product.expiry_date - today).days
+
+        # Daily sale calculation
+        if remaining_days > 0 and product.quantity > 0:
+            daily_sale = product.quantity / remaining_days
+
+            
+            daily_sale = int(daily_sale) if daily_sale == int(daily_sale) else int(daily_sale) + 1
+        else:
+            daily_sale = 0
+
+     
+        product.remaining_days = max(remaining_days, 0)
+        product.daily_sale = daily_sale
+
+        # Status
+        if remaining_days < 0:
+            product.expiry_status = "Expired"
+        elif remaining_days == 0:
+            product.expiry_status = "Expires Today"
+        elif remaining_days <= 7:
+            product.expiry_status = "Expiring Soon"
+        else:
+            product.expiry_status = "Safe"
+
+    return render(request, "staff/products.html", {
+        "products": products
+    })
+def expiry_simulator(request):
+
+    # Get all products
+    products = Product.objects.all().order_by("expiry_date")
+
+    product_data = []
+
+    today = date.today()
+
+    for product in products:
+
+        # Calculate remaining days
+        days_until_expiry = (
+            product.expiry_date - today
+        ).days
+
+        # Get current stock
+        stock = product.stock_quantity or 0
+
+        # ------------------------------------------------
+        # PRODUCT NOT EXPIRED
+        # ------------------------------------------------
+        if days_until_expiry > 0 and stock > 0:
+
+            # Minimum number of units to sell per day
+            required_daily_sale = math.ceil(
+                stock / days_until_expiry
+            )
+
+            expiry_message = (
+                f"🛒 To reduce wastage, sell at least "
+                f"{required_daily_sale} unit(s) per day before expiry."
+            )
+
+        # ------------------------------------------------
+        # EXPIRING TODAY
+        # ------------------------------------------------
+        elif days_until_expiry == 0:
+
+            required_daily_sale = stock
+
+            expiry_message = (
+                "⚠️ This product expires today. "
+                "Sell the remaining stock immediately."
+            )
+
+        # ------------------------------------------------
+        # ALREADY EXPIRED
+        # ------------------------------------------------
+        elif days_until_expiry < 0:
+
+            required_daily_sale = 0
+
+            expiry_message = (
+                "❌ This product has already expired."
+            )
+
+        # ------------------------------------------------
+        # NO STOCK
+        # ------------------------------------------------
+        else:
+
+            required_daily_sale = 0
+
+            expiry_message = (
+                "No stock available."
+            )
+
+        # Add product information
+        product_data.append({
+            "product": product,
+            "days_until_expiry": days_until_expiry,
+            "required_daily_sale": required_daily_sale,
+            "expiry_message": expiry_message,
+        })
+
+    # IMPORTANT:
+    # This return is required
+    return render(
+        request,
+        "staff/expiry_simulator.html",
+        {
+            "products": products,
+            "product_data": product_data,
+        }
+    )
+
+
+# ============================================================
+# ADD PRODUCT
+# STAFF + ADMIN
+# ============================================================
+
+def add_product(request):
+
+    check = staff_login_required(request)
+
+    if check:
+        return check
+
+    if request.method == "POST":
+
+        name = request.POST.get("name", "").strip()
+        barcode = request.POST.get("barcode", "").strip()
+        batch_number = request.POST.get("batch_number", "").strip()
+        category = request.POST.get("category", "").strip()
+
+        manufacture_date = (
+            request.POST.get("manufacture_date") or None
+        )
+
+        expiry_date = request.POST.get("expiry_date") or None
+
+        price = request.POST.get("price") or "0"
+
+        quantity = request.POST.get("quantity") or "0"
+
+        unit = request.POST.get(
+            "unit",
+            "Pieces"
+        ).strip()
+
+        supplier = request.POST.get(
+            "supplier",
+            ""
+        ).strip()
+
+        location = request.POST.get(
+            "location",
+            ""
+        ).strip()
+
+        description = request.POST.get(
+            "description",
+            ""
+        ).strip()
+
+        # ----------------------------------------------------
+        # REQUIRED FIELD CHECKS
+        # ----------------------------------------------------
+
+        if not name:
+
+            messages.error(
+                request,
+                "Product name is required."
+            )
+
+            return redirect("add_product")
+
+        if not barcode:
+
+            messages.error(
+                request,
+                "Barcode is required."
+            )
+
+            return redirect("add_product")
+
+        if not expiry_date:
+
+            messages.error(
+                request,
+                "Expiry date is required."
+            )
+
+            return redirect("add_product")
+
+        # ----------------------------------------------------
+        # QUANTITY
+        # ----------------------------------------------------
+
+        try:
+
+            stock_quantity = int(quantity)
+
+            if stock_quantity < 0:
+                raise ValueError
+
+        except (ValueError, TypeError):
+
+            messages.error(
+                request,
+                "Please enter a valid quantity."
+            )
+
+            return redirect("add_product")
+
+        # ----------------------------------------------------
+        # PRICE
+        # ----------------------------------------------------
+
+        try:
+
+            price_value = Decimal(price)
+
+            if price_value < 0:
+                raise ValueError
+
+        except (InvalidOperation, ValueError, TypeError):
+
+            messages.error(
+                request,
+                "Please enter a valid price."
+            )
+
+            return redirect("add_product")
+
+        # ----------------------------------------------------
+        # DUPLICATE BARCODE - STAFF
+        # ----------------------------------------------------
+
+        if Product.objects.filter(
+            barcode=barcode
+        ).exists():
+
+            messages.error(
+                request,
+                "A product with this barcode already exists."
+            )
+
+            return redirect("add_product")
+
+        # ----------------------------------------------------
+        # SAVE IN STAFF DATABASE
+        # ----------------------------------------------------
+
+        Product.objects.create(
+
+            name=name,
+
+            barcode=barcode,
+
+            batch_number=batch_number,
+
+            category=category,
+
+            manufacture_date=manufacture_date,
+
+            expiry_date=expiry_date,
+
+            price=price_value,
+
+            stock_quantity=stock_quantity
+        )
+
+        # ----------------------------------------------------
+        # SAVE SAME PRODUCT IN MAIN / ADMIN DATABASE
+        # ----------------------------------------------------
+
+        MainProduct.objects.create(
+
+            product_name=name,
+
+            barcode=barcode,
+
+            batch_number=batch_number,
+
+            category=category,
+
+            quantity=stock_quantity,
+
+            unit=unit,
+
+            supplier=supplier,
+
+            price=price_value,
+
+            manufacture_date=manufacture_date,
+
+            expiry_date=expiry_date,
+
+            location=location,
+
+            description=description
+        )
+
+        # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
+
+        messages.success(
+            request,
+            f"{name} added successfully."
+        )
+
+        return redirect("staff_products")
+
+    return render(
+        request,
+        "staff/add_product.html"
     )
