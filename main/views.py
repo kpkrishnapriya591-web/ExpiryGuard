@@ -64,22 +64,51 @@ def home(request):
         "main/home.html"
     )
 
+# =========================================================
+# NOTIFICATIONS
+# =========================================================
+
+from datetime import date
 
 def notifications(request):
 
     if not request.user.is_authenticated:
         return redirect("login")
 
+    today = date.today()
+
+    notifications = []
+
+    products = Product.objects.all()
+
+    for product in products:
+
+        if not product.expiry_date:
+            continue
+
+        days_left = (product.expiry_date - today).days
+
+        if days_left < 0:
+            notifications.append({
+                "product": product,
+                "message": "Product has expired",
+                "type": "expired"
+            })
+
+        elif days_left <= 7:
+            notifications.append({
+                "product": product,
+                "message": f"Product expires in {days_left} days",
+                "type": "warning"
+            })
+
     return render(
         request,
-        "main/notifications.html"
+        "main/notifications.html",
+        {
+            "notifications": notifications
+        }
     )
-
-
-# =========================================================
-# PRODUCT MANAGEMENT
-# =========================================================
-
 def manage_products(request):
 
     if not request.user.is_authenticated:
@@ -346,20 +375,59 @@ def logout_page(request):
 # PRODUCT STATUS
 # =========================================================
 
+from datetime import date
+from django.shortcuts import render, redirect
+from .models import Product
+
+
 def product_status(request):
 
     if not request.user.is_authenticated:
         return redirect("login")
 
+    today = date.today()
+
+    safe_products = []
+    near_expiry_products = []
+    expired_products = []
+
+    products = Product.objects.all()
+
+    for product in products:
+
+        if not product.expiry_date:
+            continue
+
+        days_left = (product.expiry_date - today).days
+
+        if days_left < 0:
+
+            expired_products.append(product)
+
+        elif days_left <= 7:
+
+            near_expiry_products.append(product)
+
+        else:
+
+            safe_products.append(product)
+
     return render(
         request,
-        "main/product_status.html"
+        "main/product_status.html",
+        {
+            "safe_products": safe_products,
+            "near_expiry_products": near_expiry_products,
+            "expired_products": expired_products,
+        }
     )
 
 
 # =========================================================
 # ADD PRODUCT
 # =========================================================
+
+
 
 def add_product(request):
 
