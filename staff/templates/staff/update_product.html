@@ -13,234 +13,170 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: Arial, sans-serif;
         }
 
         body {
-            font-family: Arial, sans-serif;
-            background: #F4F4F5;
-            color: #27272A;
+            background: #f5f5f5;
+            color: #222;
         }
 
-        /* HEADER */
+        /* SIDEBAR */
 
-        .header {
-            background: #18181B;
-            color: white;
-            padding: 18px 35px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 240px;
+            height: 100vh;
+            background: #111;
+            padding: 25px 15px;
         }
 
         .logo {
-            font-size: 24px;
+            color: #d4af37;
+            font-size: 25px;
             font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
         }
 
-        .logo span {
-            color: #D4A017;
-        }
-
-        .portal {
-            color: #D4A017;
-            font-size: 11px;
-            margin-top: 4px;
-        }
-
-        .home-btn {
+        .sidebar a {
+            display: block;
             text-decoration: none;
-            background: #D4A017;
-            color: #18181B;
-
-            padding: 10px 18px;
+            color: #ddd;
+            padding: 14px 18px;
+            margin-bottom: 8px;
             border-radius: 8px;
+            transition: 0.2s;
+        }
 
+        .sidebar a:hover {
+            background: #292929;
+            color: #d4af37;
+        }
+
+        .sidebar a.active {
+            background: #d4af37;
+            color: #111;
             font-weight: bold;
-            font-size: 14px;
         }
 
-        /* CONTAINER */
+        /* MAIN */
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 40px 20px;
+        .main {
+            margin-left: 240px;
+            padding: 40px;
         }
 
-        .title {
+        .header {
             margin-bottom: 25px;
         }
 
-        .title h1 {
+        .header h1 {
             font-size: 30px;
-            color: #18181B;
+            margin-bottom: 8px;
         }
 
-        .title p {
-            color: #71717A;
-            margin-top: 7px;
-        }
-
-        /* CARD */
-
-        .card {
-            background: white;
-            padding: 32px;
-            border-radius: 18px;
-            border: 1px solid #E4E4E7;
-        }
-
-        .card h2 {
-            color: #18181B;
-            margin-bottom: 25px;
-        }
-
-        /* MESSAGES */
-
-        .message {
-            padding: 13px 16px;
-            border-radius: 8px;
-            background: #FEE2E2;
-            color: #991B1B;
-            margin-bottom: 20px;
-            font-size: 14px;
+        .header p {
+            color: #777;
         }
 
         /* FORM */
 
-        .form-grid {
+        .form-container {
+            max-width: 850px;
+            background: white;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .form-row {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-
-            color: #3F3F46;
-            font-size: 13px;
-            font-weight: bold;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        .form-group input {
+        label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        input {
             width: 100%;
-
-            padding: 13px;
-
-            border: 1px solid #D4D4D8;
-            border-radius: 8px;
-
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
             font-size: 14px;
             outline: none;
-
-            color: #27272A;
-            background: #FAFAFA;
         }
 
-        .form-group input:focus {
-            border-color: #D4A017;
-
-            box-shadow:
-                0 0 0 3px rgba(212,160,23,0.12);
-
-            background: white;
+        input:focus {
+            border-color: #d4af37;
         }
 
         /* BUTTONS */
 
         .buttons {
+            margin-top: 10px;
             display: flex;
             gap: 12px;
-            margin-top: 28px;
         }
 
         .update-btn {
-            padding: 13px 25px;
-
-            background: #D4A017;
-            color: #18181B;
-
+            background: #d4af37;
+            color: #111;
             border: none;
+            padding: 12px 22px;
             border-radius: 8px;
-
-            font-size: 15px;
             font-weight: bold;
-
             cursor: pointer;
+            font-size: 14px;
         }
 
         .update-btn:hover {
-            background: #B8860B;
+            background: #b8962e;
         }
 
         .cancel-btn {
-            display: inline-block;
-
-            padding: 13px 25px;
-
-            background: #18181B;
-            color: #D4A017;
-
-            border-radius: 8px;
-
+            background: #333;
+            color: white;
             text-decoration: none;
-
-            font-size: 15px;
+            padding: 12px 22px;
+            border-radius: 8px;
+            font-size: 14px;
             font-weight: bold;
         }
 
         .cancel-btn:hover {
-            background: #27272A;
+            background: #222;
         }
 
-        /* PRODUCT INFO */
+        /* MOBILE */
 
-        .product-info {
-            margin-bottom: 25px;
+        @media(max-width: 700px) {
 
-            padding: 15px;
-
-            background: #FFFBEB;
-
-            border: 1px solid #FDE68A;
-
-            border-radius: 9px;
-
-            font-size: 13px;
-
-            color: #92400E;
-        }
-
-        /* RESPONSIVE */
-
-        @media (max-width: 650px) {
-
-            .header {
-                padding: 15px 20px;
-            }
-
-            .container {
-                padding: 25px 15px;
-            }
-
-            .card {
-                padding: 22px;
-            }
-
-            .form-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .buttons {
-                flex-direction: column;
-            }
-
-            .update-btn,
-            .cancel-btn {
+            .sidebar {
+                position: relative;
                 width: 100%;
-                text-align: center;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
             }
 
         }
@@ -251,105 +187,91 @@
 
 <body>
 
-<!-- HEADER -->
 
-<div class="header">
+<!-- ================= SIDEBAR ================= -->
 
-    <div>
+<div class="sidebar">
 
-        <div class="logo">
-            Expiry<span>Guard</span>
-        </div>
-
-        <div class="portal">
-            STAFF PORTAL
-        </div>
-
+    <div class="logo">
+        ExpiryGuard
     </div>
 
-    <a
-        href="{% url 'staff_home' %}"
-        class="home-btn"
-    >
-        ← Staff Home
+    <a href="{% url 'staff_home' %}">
+        Home
+    </a>
+
+    <a href="{% url 'staff_dashboard' %}">
+        Dashboard
+    </a>
+
+    <a href="{% url 'add_product' %}">
+        Add Products
+    </a>
+
+    <a href="{% url 'expiry_simulator' %}">
+        Expiry Simulator
+    </a>
+
+    <a href="{% url 'staff_product_status' %}" class="active">
+        Product Status
+    </a>
+
+    <a href="{% url 'staff_notifications' %}">
+        Notifications
+    </a>
+
+    <a href="{% url 'staff_account' %}">
+        My Account
+    </a>
+
+    <a href="{% url 'staff_logout' %}">
+        Logout
     </a>
 
 </div>
 
 
-<!-- MAIN -->
+<!-- ================= MAIN ================= -->
 
-<div class="container">
+<div class="main">
 
-    <div class="title">
+    <div class="header">
 
-        <h1>✏️ Update Product</h1>
+        <h1>
+            Update Product
+        </h1>
 
         <p>
-            Edit and update the selected product information.
+            Update the product details below.
         </p>
 
     </div>
 
 
-    <!-- MESSAGES -->
+    <!-- ================= FORM ================= -->
 
-    {% if messages %}
-
-        {% for message in messages %}
-
-            <div class="message">
-                {{ message }}
-            </div>
-
-        {% endfor %}
-
-    {% endif %}
-
-
-    <!-- UPDATE CARD -->
-
-    <div class="card">
-
-        <h2>
-            Product Details
-        </h2>
-
-
-        <div class="product-info">
-
-            📦 You are editing:
-
-            <strong>
-                {{ product.product_name }}
-            </strong>
-
-        </div>
-
+    <div class="form-container">
 
         <form method="POST">
 
             {% csrf_token %}
 
 
-            <div class="form-grid">
-
+            <div class="form-row">
 
                 <!-- PRODUCT NAME -->
 
                 <div class="form-group">
 
                     <label>
-                        Product Name *
+                        Product Name
                     </label>
 
                     <input
                         type="text"
                         name="name"
-                        value="{{ product.product_name }}"
-                        placeholder="Enter product name"
-                        required
-                    >
+                        value="{{ product.name }}"
+                        required>
 
                 </div>
 
@@ -365,14 +287,13 @@
                     <input
                         type="text"
                         name="barcode"
-                        value="{{ product.barcode|default:'' }}"
-                        placeholder="Enter barcode"
-                    >
+                        value="{{ product.barcode }}"
+                        required>
 
                 </div>
 
 
-                <!-- BATCH NUMBER -->
+                <!-- BATCH -->
 
                 <div class="form-group">
 
@@ -383,45 +304,76 @@
                     <input
                         type="text"
                         name="batch_number"
-                        value="{{ product.batch_number|default:'' }}"
-                        placeholder="Enter batch number"
-                    >
+                        value="{{ product.batch_number }}"
+                        required>
 
                 </div>
 
 
-                <!-- QUANTITY -->
+                <!-- CATEGORY -->
 
                 <div class="form-group">
 
                     <label>
-                        Quantity
+                        Category
+                    </label>
+
+                    <input
+                        type="text"
+                        name="category"
+                        value="{{ product.category }}">
+
+                </div>
+
+
+                <!-- PRICE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Price
                     </label>
 
                     <input
                         type="number"
-                        name="quantity"
-                        value="{{ product.quantity }}"
-                        min="0"
-                        placeholder="Enter quantity"
-                    >
+                        step="0.01"
+                        name="price"
+                        value="{{ product.price }}"
+                        required>
 
                 </div>
 
 
-                <!-- MANUFACTURING DATE -->
+                <!-- STOCK -->
 
                 <div class="form-group">
 
                     <label>
-                        Manufacturing Date
+                        Stock Quantity
+                    </label>
+
+                    <input
+                        type="number"
+                        name="stock_quantity"
+                        value="{{ product.stock_quantity }}"
+                        min="0"
+                        required>
+
+                </div>
+
+
+                <!-- MANUFACTURE DATE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Manufacture Date
                     </label>
 
                     <input
                         type="date"
-                        name="manufacturing_date"
-                        value="{{ product.manufacturing_date|date:'Y-m-d' }}"
-                    >
+                        name="manufacture_date"
+                        value="{{ product.manufacture_date|date:'Y-m-d' }}">
 
                 </div>
 
@@ -431,15 +383,14 @@
                 <div class="form-group">
 
                     <label>
-                        Expiry Date *
+                        Expiry Date
                     </label>
 
                     <input
                         type="date"
                         name="expiry_date"
                         value="{{ product.expiry_date|date:'Y-m-d' }}"
-                        required
-                    >
+                        required>
 
                 </div>
 
@@ -452,17 +403,19 @@
 
                 <button
                     type="submit"
-                    class="update-btn"
-                >
-                    ✓ Update Product
+                    class="update-btn">
+
+                    ✏️ Update Product
+
                 </button>
 
 
                 <a
-                    href="{% url 'staff_products' %}"
-                    class="cancel-btn"
-                >
+                    href="{% url 'staff_product_status' %}"
+                    class="cancel-btn">
+
                     Cancel
+
                 </a>
 
             </div>

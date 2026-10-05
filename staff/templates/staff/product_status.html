@@ -1,777 +1,637 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+```
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Product Status - ExpiryGuard</title>
+<title>Product Status - ExpiryGuard</title>
 
-    <style>
+<style>
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: Arial, sans-serif;
+    }
 
-        body {
-            background: #f5f5f5;
-            color: #222;
-        }
+    body {
+        background: #f5f5f5;
+        color: #222;
+    }
 
+    /* =========================
+       SIDEBAR
+    ========================== */
 
-        /* =========================
-           SIDEBAR
-        ========================== */
+    .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 240px;
+        height: 100vh;
+        background: #111;
+        padding: 25px 15px;
+        overflow-y: auto;
+    }
+
+    .logo {
+        color: #d4af37;
+        font-size: 25px;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .sidebar a {
+        display: block;
+        text-decoration: none;
+        color: #ddd;
+        padding: 14px 18px;
+        margin-bottom: 8px;
+        border-radius: 8px;
+        transition: 0.2s ease;
+    }
+
+    .sidebar a:hover {
+        background: #292929;
+        color: #d4af37;
+    }
+
+    .sidebar a.active {
+        background: #d4af37;
+        color: #111;
+        font-weight: bold;
+    }
+
+    /* =========================
+       MAIN
+    ========================== */
+
+    .main {
+        margin-left: 240px;
+        padding: 35px;
+    }
+
+    .header {
+        margin-bottom: 25px;
+    }
+
+    .header h1 {
+        font-size: 30px;
+        margin-bottom: 8px;
+    }
+
+    .header p {
+        color: #777;
+    }
+
+    /* =========================
+       MESSAGES
+    ========================== */
+
+    .message {
+        padding: 12px 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        background: #fff3cd;
+        color: #664d03;
+        border-left: 4px solid #d4af37;
+    }
+
+    /* =========================
+       TABLE
+    ========================== */
+
+    .table-container {
+        background: white;
+        border-radius: 14px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 1100px;
+    }
+
+    th {
+        background: #111;
+        color: #d4af37;
+        padding: 15px 12px;
+        text-align: left;
+        font-size: 13px;
+        white-space: nowrap;
+    }
+
+    td {
+        padding: 15px 12px;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    tbody tr:hover {
+        background: #fafafa;
+    }
+
+    /* =========================
+       PRODUCT NAME
+    ========================== */
+
+    .product-name {
+        font-weight: bold;
+        font-size: 15px;
+    }
+
+    .barcode,
+    .batch {
+        font-family: monospace;
+        color: #555;
+    }
+
+    /* =========================
+       EXPIRED
+    ========================== */
+
+    .expired {
+        display: inline-block;
+        background: #222;
+        color: white;
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* =========================
+       DELETE BUTTON
+    ========================== */
+
+    .delete-btn {
+        background: #c0392b;
+        color: white;
+        border: none;
+        padding: 9px 15px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+    .delete-btn:hover {
+        background: #a93226;
+        transform: translateY(-1px);
+    }
+
+    /* =========================
+       UPDATE BUTTON
+    ========================== */
+
+    .update-btn {
+        background: #d4af37;
+        color: #111;
+        border: none;
+        padding: 9px 15px;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-right: 6px;
+        transition: 0.2s ease;
+    }
+
+    .update-btn:hover {
+        background: #b8962e;
+        transform: translateY(-1px);
+    }
+
+    /* =========================
+       EMPTY
+    ========================== */
+
+    .empty {
+        background: white;
+        padding: 50px;
+        text-align: center;
+        border-radius: 14px;
+        color: #777;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .empty h2 {
+        margin-bottom: 10px;
+        color: #333;
+    }
+
+    /* =========================
+       MOBILE
+    ========================== */
+
+    @media(max-width: 900px) {
 
         .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-
-            width: 240px;
-            height: 100vh;
-
-            background: #111;
-
-            padding: 25px 15px;
-
-            overflow-y: auto;
+            width: 200px;
         }
-
-        .logo {
-            color: #d4af37;
-
-            font-size: 25px;
-
-            font-weight: bold;
-
-            text-align: center;
-
-            margin-bottom: 35px;
-        }
-
-        .sidebar a {
-            display: block;
-
-            text-decoration: none;
-
-            color: #ddd;
-
-            padding: 14px 18px;
-
-            margin-bottom: 8px;
-
-            border-radius: 8px;
-
-            transition: 0.2s ease;
-        }
-
-        .sidebar a:hover {
-            background: #292929;
-
-            color: #d4af37;
-        }
-
-        .sidebar a.active {
-            background: #d4af37;
-
-            color: #111;
-
-            font-weight: bold;
-        }
-
-
-        /* =========================
-           MAIN
-        ========================== */
 
         .main {
-            margin-left: 240px;
-
-            padding: 35px;
+            margin-left: 200px;
+            padding: 20px;
         }
 
-        .header {
-            margin-bottom: 25px;
+    }
+
+    @media(max-width: 600px) {
+
+        .sidebar {
+            position: relative;
+            width: 100%;
+            height: auto;
+            padding: 20px 15px;
+        }
+
+        .main {
+            margin-left: 0;
+            padding: 20px;
         }
 
         .header h1 {
-            font-size: 30px;
-
-            margin-bottom: 8px;
+            font-size: 25px;
         }
 
-        .header p {
-            color: #777;
-        }
+    }
 
-
-        /* =========================
-           MESSAGES
-        ========================== */
-
-        .message {
-            padding: 12px 15px;
-
-            margin-bottom: 20px;
-
-            border-radius: 8px;
-
-            background: #fff3cd;
-
-            color: #664d03;
-
-            border-left: 4px solid #d4af37;
-        }
-
-
-        /* =========================
-           TABLE
-        ========================== */
-
-        .table-container {
-            background: white;
-
-            border-radius: 14px;
-
-            padding: 20px;
-
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-
-            overflow-x: auto;
-        }
-
-        table {
-            width: 100%;
-
-            border-collapse: collapse;
-
-            min-width: 1200px;
-        }
-
-        th {
-            background: #111;
-
-            color: #d4af37;
-
-            padding: 15px 12px;
-
-            text-align: left;
-
-            font-size: 13px;
-
-            white-space: nowrap;
-        }
-
-        td {
-            padding: 15px 12px;
-
-            border-bottom: 1px solid #eee;
-
-            font-size: 14px;
-
-            white-space: nowrap;
-        }
-
-        tbody tr:hover {
-            background: #fafafa;
-        }
-
-
-        /* =========================
-           PRODUCT NAME
-        ========================== */
-
-        .product-name {
-            font-weight: bold;
-
-            font-size: 15px;
-        }
-
-        .barcode,
-        .batch {
-            font-family: monospace;
-
-            color: #555;
-        }
-
-
-        /* =========================
-           STATUS
-        ========================== */
-
-        .status {
-            display: inline-block;
-
-            padding: 7px 13px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-        }
-
-        .safe {
-            background: #dff5e5;
-
-            color: #16803a;
-        }
-
-        .warning {
-            background: #fff0c2;
-
-            color: #946200;
-        }
-
-        .critical {
-            background: #ffe0e0;
-
-            color: #c62828;
-        }
-
-        .expired {
-            display: inline-block;
-
-            background: #222;
-
-            color: white;
-
-            padding: 7px 13px;
-
-            border-radius: 20px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-        }
-
-
-        /* =========================
-           DELETE BUTTON
-        ========================== */
-
-        .delete-btn {
-            background: #c0392b;
-
-            color: white;
-
-            border: none;
-
-            padding: 9px 15px;
-
-            border-radius: 7px;
-
-            font-size: 12px;
-
-            font-weight: bold;
-
-            cursor: pointer;
-
-            transition: 0.2s ease;
-        }
-
-        .delete-btn:hover {
-            background: #a93226;
-
-            transform: translateY(-1px);
-        }
-
-
-        /* =========================
-           EMPTY
-        ========================== */
-
-        .empty {
-            background: white;
-
-            padding: 50px;
-
-            text-align: center;
-
-            border-radius: 14px;
-
-            color: #777;
-
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-        }
-
-        .empty h2 {
-            margin-bottom: 10px;
-
-            color: #333;
-        }
-
-
-        /* =========================
-           MOBILE
-        ========================== */
-
-        @media(max-width: 900px) {
-
-            .sidebar {
-                width: 200px;
-            }
-
-            .main {
-                margin-left: 200px;
-
-                padding: 20px;
-            }
-
-        }
-
-        @media(max-width: 600px) {
-
-            .sidebar {
-                position: relative;
-
-                width: 100%;
-
-                height: auto;
-
-                padding: 20px 15px;
-            }
-
-            .main {
-                margin-left: 0;
-
-                padding: 20px;
-            }
-
-            .header h1 {
-                font-size: 25px;
-            }
-
-        }
-
-    </style>
+</style>
+```
 
 </head>
 
-
 <body>
 
+<!-- =========================
+     SIDEBAR
+========================== -->
 
-    <!-- =========================
-         SIDEBAR
-    ========================== -->
+<div class="sidebar">
 
-    <div class="sidebar">
+```
+<div class="logo">
+    ExpiryGuard
+</div>
 
-        <div class="logo">
-            ExpiryGuard
+
+<a href="{% url 'staff_home' %}">
+    Home
+</a>
+
+
+<a href="{% url 'staff_dashboard' %}">
+    Dashboard
+</a>
+
+
+<a href="{% url 'add_product' %}">
+    Add Products
+</a>
+
+
+<a href="{% url 'expiry_simulator' %}">
+    Expiry Simulator
+</a>
+
+
+<a
+    href="{% url 'staff_product_status' %}"
+    class="active">
+
+    Product Status
+
+</a>
+
+
+<a href="{% url 'staff_notifications' %}">
+    Notifications
+</a>
+
+
+<a href="{% url 'staff_account' %}">
+    My Account
+</a>
+
+
+<a href="{% url 'staff_logout' %}">
+    Logout
+</a>
+```
+
+</div>
+
+<!-- =========================
+     MAIN CONTENT
+========================== -->
+
+<div class="main">
+
+```
+<div class="header">
+
+    <h1>
+        Product Status
+    </h1>
+
+    <p>
+        Check product details and expiry information
+    </p>
+
+</div>
+
+
+<!-- =========================
+     DJANGO MESSAGES
+========================== -->
+
+{% if messages %}
+
+    {% for message in messages %}
+
+        <div class="message">
+
+            {{ message }}
+
         </div>
 
+    {% endfor %}
 
-        <!-- HOME -->
-
-        <a href="{% url 'staff_home' %}">
-            Home
-        </a>
+{% endif %}
 
 
-        <!-- DASHBOARD -->
+<!-- =========================
+     PRODUCT TABLE
+========================== -->
 
-        <a href="{% url 'staff_dashboard' %}">
-            Dashboard
-        </a>
+{% if product_data %}
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Product Name
+                    </th>
+
+                    <th>
+                        Barcode
+                    </th>
+
+                    <th>
+                        Batch Number
+                    </th>
+
+                    <th>
+                        Category
+                    </th>
+
+                    <th>
+                        Price
+                    </th>
+
+                    <th>
+                        Stock
+                    </th>
+
+                    <th>
+                        Manufacture Date
+                    </th>
+
+                    <th>
+                        Expiry Date
+                    </th>
+
+                    <th>
+                        Days Remaining
+                    </th>
+
+                    <th>
+                        Action
+                    </th>
+
+                </tr>
+
+            </thead>
 
 
-        <!-- ADD PRODUCTS -->
-
-        <a href="{% url 'add_product' %}">
-            Add Products
-        </a>
+            <tbody>
 
 
-        <!-- EXPIRY SIMULATOR -->
+                {% for item in product_data %}
 
-        <a href="{% url 'expiry_simulator' %}">
-            Expiry Simulator
-        </a>
+                    <tr>
 
 
-        <!-- PRODUCT STATUS -->
+                        <!-- PRODUCT NAME -->
 
-        <a
-            href="{% url 'staff_product_status' %}"
-            class="active">
+                        <td>
 
-            Product Status
+                            <span class="product-name">
 
-        </a>
+                                {{ item.product.name }}
 
+                            </span>
 
-        <!-- NOTIFICATIONS -->
-
-        <a href="{% url 'staff_notifications' %}">
-            Notifications
-        </a>
+                        </td>
 
 
-        <!-- ACCOUNT -->
+                        <!-- BARCODE -->
 
-        <a href="{% url 'staff_account' %}">
-            My Account
-        </a>
+                        <td>
+
+                            <span class="barcode">
+
+                                {{ item.product.barcode|default:"-" }}
+
+                            </span>
+
+                        </td>
 
 
-        <!-- LOGOUT -->
+                        <!-- BATCH -->
 
-        <a href="{% url 'staff_logout' %}">
-            Logout
-        </a>
+                        <td>
+
+                            <span class="batch">
+
+                                {{ item.product.batch_number|default:"-" }}
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- CATEGORY -->
+
+                        <td>
+
+                            {{ item.product.category|default:"-" }}
+
+                        </td>
+
+
+                        <!-- PRICE -->
+
+                        <td>
+
+                            ₹{{ item.product.price }}
+
+                        </td>
+
+
+                        <!-- STOCK -->
+
+                        <td>
+
+                            {{ item.product.stock_quantity }} Pieces
+
+                        </td>
+
+
+                        <!-- MANUFACTURE DATE -->
+
+                        <td>
+
+                            {% if item.product.manufacture_date %}
+
+                                {{ item.product.manufacture_date|date:"d M Y" }}
+
+                            {% else %}
+
+                                -
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- EXPIRY DATE -->
+
+                        <td>
+
+                            {{ item.product.expiry_date|date:"d M Y" }}
+
+                        </td>
+
+
+                        <!-- DAYS REMAINING -->
+
+                        <td>
+
+                            {% if item.days_left < 0 %}
+
+                                <span class="expired">
+
+                                    Expired
+
+                                </span>
+
+                            {% elif item.days_left == 0 %}
+
+                                Today
+
+                            {% else %}
+
+                                {{ item.days_left }} days
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- ACTION -->
+
+                        <td>
+
+                            <!-- UPDATE -->
+
+                            <a
+                                href="{% url 'update_product' item.product.id %}"
+                                class="update-btn">
+
+                                ✏️ Update
+
+                            </a>
+
+
+                            <!-- DELETE -->
+
+                            <form
+                                method="POST"
+                                action="{% url 'delete_product' item.product.id %}"
+                                style="display:inline;"
+                                onsubmit="return confirm('Are you sure you want to delete {{ item.product.name }}?');">
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="delete-btn">
+
+                                    🗑 Delete
+
+                                </button>
+
+                            </form>
+
+                        </td>
+
+
+                    </tr>
+
+                {% endfor %}
+
+
+            </tbody>
+
+        </table>
 
     </div>
 
 
+{% else %}
+
 
     <!-- =========================
-         MAIN CONTENT
+         NO PRODUCTS
     ========================== -->
 
-    <div class="main">
-
-
-        <!-- HEADER -->
-
-        <div class="header">
-
-            <h1>
-                Product Status
-            </h1>
-
-            <p>
-                Check product details and expiry status
-            </p>
-
-        </div>
-
-
-
-        <!-- =========================
-             DJANGO MESSAGES
-        ========================== -->
-
-        {% if messages %}
-
-            {% for message in messages %}
-
-                <div class="message">
-
-                    {{ message }}
-
-                </div>
-
-            {% endfor %}
-
-        {% endif %}
-
-
-
-        <!-- =========================
-             PRODUCT TABLE
-        ========================== -->
-
-        {% if product_data %}
-
-            <div class="table-container">
-
-                <table>
-
-                    <thead>
-
-                        <tr>
-
-                            <th>
-                                Product Name
-                            </th>
-
-                            <th>
-                                Barcode
-                            </th>
-
-                            <th>
-                                Batch Number
-                            </th>
-
-                            <th>
-                                Category
-                            </th>
-
-                            <th>
-                                Price
-                            </th>
-
-                            <th>
-                                Stock
-                            </th>
-
-                            <th>
-                                Manufacture Date
-                            </th>
-
-                            <th>
-                                Expiry Date
-                            </th>
-
-                            <th>
-                                Days Remaining
-                            </th>
-
-                            <th>
-                                Status
-                            </th>
-
-                            <th>
-                                Action
-                            </th>
-
-                        </tr>
-
-                    </thead>
-
-
-                    <tbody>
-
-
-                        {% for item in product_data %}
-
-                            <tr>
-
-
-                                <!-- =========================
-                                     PRODUCT NAME
-                                ========================== -->
-
-                                <td>
-
-                                    <span class="product-name">
-
-                                        {{ item.product.name }}
-
-                                    </span>
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     BARCODE
-                                ========================== -->
-
-                                <td>
-
-                                    <span class="barcode">
-
-                                        {{ item.product.barcode|default:"-" }}
-
-                                    </span>
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     BATCH NUMBER
-                                ========================== -->
-
-                                <td>
-
-                                    <span class="batch">
-
-                                        {{ item.product.batch_number|default:"-" }}
-
-                                    </span>
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     CATEGORY
-                                ========================== -->
-
-                                <td>
-
-                                    {{ item.product.category|default:"-" }}
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     PRICE
-                                ========================== -->
-
-                                <td>
-
-                                    ₹{{ item.product.price }}
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     STOCK
-                                ========================== -->
-
-                                <td>
-
-                                    {{ item.product.stock_quantity }} Pieces
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     MANUFACTURE DATE
-                                ========================== -->
-
-                                <td>
-
-                                    {% if item.product.manufacture_date %}
-
-                                        {{ item.product.manufacture_date|date:"d M Y" }}
-
-                                    {% else %}
-
-                                        -
-
-                                    {% endif %}
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     EXPIRY DATE
-                                ========================== -->
-
-                                <td>
-
-                                    {{ item.product.expiry_date|date:"d M Y" }}
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     DAYS REMAINING
-                                ========================== -->
-
-                                <td>
-
-                                    {% if item.days_left < 0 %}
-
-                                        <span class="expired">
-
-                                            Expired
-
-                                        </span>
-
-                                    {% elif item.days_left == 0 %}
-
-                                        <span class="status critical">
-
-                                            Today
-
-                                        </span>
-
-                                    {% else %}
-
-                                        {{ item.days_left }} days
-
-                                    {% endif %}
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     STATUS
-                                ========================== -->
-
-                                <td>
-
-                                    <span class="status {{ item.status_class }}">
-
-                                        {{ item.status }}
-
-                                    </span>
-
-                                </td>
-
-
-
-                                <!-- =========================
-                                     DELETE BUTTON
-                                ========================== -->
-
-                                <td>
-
-                                    <form
-                                        method="POST"
-                                        action="{% url 'delete_product' item.product.id %}"
-                                        onsubmit="return confirm('Are you sure you want to delete {{ item.product.name }}?');">
-
-                                        {% csrf_token %}
-
-                                        <button
-                                            type="submit"
-                                            class="delete-btn">
-
-                                            🗑 Delete
-
-                                        </button>
-
-                                    </form>
-
-                                </td>
-
-
-                            </tr>
-
-                        {% endfor %}
-
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-
-        {% else %}
-
-
-            <!-- =========================
-                 NO PRODUCTS
-            ========================== -->
-
-            <div class="empty">
-
-                <h2>
-                    No Products Found
-                </h2>
-
-                <p>
-                    Add a product first to see its expiry status.
-                </p>
-
-            </div>
-
-
-        {% endif %}
-
+    <div class="empty">
+
+        <h2>
+            No Products Found
+        </h2>
+
+        <p>
+            Add a product first to see its expiry information.
+        </p>
 
     </div>
 
+
+{% endif %}
+```
+
+</div>
 
 </body>
 

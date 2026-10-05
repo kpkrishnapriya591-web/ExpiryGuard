@@ -203,6 +203,29 @@
             }
 
         }
+        /* ADD PRODUCT BUTTON */
+
+.add-product-container {
+    margin-top: 25px;
+    text-align: right;
+}
+
+.add-product-btn {
+    display: inline-block;
+    background: #d4af37;
+    color: #111;
+    text-decoration: none;
+    padding: 12px 22px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.add-product-btn:hover {
+    background: #b8962e;
+    transform: translateY(-2px);
+}
 
     </style>
 </head>
@@ -439,6 +462,12 @@
         {% endif %}
 
     </div>
+    <!-- ADD PRODUCT BUTTON -->
+<div class="add-product-container">
+    <a href="{% url 'add_product' %}" class="add-product-btn">
+        ➕ Add Product
+    </a>
+</div>
 
 </div>
 

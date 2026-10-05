@@ -17,11 +17,10 @@ urlpatterns = [
     path("products/", views.staff_products, name="staff_products"),
 
     path(
-        "products/update/<int:product_id>/",
-        views.update_staff_product,
-        name="update_product"
-    ),
-
+    "products/update/<int:product_id>/",
+    views.update_product,
+    name="update_product"
+),
     path(
         "products/delete/<int:product_id>/",
         views.delete_staff_product,
@@ -53,8 +52,8 @@ urlpatterns = [
     ),
 
     path(
-        "expiry-simulator/",
-        views.expiry_simulator,
-        name="expiry_simulator"
-    ),
+    "expiry-simulator/",
+    views.expiry_simulator,
+    name="expiry_simulator"
+),
 ]

@@ -313,288 +313,107 @@ def staff_products(request):
 # UPDATE STAFF PRODUCT
 # ============================================================
 
-def update_staff_product(request, product_id):
+# ============================================================
+# UPDATE PRODUCT
+# ============================================================
+
+def update_product(request, product_id):
 
     check = staff_login_required(request)
-
     if check:
         return check
 
-    product = get_object_or_404(
-        Product,
-        id=product_id
-    )
+    product = get_object_or_404(Product, id=product_id)
 
     if request.method == "POST":
 
-        # ----------------------------------------------------
-        # BASIC DETAILS
-        # ----------------------------------------------------
+        name = request.POST.get("name", "").strip()
+        barcode = request.POST.get("barcode", "").strip()
+        batch_number = request.POST.get("batch_number", "").strip()
+        category = request.POST.get("category", "").strip()
+        price = request.POST.get("price", "0")
+        stock_quantity = request.POST.get("stock_quantity", "0")
+        manufacture_date = request.POST.get("manufacture_date") or None
+        expiry_date = request.POST.get("expiry_date") or None
 
-        name = request.POST.get(
-            "name",
-            product.name
-        ).strip()
+        if not name:
+            messages.error(request, "Product name is required.")
+            return redirect("update_product", product_id=product.id)
 
-        barcode = request.POST.get(
-            "barcode",
-            product.barcode
-        ).strip()
+        if not barcode:
+            messages.error(request, "Barcode is required.")
+            return redirect("update_product", product_id=product.id)
 
-        category = request.POST.get(
-            "category",
-            product.category or ""
-        ).strip()
-
-        batch_number = request.POST.get(
-            "batch_number",
-            product.batch_number
-        ).strip()
-
-        unit = request.POST.get(
-            "unit",
-            product.unit or ""
-        ).strip()
-
-        # ----------------------------------------------------
-        # REQUIRED FIELD CHECK
-        # ----------------------------------------------------
-
-        if not name or not barcode or not batch_number:
-
-            return render(
-                request,
-                "staff/update_product.html",
-                {
-                    "product": product,
-                    "error":
-                        "Product Name, Barcode and Batch Number are required."
-                }
-            )
-
-        # ----------------------------------------------------
-        # DUPLICATE BARCODE CHECK
-        # ----------------------------------------------------
-
-        if Product.objects.filter(
+        # Check duplicate barcode
+        duplicate = Product.objects.filter(
             barcode=barcode
         ).exclude(
             id=product.id
-        ).exists():
+        ).first()
 
-            return render(
+        if duplicate:
+            messages.error(
                 request,
-                "staff/update_product.html",
-                {
-                    "product": product,
-                    "error":
-                        "This barcode already exists."
-                }
+                "This barcode already exists for another product."
             )
-
-        # ----------------------------------------------------
-        # QUANTITY
-        # ----------------------------------------------------
-
-        quantity_text = request.POST.get(
-            "quantity",
-            product.quantity
-        )
+            return redirect("update_product", product_id=product.id)
 
         try:
+            price_value = Decimal(price)
 
-            quantity = int(quantity_text)
+            if price_value < 0:
+                raise ValueError
 
-            if quantity < 0:
+        except (InvalidOperation, ValueError, TypeError):
+            messages.error(request, "Please enter a valid price.")
+            return redirect("update_product", product_id=product.id)
+
+        try:
+            stock_value = int(stock_quantity)
+
+            if stock_value < 0:
                 raise ValueError
 
         except (ValueError, TypeError):
+            messages.error(request, "Please enter a valid stock quantity.")
+            return redirect("update_product", product_id=product.id)
 
-            return render(
-                request,
-                "staff/update_product.html",
-                {
-                    "product": product,
-                    "error":
-                        "Please enter a valid quantity."
-                }
-            )
-
-        # ----------------------------------------------------
-        # DAILY SALES
-        # ----------------------------------------------------
-
-        daily_sales_text = request.POST.get(
-            "daily_sales",
-            product.daily_sales
-        )
-
-        try:
-
-            daily_sales = int(daily_sales_text)
-
-            if daily_sales < 0:
-                raise ValueError
-
-        except (ValueError, TypeError):
-
-            return render(
-                request,
-                "staff/update_product.html",
-                {
-                    "product": product,
-                    "error":
-                        "Please enter valid daily sales."
-                }
-            )
-
-        # ----------------------------------------------------
-        # PRICE
-        # ----------------------------------------------------
-
-        price_text = request.POST.get(
-            "price",
-            ""
-        ).strip()
-
-        if price_text:
-
-            try:
-
-                price = float(price_text)
-
-                if price < 0:
-                    raise ValueError
-
-            except (ValueError, TypeError):
-
-                return render(
-                    request,
-                    "staff/update_product.html",
-                    {
-                        "product": product,
-                        "error":
-                            "Please enter a valid price."
-                    }
-                )
-
-        else:
-
-            price = product.price
-
-        # ----------------------------------------------------
-        # MANUFACTURE DATE
-        # ----------------------------------------------------
-
-        manufacture_date_text = request.POST.get(
-            "manufacture_date",
-            ""
-        ).strip()
-
-        if manufacture_date_text:
-
-            try:
-
-                manufacture_date = datetime.strptime(
-                    manufacture_date_text,
-                    "%Y-%m-%d"
-                ).date()
-
-            except ValueError:
-
-                return render(
-                    request,
-                    "staff/update_product.html",
-                    {
-                        "product": product,
-                        "error":
-                            "Invalid manufacture date."
-                    }
-                )
-
-        else:
-
-            manufacture_date = product.manufacture_date
-
-        # ----------------------------------------------------
-        # EXPIRY DATE
-        # ----------------------------------------------------
-
-        expiry_date_text = request.POST.get(
-            "expiry_date",
-            ""
-        ).strip()
-
-        if expiry_date_text:
-
-            try:
-
-                expiry_date = datetime.strptime(
-                    expiry_date_text,
-                    "%Y-%m-%d"
-                ).date()
-
-            except ValueError:
-
-                return render(
-                    request,
-                    "staff/update_product.html",
-                    {
-                        "product": product,
-                        "error":
-                            "Invalid expiry date."
-                    }
-                )
-
-        else:
-
-            expiry_date = product.expiry_date
-
-        # ----------------------------------------------------
-        # DATE VALIDATION
-        # ----------------------------------------------------
-
-        if (
-            manufacture_date
-            and expiry_date
-            and expiry_date < manufacture_date
-        ):
-
-            return render(
-                request,
-                "staff/update_product.html",
-                {
-                    "product": product,
-                    "error":
-                        "Expiry date cannot be before manufacture date."
-                }
-            )
-
-        # ----------------------------------------------------
-        # UPDATE PRODUCT
-        # ----------------------------------------------------
-
+        # Update staff product
         product.name = name
         product.barcode = barcode
-        product.category = category
         product.batch_number = batch_number
-        product.unit = unit
-        product.quantity = quantity
-        product.daily_sales = daily_sales
-        product.price = price
+        product.category = category
+        product.price = price_value
+        product.stock_quantity = stock_value
         product.manufacture_date = manufacture_date
         product.expiry_date = expiry_date
 
         product.save()
 
+        # Also update main product
+        main_product = MainProduct.objects.filter(
+            barcode=barcode
+        ).first()
+
+        if main_product:
+
+            main_product.product_name = name
+            main_product.barcode = barcode
+            main_product.batch_number = batch_number
+            main_product.category = category
+            main_product.quantity = stock_value
+            main_product.price = price_value
+            main_product.manufacture_date = manufacture_date
+            main_product.expiry_date = expiry_date
+
+            main_product.save()
+
         messages.success(
             request,
-            "Product updated successfully."
+            f"{name} updated successfully."
         )
 
-        return redirect(
-            "staff_products"
-        )
+        return redirect("staff_product_status")
 
     return render(
         request,
@@ -603,12 +422,6 @@ def update_staff_product(request, product_id):
             "product": product
         }
     )
-
-
-# ============================================================
-# DELETE STAFF PRODUCT
-# ============================================================
-
 @require_POST
 def delete_staff_product(request, product_id):
 
@@ -907,55 +720,6 @@ def staff_account(request):
 
 
 
-def update_product(request, product_id):
-
-    product = get_object_or_404(
-        Product,
-        id=product_id
-    )
-
-    if request.method == "POST":
-
-        product.name = request.POST.get("name")
-        product.barcode = request.POST.get("barcode")
-        product.batch_number = request.POST.get("batch_number")
-        product.quantity = request.POST.get("quantity")
-        product.expiry_date = request.POST.get("expiry_date")
-
-        product.save()
-
-        return redirect("expiry_simulator")
-
-    return render(
-        request,
-        "update_product.html",
-        {
-            "product": product
-        }
-    )
-
-
-def delete_product(request, product_id):
-
-    product = get_object_or_404(
-        Product,
-        id=product_id
-    )
-
-    if request.method == "POST":
-
-        product.delete()
-
-        return redirect("expiry_simulator")
-
-    return render(
-        request,
-        "delete_product.html",
-        {
-            "product": product
-        }
-    )
-
 
 
 def products(request):
@@ -1084,7 +848,7 @@ def expiry_simulator(request):
 # ============================================================
 # ADD PRODUCT
 # STAFF + ADMIN
-# ============================================================
+# ================================================
 
 def add_product(request):
 
@@ -1273,13 +1037,17 @@ def add_product(request):
         # ----------------------------------------------------
         # SUCCESS
         # ----------------------------------------------------
+        
+               # ----------------------------------------------------
+        # SUCCESS
+        # ----------------------------------------------------
 
         messages.success(
             request,
             f"{name} added successfully."
         )
 
-        return redirect("staff_products")
+        return redirect("expiry_simulator")
 
     return render(
         request,

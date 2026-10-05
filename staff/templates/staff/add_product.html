@@ -961,15 +961,21 @@
 
                 <!-- BUTTONS -->
 
-                <div class="buttons">
+                <form method="POST" action="{% url 'add_product' %}">
 
-                    <button
-                        type="submit"
-                        class="save-btn">
+    {% csrf_token %}
 
-                        Save Product
+    <!-- Product details -->
 
-                    </button>
+    
+
+    <button
+        type="submit"
+        class="save-btn">
+        Save Product
+    </button>
+
+</form>
 
 
                     <a
